@@ -1,0 +1,57 @@
+# 빌드 및 디버그 결과물 (가장 중요)
+######################################
+# 실행 파일, 라이브러리 파일, 오브젝트 파일
+*.exe
+*.dll
+*.lib
+*.so
+*.a
+*.obj
+*.o
+*.pdb
+*.ilk
+
+# Visual Studio 빌드 폴더
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bin/
+Bin/
+Build/
+build/
+GeneratedFiles/
+
+# Visual Studio 2017 이상에서 사용하는 중간 파일 폴더
+ipch/
+*.aps
+*.tlog
+*.log
+*.ncb
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+
+# Visual Studio 사용자 설정 파일
+######################################
+# 프로젝트별 사용자 설정
+*.vcxproj.user
+*.vcxproj.filters
+
+# 솔루션 사용자 설정
+*.sln.docstates
+*.vshost.*
+
+# Visual Studio 2019/2022 캐시 폴더
+.vs/
+.git/
+.svn/
+
+# 임시 파일 및 시스템 파일
+######################################
+*~
+# Windows 썸네일 파일 (불필요)
+Thumbs.db
+# OS X 시스템 파일 (MacOS 사용자 협업 시)
+.DS_Store
