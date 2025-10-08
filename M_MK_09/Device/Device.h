@@ -12,7 +12,7 @@ using namespace std;
 
 class DX_Device
 {
-private:
+public: //일단 공부해야 하니깐 열어 버려 
 	ID3D11Device* m_Device = nullptr;
 	ID3D11DeviceContext* m_DXDC = nullptr;
 

@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "Core.h"
 
+
+
+//전역에서 관리되는 shader ?
+// 
+//Object가 렌더되기 위해서 가져야 하는 shader 객체 혹은 포인터도 결국 전역 정보와 오브젝트의 정보가 필요하긴 함. 
+//Model은 그냥 Model이고 
+
 void Core::Sets()
 {
     HRESULT hr;
@@ -10,6 +17,8 @@ void Core::Sets()
   assert(SUCCEEDED(hr));
   hr = ModuleInit();
   assert(SUCCEEDED(hr));
+
+  ModelParssing();
 }
 bool Core::WinSet()
 {
@@ -32,9 +41,12 @@ bool Core::DX_Set()
 bool Core::ModuleInit()
 {
     m_timer = make_unique<GameTimer>();
+
     g_camera = make_unique<Camera>();
     g_camera->Initalize();
 
+    m_Asimmper = make_unique<Asimpper>();
+    m_Asimmper->Initalize(DX->m_Device, DX->m_DXDC); //MODEL 생성 -> 버퍼 생성을 위한 DEVICE, CONTEXT 주입.
 	return true;
 }
 
@@ -79,6 +91,14 @@ void Core::Update(float dTime)
 {
     DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
+    
+
+    for (const auto& models : m_Asimmper->m_Models)
+    {
+        models->Update(dTime);
+    }
+
+
 }
 
 void Core::Render(float dTime)
@@ -87,6 +107,17 @@ void Core::Render(float dTime)
 
     DX->DrawGridNAxis();
     DX->Flip();
+
+    //이건 유닛단위에서 실행하는 게 맞는듯, 일단 Object의 멤버로 두고, MeshComponent랑 animation Component로 분리 하자 (이건 발표 때 설명 
+
+    for (const auto& models : m_Asimmper->m_Models)
+    {
+        models->Draw(dTime, PT_TRIANGLELIST,models->GetFlag());
+
+        //set하고 여기서 shader에서 처리하던가 해야 할듯. mesh component는 model이랑 fx를 같이 들고 있어야 하는건가. 
+    }
+
+
 }
 
 bool Core::MsgProcess(MSG& msg)
@@ -111,7 +142,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 {
     g_camera->Update(dTime);
 
-            if (g_camera->GetDirty())
+            if (g_camera->GetDirty()) 
             {
                 XMVECTOR eye = g_camera->GetCameraMem().eye;
                 XMVECTOR lookat = g_camera->GetCameraMem().lookat;
@@ -120,12 +151,24 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 // View 행렬 재계산
                 XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
 
-                // DX 시스템에 업데이트
-                DX->GetGridFX()->GetFX()->SetView(&mView);
-                DX->GetGridFX()->GetFX()->Update();
 
+
+
+
+                //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
+                
+                // DX 시스템에 업데이트
+                DX->GetGridFX()->GetFX()->SetView(&mView); //Line 그리는 애들 ㅇㅇ 그 fx 
+                DX->GetGridFX()->GetFX()->Update();
                 g_camera->SetDirty(false);
             }
+
+            //카메라의 더티 플래그 말고도, 캐릭터 움직임을 카메라가 따라갈 때 행렬 업데이트 되는 게 더 맞으니깐. 저 상황은 쉐이더 및 카메라 디버깅으로 만든거니 일단 무시. 
     
+}
+
+void Core::ModelParssing()
+{
+    m_Asimmper->LoadModel("../Models/test.obj", DX->m_Device);
 }
 

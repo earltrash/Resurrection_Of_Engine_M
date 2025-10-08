@@ -3,8 +3,6 @@
 #include <Windows.h>
 #include "Core.h"
 
-
-
 int main()
 {
 	Core core;

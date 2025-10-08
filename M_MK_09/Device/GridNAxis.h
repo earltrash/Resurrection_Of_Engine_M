@@ -41,7 +41,6 @@ private:
 	ID3D11Buffer* m_AxisVB = nullptr;
 	ID3D11Buffer* m_GridVB = nullptr;
 
-	//래핑해도 되긴 하다마ㅏㄴ..
 	ID3D11InputLayout* m_LineInputLayout;
 	ID3D11VertexShader* m_LineVS;
 	ID3D11PixelShader* m_LinePS;

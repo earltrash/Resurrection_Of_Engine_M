@@ -140,16 +140,13 @@ void GridNAxis::Draw()
 
     if (fx && cont)
     {
-
-        
-
         cont->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
         fx->Apply(); //위 get 함수 다 없앨까 생각중. ////////////////////////// device context에 다 처리 .
         
         //어찌 보면 얘네가 model 이긴 하지 
         if (m_AxisVB != nullptr && m_GridVB != nullptr)
         {
-            UINT stride = sizeof(PosNCol);
+            UINT stride = sizeof(PosNCol); //line 자체는 뭐. ㅇㅇ 
             UINT offset = 0;
             cont->IASetVertexBuffers(0, 1, &m_AxisVB, &stride, &offset);
             cont->Draw(6, 0);

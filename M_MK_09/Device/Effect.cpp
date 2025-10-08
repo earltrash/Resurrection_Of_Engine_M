@@ -3,10 +3,9 @@
 #include "Effect.h"
 #include "Commons.h" 
 #include <d3dcompiler.h>
+#include "Model.h"
 
 #pragma comment(lib, "D3DCompiler.lib")
-
-
 
 Effect::Effect()
 {
@@ -23,7 +22,6 @@ Effect::Effect()
 	// CBuffer 초기화
 	ZeroMemory(&m_CBuffer, sizeof(ConstBuffer));
 }
-
 // Effect::~Effect()
 Effect::~Effect()
 {
@@ -175,9 +173,6 @@ HRESULT Effect::Compile(const WCHAR* FileName, const  char* EntryPoint, const ch
 	return hr;
 }
 
-
-
-
 HRESULT Effect::CreateConstBuffer(UINT size, ID3D11Buffer** ppCB)
 {
 	HRESULT hr = S_OK;
@@ -235,7 +230,7 @@ HRESULT Effect::CreateDynaConstBuffer(UINT size, void* pData, ID3D11Buffer** ppC
 	return hr;
 }
 
-// Effect::UpdateDynaConstBuffer() - 동적 버퍼 갱신 (Map/Unmap)
+
 HRESULT Effect::UpdateDynaConstBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, void* pData, UINT size)
 {
 	HRESULT hr = S_OK;
@@ -254,7 +249,7 @@ HRESULT Effect::UpdateDynaConstBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource
 	return hr;
 }
 
-int Effect::CreateInputLayout()
+int Effect::CreateInputLayout() //이거 shader 만들 떄, flag 넣어서 처리하고 싶은데, Universal로 vertex를 받으니깐 offset을 잘 처리해야 될 거 같은데 
 {
 	HRESULT hr = S_OK;
 
