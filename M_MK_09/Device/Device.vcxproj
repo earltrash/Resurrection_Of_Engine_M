@@ -139,18 +139,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Commons.h" />
+    <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="GridNAxis.h" />
+    <ClInclude Include="IConsttBuffer.h" />
     <ClInclude Include="Model.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConstBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="GridNAxis.cpp" />
     <ClCompile Include="Commons.cpp" />
+    <ClCompile Include="IConsttBuffer.cpp" />
     <ClCompile Include="Model.cpp" />
   </ItemGroup>
   <ItemGroup>

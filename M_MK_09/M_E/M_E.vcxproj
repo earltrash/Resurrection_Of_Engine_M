@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Input.h" />
@@ -28,12 +27,10 @@
     <ClInclude Include="Listener.h" />
     <ClInclude Include="Modules.h" />
     <ClInclude Include="MouseListenerComponent.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputManager.cpp" />

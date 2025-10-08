@@ -1,56 +1,56 @@
 #include "GridNAxis.h"
+#include "Effect.h"
+#include "Commons.h" // StrideFromFlag, VertexFlag 정의
+#include <cassert>
+#include <iostream>
+using namespace DirectX;
 
+//
+// 기본 카메라 파라미터
+//
+XMVECTOR eye{ 0.0f, 30.0f, -30.0f };      // 카메라 위치
+XMVECTOR lookat{ 0.0f, 30.0f, 0.0f };     // 바라보는 지점
+XMVECTOR up{ 0.0f, 1.0f, 0.0f };          // 상방 벡터
 
+float g_fFov = XMConvertToRadians(45.0f);
+float g_fAspect = 1.6f;
+float g_fZnear = 1.0f;
+float g_fZfar = 300.0f;
 
-//초기값
-
-XMVECTOR eye{ 0.0f, 30.0f, -30.0f };		//카메라 위치.(Position)
-XMVECTOR lookat{ 0.0f, 30.0f, 0.0f };		//바라보는 곳.(Position)
-XMVECTOR up{ 0.0f, 1.0f, 0.0f };			//카메라 상방 벡터.(Direction)
-
-
-float	g_fFov = XMConvertToRadians(45);	//기본 FOV 앵글. Field of View (Y) 
-float	g_fAspect = 1.6f;					//가로:세로 비율. 960:600 = 1.6:1 (16:10) 800:600 = 1.33:1 (4:3) 
-float	g_fZnear = 1.0f;					//시야 최소 거리 (1.0m) 
-float	g_fZfar = 300.0f;					//시야 최대 거리 (300m) 
-
-//해당 전역값을 Edittor의 전역 Camera를 통해서 받을까 아님. 
-// Editor가 있고 Camera 를 member로 두는 형식으로 만들어 봐야겠다.
-
-
-
-
-
+//
+// Grid + Axis 초기화
+//
 bool GridNAxis::Set_GridNAxis(ID3D11Device*& Dev)
 {
+    bool result = false;
+    result = Set_Effect(Dev);
+    if (!result)
+    {
+        std::cout << "GridNAxis Effect 생성 실패\n";
+        assert(SUCCEEDED(result));
+    }
 
-    bool Result = false;
-   Result = Set_Effect(Dev); // 거의 고정적인 vs ps 파일을 가져가기 때문에 
+#pragma region Axis
+    const float L = 100.0f;
 
-   if (!Result) std::cout << "GRIRD N AXIS EFFECT 생성 실패" << endl;
-   assert(SUCCEEDED(Result));
-
-#pragma region axis
-    const float L = 100.0f; 
-
+    //  이제 universal vertex 구조 사용 (Position + Color + DummyNormal)
     PosNCol axisVertices[] =
     {
-        // X 축 (빨강)
-        { { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { { -L,    0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        // X축 (빨강)
+        { XMFLOAT3(0, 0, 0), XMFLOAT4(1, 0, 0, 1), },
+        { XMFLOAT3(-L, 0, 0), XMFLOAT4(1, 0, 0, 1),  },
 
-        // Y 축 (초록)
-        { { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { 0.0f, L,    0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        // Y축 (초록)
+        { XMFLOAT3(0, 0, 0), XMFLOAT4(0, 1, 0, 1), },
+        { XMFLOAT3(0, L, 0), XMFLOAT4(0, 1, 0, 1),  },
 
-        // Z 축 (파랑)
-        { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-        { { 0.0f, 0.0f, -L    }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+        // Z축 (파랑)
+        { XMFLOAT3(0, 0, 0), XMFLOAT4(0, 0, 1, 1), },
+        { XMFLOAT3(0, 0, -L), XMFLOAT4(0, 0, 1, 1),  },
     };
 
-    UINT vertexCount = ARRAYSIZE(axisVertices);
     D3D11_BUFFER_DESC bd = {};
-    bd.ByteWidth = sizeof(PosNCol) * vertexCount;
+    bd.ByteWidth = sizeof(axisVertices);
     bd.Usage = D3D11_USAGE_IMMUTABLE;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
@@ -58,103 +58,108 @@ bool GridNAxis::Set_GridNAxis(ID3D11Device*& Dev)
     D3D11_SUBRESOURCE_DATA InitData = {};
     InitData.pSysMem = axisVertices;
 
-    HRESULT hr;
-
-    hr = Dev->CreateBuffer(&bd, &InitData, &m_AxisVB);
+    HRESULT hr = Dev->CreateBuffer(&bd, &InitData, &m_AxisVB);
     if (FAILED(hr))
     {
-        assert(SUCCEEDED(hr)); 
+        std::cout << "Axis VB 생성 실패\n";
+        assert(SUCCEEDED(hr));
     }
-
 #pragma endregion
 
 #pragma region Grid
     GridVertices.clear();
 
-    int gridSize = 10;
-    float spacing = 10.0f;
-    float extent = gridSize * spacing;
+    const int gridSize = 10;
+    const float spacing = 10.0f;
+    const float extent = gridSize * spacing;
 
-    // Grid 정점 생성 (XZ 평면)
+    // grid 도 universal vertex 기반
     for (int i = -gridSize; i <= gridSize; ++i)
     {
         float x = i * spacing;
         float z = i * spacing;
+        XMFLOAT4 lineColor = (i == 0) ? XMFLOAT4(1, 1, 1, 1) : XMFLOAT4(0.5f, 0.5f, 0.5f, 1);
 
-        // Z축 평행선: (x, 0, -extent) -> (x, 0, extent)
-        GridVertices.push_back({ { x, 0.0f, -extent }, { 0.5f, 0.5f, 0.5f, 1.0f } });
-        GridVertices.push_back({ { x, 0.0f, extent  }, { 0.5f, 0.5f, 0.5f, 1.0f } });
+        // Z축 평행선
+        GridVertices.push_back({ XMFLOAT3(x, 0, -extent) ,lineColor });
+        GridVertices.push_back({ XMFLOAT3(x, 0, extent) ,lineColor });
 
-        // X축 평행선: (-extent, 0, z) -> (extent, 0, z)
-        GridVertices.push_back({ { -extent, 0.0f, z}, { 0.5f, 0.5f, 0.5f, 1.0f } });
-        GridVertices.push_back({ {extent, 0.0f, z }, { 0.5f, 0.5f, 0.5f, 1.0f } });
+        // X축 평행선
+        GridVertices.push_back({ XMFLOAT3(-extent, 0, z), lineColor });
+        GridVertices.push_back({ XMFLOAT3(extent, 0, z), lineColor });
     }
 
-     bd = {};
-    bd.ByteWidth = sizeof(PosNCol) * GridVertices.size(); 
-    bd.Usage = D3D11_USAGE_IMMUTABLE;                    
+    bd = {};
+    bd.ByteWidth = static_cast<UINT>(sizeof(PosNCol) * GridVertices.size());
+    bd.Usage = D3D11_USAGE_IMMUTABLE;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    bd.CPUAccessFlags = 0;
 
-   
-     InitData = {};
-    InitData.pSysMem = GridVertices.data(); // 벡터의 내부 데이터 주소를 사용
+    InitData = {};
+    InitData.pSysMem = GridVertices.data();
 
-
-    hr = Dev->CreateBuffer(&bd, &InitData, &m_GridVB); // m_GridVB에 저장
+    hr = Dev->CreateBuffer(&bd, &InitData, &m_GridVB);
     if (FAILED(hr))
     {
+        std::cout << "Grid VB 생성 실패\n";
         assert(SUCCEEDED(hr));
     }
-
-  
 #pragma endregion
 
     return S_OK;
 }
 
+//
+// Effect 초기화
+//
 bool GridNAxis::Set_Effect(ID3D11Device*& Dev)
 {
-    bool result = 0;
+    fx = std::make_unique<Effect>();
+    bool result = fx->Create(Dev, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
 
-    fx = make_unique<Effect>();
-    result =  fx->Create(Dev, L"Shader/Default.fx"); //얘는 PROJDIR기준임.
+    if (!result)
+    {
+        std::cout << "GridNAxis: Effect 생성 실패\n";
+        return false;
+    }
 
-    XMMATRIX Iden = XMMatrixIdentity();
-    fx->SetWorld(&Iden);
-
+    XMMATRIX I = XMMatrixIdentity();
     XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
     XMMATRIX mProj = XMMatrixPerspectiveFovLH(g_fFov, g_fAspect, g_fZnear, g_fZfar);
 
-    fx->SetView(&mView);
-    fx->SetProj(&mProj);
-
+    fx->SetWorld(I);
+    fx->SetView(mView);
+    fx->SetProj(mProj);
     fx->Update();
 
-    return result;
+    return true;
 }
 
+//
+// Draw
+//
 void GridNAxis::Draw()
 {
-    ID3D11DeviceContext* cont = fx->GetContext();
+    if (!fx) return;
 
-    if (fx && cont)
+    ID3D11DeviceContext* ctx = fx->GetContext();
+    if (!ctx) return;
+
+    ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    fx->Apply();
+
+    UINT stride = static_cast<UINT>(StrideFromFlag(VertexFlag::VF_POSCOL));
+    // stride = sizeof(Vertex);
+    UINT offset = 0;
+
+    if (m_AxisVB)
     {
-        cont->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-        fx->Apply(); //위 get 함수 다 없앨까 생각중. ////////////////////////// device context에 다 처리 .
-        
-        //어찌 보면 얘네가 model 이긴 하지 
-        if (m_AxisVB != nullptr && m_GridVB != nullptr)
-        {
-            UINT stride = sizeof(PosNCol); //line 자체는 뭐. ㅇㅇ 
-            UINT offset = 0;
-            cont->IASetVertexBuffers(0, 1, &m_AxisVB, &stride, &offset);
-            cont->Draw(6, 0);
+        ctx->IASetVertexBuffers(0, 1, &m_AxisVB, &stride, &offset);
+        ctx->Draw(6, 0);
+    }
 
-            cont->IASetVertexBuffers(0, 1, &m_GridVB, &stride, &offset);
-            cont->Draw(GridVertices.size(), 0);
-        }
-        else cout << "? axis 랑 grid null인데ㅔ?" << endl;
-
+    if (m_GridVB)
+    {
+        ctx->IASetVertexBuffers(0, 1, &m_GridVB, &stride, &offset);
+        ctx->Draw(static_cast<UINT>(GridVertices.size()), 0);
     }
 }

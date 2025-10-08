@@ -2,10 +2,13 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include <unordered_map>
+#include <iostream>
+
 #include "D3D11.h"
 #include "DirectXMath.h"
-#include <iostream>
 using namespace DirectX;
+
 typedef XMFLOAT4		COLOR;
 
 struct PosNCol
@@ -19,9 +22,6 @@ struct PosNNor
 	XMFLOAT3 pos;
 	XMFLOAT3 nor;
 };
-
-
-
 
 struct Model_Prop
 {
@@ -45,7 +45,9 @@ enum class VertexFlag : uint32_t
 
 
 	VF_POSCOL = VF_POSITION | VF_COLOR,
+
 	VF_POSNOR = VF_POSITION | VF_NORMAL,
+
 	VK_POSCOLNOR = VF_POSITION | VF_COLOR | VF_NORMAL,
 
 
@@ -89,9 +91,10 @@ float StrideFromFlag(VertexFlag Flag);
 struct Vertex
 {
 	XMFLOAT3 Position;
-	XMFLOAT3 Normal;
-	//XMFLOAT2 TexCoord;
 	XMFLOAT4 Color;
+	XMFLOAT3 Normal;
+
+	//XMFLOAT2 TexCoord;
 	//XMFLOAT3 Tangent;
 	//XMFLOAT3 BiNormal;
 	//uint32_t BoneInidces[4];
@@ -130,8 +133,7 @@ int CreateConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer** ppCB);
 HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer** ppCB);
 HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, LPVOID pData, ID3D11Buffer** ppCB);
 int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD num, ID3DBlob* pVSCode, ID3D11InputLayout** ppLayout);
-
-
+HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size);
 
 
 

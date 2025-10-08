@@ -1,10 +1,10 @@
 #pragma once
-#include "Commons.h" //좀 커지면 pch로 뺄까도 고민 
+#include "Commons.h" 
 #include "GridNAxis.h"
 
-//여기에는 DX 객체를 담아두고 싶음. RENDER 적인 부분도 여기서 
-//종합 관리 하고 싶은데, 최종적인 형태는 아마 계층 구조가 더 세분화 되지
-//않을까 싶긴 함. 
+
+extern class GridNAxis;
+
 
 
 using namespace DirectX;
@@ -22,6 +22,8 @@ public: //일단 공부해야 하니깐 열어 버려
 	ID3D11Texture2D* m_pDS = nullptr;					//깊이-스텐실 버퍼.
 	ID3D11DepthStencilView* m_pDSView = nullptr;				//깊이-스텐실 버퍼-뷰 
 
+	ID3D11RasterizerState* pSolidRS = nullptr;
+	ID3D11DepthStencilState* pNoDepthDS = nullptr;
 
 private:
 	unique_ptr<GridNAxis> GDNAX;
@@ -36,9 +38,9 @@ public:
 	HRESULT GridNAxis_SetUP(ID3D11Device* device);
 	void SetViewPort(float widh, float ht);
 	
-	inline GridNAxis* GetGridFX() { return GDNAX.get(); }
+	GridNAxis* GetGridFX();
 
-	void UpdateGrid(float dTime) { GetGridFX()->GetFX()->Update(dTime); }
+	void UpdateGrid(float dTime);
 
 
 	void DrawGridNAxis();

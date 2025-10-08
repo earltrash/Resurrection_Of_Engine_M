@@ -19,9 +19,8 @@ cbuffer ConstBuffer //: register(b0)
     matrix mProj;		//투영 변환 행렬
     matrix mWVP;		//월드+뷰+투영 변환 행렬
     
-    
-    float4x4 col;
-    float aniT;
+    float4 col;
+   
 }
 
 
@@ -58,6 +57,7 @@ VSOutput VS_Main(
     //원근 투영 변환 (Projection Transform)
     pos = mul(pos, mProj);
 
+   // pos = mul(pos, mTM);
 
     //정보 출력.
     VSOutput o = (VSOutput) 0;
@@ -84,7 +84,7 @@ float4 PS_Main(
 {
 	//특별한 변환 없이 입력된 정보를 그대로 출력합니다.
     //...
-
+    //return float4(1.0f, 0.0f, 0.0f, 1.0f);
     return col;
 }
 

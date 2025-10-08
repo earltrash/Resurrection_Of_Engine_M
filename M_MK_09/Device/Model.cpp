@@ -3,9 +3,6 @@
 
 Model::~Model() { Release(); }
 
-
-
-
 int Model::Create(ID3D11Device* pDev, VOID* pBuff, UINT size, VertexFlag Type)
 {
 	m_Dev = pDev;
@@ -32,13 +29,20 @@ void Model::Release()
 
 
 //Mesh Component로 빼는, 하나의 정점 버퍼 운용 단계에서의 drawcall
-int Model:: Draw(float dTime, PRIMTYPE primType, VertexFlag Type)
+int Model:: Draw(float dTime, PRIMTYPE primType, VertexFlag Type) //일단 기본값으로 해보자 
 {
+
+	Type = this->GetFlag(); 
+	//topology 정보도 같이 가진다면 편하겠다만. 일단 열어두자. 이러면 Flag 정보는 flag 내에서만 처리될 수 있어서 draw도 편함.
+
 
 	m_Dct->IASetVertexBuffers(0, 1, &Data[Type].m_pVB, &Data[Type].m_Stride, &Data[Type].m_Offset);
 	m_Dct->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)primType);
 	m_Dct->Draw(Data[Type].m_VtxCnt, 0);
 
+	//std::cout << "CreateVB: Type=" << static_cast<int>(Type)
+	//	<< " Stride=" << Data[Type].m_Stride
+	//	<< " VtxCnt=" << Data[Type].m_VtxCnt << std::endl;
 	return 1;
 }
 
@@ -67,7 +71,9 @@ void Model::CreateVB(VOID* pBuff, UINT size, VertexFlag Type)
 
 	Data[Type].m_pVB = pVB;
 	Data[Type].m_Size = size;
+	//Data[Type].m_Stride = StrideFromFlag(Type);
 	Data[Type].m_Stride = sizeof(Vertex);
+	Data[Type].m_VtxCnt = size / Data[Type].m_Stride;
 	Data[Type].m_Offset = 0;
-	Data[Type].m_VtxCnt = size / sizeof(Vertex);
+	
 }

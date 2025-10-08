@@ -1,8 +1,9 @@
 #pragma once
-#include <memory>
-#include <vector>
 #include "Component.h"
 #include "Listener.h"
+
+#include "Effect.h"
+#include "Model.h"
 
 class Object 
 {
@@ -13,10 +14,14 @@ public:
 
 		virtual void Update() 
 		{
-			for (auto& obj : m_Components)
+			/*for (auto& obj : m_Components)
 			{
 				obj->Update();
-			}
+			}*/
+
+
+			m_effect->Update(); //fx에게 업데이트를 해줌 
+
 		};
 
 		virtual void FixedUpdate(float dt) 
@@ -27,13 +32,20 @@ public:
 			}
 		}
 
-		virtual void Render() {}; //ecs 참고를 해볼까 
+		virtual void Render() 
+		{
+			m_effect->Apply(); //update까지 같이 ㄴ
+			m_model->Draw();
+			
+
+		}; //object가 model의 정보를 알 필요가 없지. 
 
 		void SetActive(bool b) { activated = b; };
 		bool isActive() { return activated; }
 public:
 		
-		
+	Model* m_model = nullptr;
+	Effect* m_effect = nullptr;
 
 public:
 
@@ -84,5 +96,10 @@ inline T* Object::GetComponent() const
 
 		return nullptr;
 }
+
+
+
+
+
 
 #pragma endregion

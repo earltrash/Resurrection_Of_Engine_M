@@ -69,12 +69,24 @@ Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
                 Flag |= VertexFlag::VF_NORMAL;
         }
 
-        if (mesh->mColors[0])
+        if (mesh->mColors[0] != nullptr)
         {
-            vertex.Color = { mesh->mColors[i]->r , mesh->mColors[i]->g , mesh->mColors[i]->b ,mesh->mColors[i]->a };
-                Flag |= VertexFlag::VF_COLOR;
+            //  Assimp가 컬러를 로드했다면 사용 (이전 Access Violation 해결)
+            vertex.Color = {
+                mesh->mColors[0][i].r,
+                mesh->mColors[0][i].g,
+                mesh->mColors[0][i].b,
+                mesh->mColors[0][i].a
+            };
+            Flag |= VertexFlag::VF_COLOR;
         }
-
+        else
+        {
+            //  OBJ 파일에서 컬러 로드가 실패했더라도 VF_POSCOL 파이프라인 테스트를 위해 강제 설정
+            // 이 임시 코드를 사용하여 VF_POSCOL 인풋 레이아웃이 올바르게 작동하는지 확인합니다.
+            vertex.Color = { 1.0f, 0.5f, 0.5f, 1.0f }; // 연한 빨간색으로 설정
+            Flag |= VertexFlag::VF_COLOR;
+        }
         //etc
         vertices.push_back(vertex);
 

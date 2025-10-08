@@ -1,5 +1,4 @@
-﻿
-#include "Device.h"
+﻿#include "Device.h"
 
 HRESULT DX_Device::CreateDeviceSwapChain(HWND hwnd)
 {
@@ -137,6 +136,16 @@ void DX_Device::SetViewPort(float width, float height)
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	m_DXDC->RSSetViewports(1, &vp);
+}
+
+GridNAxis* DX_Device::GetGridFX()
+{
+	 return GDNAX.get(); 
+}
+
+void DX_Device::UpdateGrid(float dTime)
+{ 
+	 (GetGridFX()->GetFX()) ->Update(dTime); 
 }
 
 void DX_Device::DrawGridNAxis()

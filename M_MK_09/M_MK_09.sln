@@ -8,6 +8,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Device", "Device\Device.vcxproj", "{5AAC64FB-CF29-4FD6-BA61-0A679C939BE9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M_E", "M_E\M_E.vcxproj", "{E66C468E-1A97-42EA-A497-271972EA55FC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5AAC64FB-CF29-4FD6-BA61-0A679C939BE9} = {5AAC64FB-CF29-4FD6-BA61-0A679C939BE9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "External\assimp-master\Build\ALL_BUILD.vcxproj", "{77295F56-523F-335A-A39F-F670984C3C4F}"
 EndProject

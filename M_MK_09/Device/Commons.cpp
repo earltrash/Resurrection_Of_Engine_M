@@ -49,7 +49,7 @@ HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer*
 	hr = pDev->CreateBuffer(&bd, nullptr, &pCB);
 	if (FAILED(hr))
 	{
-		//ynError(hr, _T("CreateDynamicConstantBuffer : 동적 상수버퍼 생성 실패 : size=%d"), sizeAligned);
+		std::cout << "상수 버퍼 생성 실패" << std::endl;
 		return hr;
 	}
 
@@ -167,6 +167,38 @@ int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD nu
 	*ppLayout = pLayout;
 
 	return S_OK;
+}
+HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size)
+{
+	HRESULT hr = S_OK;
+
+	//정렬된 버퍼 크기 계산 
+	DWORD sizeAligned = AlignCBSize(size);
+
+
+	//버퍼 자원 정보 설정.
+	D3D11_MAPPED_SUBRESOURCE mr = {};
+	//ZeroMemory(&mr, sizeof(mr));
+	mr.pData = nullptr;							//리소스 버퍼 포인터. Map 을 통해 획득됨. 
+
+	//버퍼 버퍼 접근
+	hr = pDXDC->Map(pBuff,						//버퍼 잠금 "Locked"
+		0,
+		D3D11_MAP_WRITE_DISCARD,	//CPU 접근 설정 
+		0,
+		&mr							//버퍼 포인터 얻기. 
+	);
+	if (FAILED(hr))
+	{
+		std::cout << "상수 버퍼 업데이트 실패했는뎁쇼" << std::endl;
+		return hr;
+	}
+
+	memcpy(mr.pData, pData, size);				//버퍼 갱신.
+	//memcpy(mr.pData, pData, sizeAligned);		//버퍼 갱신 (+정렬된 크기)
+	pDXDC->Unmap(pBuff, 0);						//버퍼 닫기 : 감금해제 "Unlocked"
+
+	return hr;
 }
 #pragma endregion
 

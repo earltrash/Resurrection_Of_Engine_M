@@ -19,8 +19,7 @@ Effect::Effect()
 	m_pCB = nullptr;
 	m_pLayout = nullptr;
 
-	// CBuffer 초기화
-	ZeroMemory(&m_CBuffer, sizeof(ConstBuffer));
+	
 }
 // Effect::~Effect()
 Effect::~Effect()
@@ -38,49 +37,70 @@ void Effect::Release()
 	SafeRelease(m_pLayout);
 }
 
-void Effect::SetWorld(XMMATRIX* mTM)
+void Effect::SetView(XMMATRIX TM)
 {
-	XMFLOAT4X4 mView;
-	XMStoreFloat4x4(&mView, *mTM);
+	auto cb = GetConstantBuffer<cbDEFAULT>();
 
-	m_CBuffer.mTM = mView;
-}
-
-void Effect::SetMatrix(XMFLOAT4X4 mTM)
-{
-	
-}
-
-void Effect::SetView(XMMATRIX* mTM)
-{
-	XMFLOAT4X4 mView;
-	XMStoreFloat4x4(&mView, *mTM);
-
-	m_CBuffer.mView = mView;
+	if (cb)
+	{
+		cb->SetView(TM);
+	}
 
 
 }
 
-void Effect::SetProj(XMMATRIX* mTM)
+void Effect::SetProj(XMMATRIX TM)
 {
-	XMFLOAT4X4 mView;
-	XMStoreFloat4x4(&mView, *mTM);
-
-	m_CBuffer.mProj = mView;
+	auto cb = GetConstantBuffer<cbDEFAULT>();
+	if (cb)
+	{
+		cb->SetProj(TM);
+	}
 }
 
-int Effect::Create(ID3D11Device* pDev, const TCHAR* filename)
+void Effect::SetWorld(XMMATRIX TM)
+{
+	auto cb = GetConstantBuffer<cbDEFAULT>();
+	if (cb)
+	{
+		cb->SetTM(TM);
+	}
+}
+
+void Effect::SetMatrix(XMMATRIX TM)
+{
+	auto cb = GetConstantBuffer<cbDEFAULT>();
+	if (cb)
+	{
+		cb->SetTM(TM);
+	}
+}
+
+void Effect::SetColor(COLOR col)
+{
+	auto cb = GetConstantBuffer<cbDEFAULT>();
+	if (cb)
+	{
+		cb->SetColor(col);
+	}
+}
+
+
+int Effect::Create(ID3D11Device* pDev, const TCHAR* filename, VertexFlag flag)
 {
 	int res = 1;
+
+	//장치 정보 획득.
 	m_pDev = pDev;
-	m_pDev->GetImmediateContext(&m_pDXDC);
+	m_pDev->GetImmediateContext(&m_pDXDC);	//획득한 핸들은 꼭 Release 해야 합니다.
 
-	if (FAILED(Load(filename))) return 0;
+	// 셰이더 로드.
+	Load(filename);
+	CreateInputLayout(flag , m_pVSCode);
 
-	if (FAILED(CreateInputLayout())) return 0; //POS COL 
+	Createbuffer_wrapped(flag);
 
-	ZeroMemory(&m_CBuffer, sizeof(ConstBuffer));
-	if (FAILED(CreateDynaConstBuffer(sizeof(ConstBuffer), &m_CBuffer, &m_pCB))) return 0;
+	Update();
 
 
 	return res;
@@ -172,6 +192,42 @@ HRESULT Effect::Compile(const WCHAR* FileName, const  char* EntryPoint, const ch
 	SafeRelease(pError);
 	return hr;
 }
+
+void Effect::Createbuffer_wrapped(VertexFlag type)
+{
+	if (type == VertexFlag::VF_POSCOL) //NOLIGHT가 맞는듯?
+	{
+		auto cbuffer = make_unique<cbDEFAULT>();
+		cbuffer->Create(m_pDev);
+		AddCB(std::move(cbuffer));
+	}
+
+	else if (type == VertexFlag::VF_POSNOR) // Light는 전역에서 관리. 후에는 Light 전용 Class에서 운용 
+	{
+		auto cbuffer_1 = make_unique<cbDEFAULT>();
+		cbuffer_1->Create(m_pDev);
+		AddCB(std::move(cbuffer_1));
+
+		auto cbuffer_2 = make_unique<cbMATERIAL>();
+		cbuffer_2->Create(m_pDev);
+		AddCB(std::move(cbuffer_2));
+
+
+		auto cbuffer_3 = make_unique<cbLIGHT>();
+		cbuffer_3->Create(m_pDev);
+		AddCB(std::move(cbuffer_3));
+	}
+	/*else if (type == VertexFlag::FX_LIGHT)
+	{
+		auto cbuffer_1 = make_unique<cbLIGHT>();
+		cbuffer_1->Create(m_pDev);
+		AddCB(std::move(cbuffer_1));
+	}*/
+	//나머지는 ANIMATION에서 처리 
+	else assert(SUCCEEDED(false));
+
+}
+
 
 HRESULT Effect::CreateConstBuffer(UINT size, ID3D11Buffer** ppCB)
 {
@@ -269,31 +325,68 @@ int Effect::CreateInputLayout() //이거 shader 만들 떄, flag 넣어서 처�
 	return S_OK;
 }
 
+int Effect::CreateInputLayout(VertexFlag modelFlag, ID3DBlob* pVSCode) //helper 로 빼도 되고, 아님 여기 둬도 되미. 
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
+	UINT offset = 0;
+
+	if ((modelFlag & VertexFlag::VF_POSITION) != VertexFlag::VF_NONE)
+	{
+		layout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		offset += sizeof(XMFLOAT3);
+	}
+
+	if ((modelFlag & VertexFlag::VF_COLOR) != VertexFlag::VF_NONE)
+	{
+		layout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,
+						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		offset += sizeof(XMFLOAT4);
+	}
+
+	if ((modelFlag & VertexFlag::VF_NORMAL) != VertexFlag::VF_NONE)
+	{
+		layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		offset += sizeof(XMFLOAT3);
+	}
+
+	HRESULT hr = m_pDev->CreateInputLayout(
+		layout.data(), layout.size(),
+		pVSCode->GetBufferPointer(), pVSCode->GetBufferSize(),
+		&m_pLayout
+	);
+
+	return SUCCEEDED(hr) ? 1 : E_FAIL;
+}
+
 void Effect::Apply(float dTime)
 {
 		m_pDXDC->VSSetShader(m_pVS, nullptr, 0);
 		m_pDXDC->PSSetShader(m_pPS, nullptr, 0);
 		m_pDXDC->IASetInputLayout(m_pLayout);
-		m_pDXDC->VSSetConstantBuffers(0, 1, &m_pCB);
+
+		for (const auto& cb : m_ConstantBuffers)
+		{
+			ID3D11Buffer* pCB = cb.get()->GetBuffer();
+			UINT slot = cb.get()->GetRegisterSlot();
+			m_pDXDC->VSSetConstantBuffers(slot, 1, &pCB);
+			//m_pDXDC->PSSetConstantBuffers(slot, 1, &pCB);
+
+		}
 }
 
-int Effect::Update(float dTime)
+void Effect::Update(float dTime)
 {
-	XMMATRIX mWorld = XMLoadFloat4x4(&m_CBuffer.mTM);
-	XMMATRIX mView = XMLoadFloat4x4(&m_CBuffer.mView);
-	XMMATRIX mProj = XMLoadFloat4x4(&m_CBuffer.mProj);
+	UpdateConstantBuffers();
+}
 
-	XMMATRIX mWVP = XMMatrixMultiply(mWorld, mView);
-	mWVP = XMMatrixMultiply(mWVP, mProj);
+int Effect::UpdateConstantBuffers()
+{
 
-	// 계산된 WVP를 CBuffer에 저장
-	XMStoreFloat4x4(&m_CBuffer.mWVP, mWVP);
-
-	UpdateDynaConstBuffer(m_pDXDC, m_pCB, &m_CBuffer, sizeof(ConstBuffer));
+	for (const auto& cb : m_ConstantBuffers)
+	{
+		cb->Update(m_pDXDC);
+	}
 	return 1;
-}
-
-void Effect::SetColor(COLOR dTime)
-{
-
 }
