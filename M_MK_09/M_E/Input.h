@@ -14,6 +14,7 @@ enum class EventType {
     RButtonDown,
     RButtonUp,
 
+    MouseWheel,
     
 };
 

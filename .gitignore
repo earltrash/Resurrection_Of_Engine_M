@@ -36,8 +36,6 @@ ipch/
 # Visual Studio 사용자 설정 파일
 ######################################
 # 프로젝트별 사용자 설정
-*.vcxproj.user
-*.vcxproj.filters
 
 # 솔루션 사용자 설정
 *.sln.docstates

@@ -28,20 +28,21 @@ bool InputManager::MsgCheck(MSG& msg)
         break;
     case WM_KEYUP:
 
-       ///* if (VK_F1 == msg.wParam)
-       // {
-       //     TogglelCancled();
-       //     std::cout << "worked" << std::endl;
-       //     return true;
-       // }*/
-
         event.type = EventType::KeyUp;
         event.key.virtualKeyCode = (int)msg.wParam;
         InputManager::Get().m_broadcaster->Broadcast(event);
         InputManager::Get().m_keys[event.key.virtualKeyCode] = false;
         return true;
         break;
-    case WM_MOUSEMOVE:
+    case WM_MOUSEMOVE: //그럼 해당 이벤트가 발생하면 그냥... 카메라를 받아와서 시점만 업데이트 시켜버릴까.
+        event.type = EventType::MouseMove;
+        event.Pos.x = (float)GET_X_LPARAM(msg.lParam);
+        event.Pos.y = (float)GET_Y_LPARAM(msg.lParam);
+        InputManager::Get().m_broadcaster->Broadcast(event); //카메라라 밖에 안쓰지 않을까 싶긴 한데?.. 
+
+
+        return true;
+
     case WM_LBUTTONDOWN:
 
         event.type = EventType::LButtonDown;
@@ -50,15 +51,16 @@ bool InputManager::MsgCheck(MSG& msg)
         InputManager::Get().m_broadcaster->Broadcast(event);
         return true;
         break;
+
     case WM_LBUTTONUP:
 
         event.type = EventType::LButtonUp;
         event.Pos.x = (float)GET_X_LPARAM(msg.lParam);
         event.Pos.y = (float)GET_Y_LPARAM(msg.lParam);
         InputManager::Get().m_broadcaster->Broadcast(event);
-
         return true;
         break;
+
     case WM_RBUTTONDOWN:
 
         event.type = EventType::RButtonDown;
@@ -73,10 +75,13 @@ bool InputManager::MsgCheck(MSG& msg)
         event.Pos.x = (float)GET_X_LPARAM(msg.lParam);
         event.Pos.y = (float)GET_Y_LPARAM(msg.lParam);
         InputManager::Get().m_broadcaster->Broadcast(event);
-
         return true;
         break;
 
+        case WM_MOUSEWHEEL: //일단 보류 
+
+            return true;
+            break;
     default:
         return false; //나머지는 프로시저가 처리 -> system key로 나중에 viewport 수정하는 것도 넣자
         break;

@@ -31,7 +31,6 @@ void Asimpper::ProcessNode(aiNode* node, const aiScene* scene)
     // 1. 현재 노드가 참조하는 모든 메쉬 인덱스를 순회합니다.
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
-       
         unsigned int meshIndex = node->mMeshes[i];
         aiMesh* mesh = scene->mMeshes[meshIndex];
 
@@ -71,7 +70,7 @@ Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
 
         if (mesh->mColors[0] != nullptr)
         {
-            //  Assimp가 컬러를 로드했다면 사용 (이전 Access Violation 해결)
+            
             vertex.Color = {
                 mesh->mColors[0][i].r,
                 mesh->mColors[0][i].g,
@@ -80,14 +79,7 @@ Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
             };
             Flag |= VertexFlag::VF_COLOR;
         }
-        else
-        {
-            //  OBJ 파일에서 컬러 로드가 실패했더라도 VF_POSCOL 파이프라인 테스트를 위해 강제 설정
-            // 이 임시 코드를 사용하여 VF_POSCOL 인풋 레이아웃이 올바르게 작동하는지 확인합니다.
-            vertex.Color = { 1.0f, 0.5f, 0.5f, 1.0f }; // 연한 빨간색으로 설정
-            Flag |= VertexFlag::VF_COLOR;
-        }
-        //etc
+        
         vertices.push_back(vertex);
 
     }

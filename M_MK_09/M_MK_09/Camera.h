@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Object.h"
 #include "KeyListenerComponent.h"
+#include "MouseListenerComponent.h"
 
 struct Cam_M
 {
@@ -20,7 +21,7 @@ class Camera : public Object
 {
 public:
 	Camera() = default;
-	~Camera() = default; // 
+	~Camera() = default;  
 	
 
 	void Initalize();
@@ -53,5 +54,9 @@ public:
 	void SetDirty(bool val) {  m_dirty =false; }
 	bool GetDirty() { return m_dirty; }
 	
+	void MouseMove(InputEvent event);
+	void MouseWheel(InputEvent event);
+
+
 };
 

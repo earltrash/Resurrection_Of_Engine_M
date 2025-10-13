@@ -4,9 +4,6 @@
 
 using namespace DirectX;
 
-
-
-
 struct cbMatrix_4
 {
 	XMMATRIX mTM;			
@@ -29,10 +26,6 @@ struct cbMAT
 	XMVECTOR Diffuse = { 1,1,1,1 };		//!< 주 광량(확산광) 의 반사율(%) 
 	XMVECTOR Ambient;		//!< 보조 광량(주변광) 의 반사율(%) 
 };
-
-
-
-
 //그럼 타입에 따라서 업데이트 해야하는 상수 버퍼를 나누는 형식으로 해야 겠네 
 
 struct ConstBuffer_ANI

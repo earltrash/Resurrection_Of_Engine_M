@@ -50,8 +50,6 @@ enum class VertexFlag : uint32_t
 
 	VK_POSCOLNOR = VF_POSITION | VF_COLOR | VF_NORMAL,
 
-
-
 #pragma region later
 	// 3. PBR / 노멀 매핑 속성
 	//VF_TANGENT = 1 << 4,  // 0x00000010 (Tangent)
@@ -101,6 +99,7 @@ struct Vertex
 	//XMFLOAT4 BoneWeights;
 	//float padding;
 };
+
 #pragma endregion
 #pragma region Topology
 enum PRIMTYPE {

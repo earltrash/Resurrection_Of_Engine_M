@@ -35,7 +35,7 @@ public:
 		virtual void Render() 
 		{
 			m_effect->Apply(); //update까지 같이 ㄴ
-			m_model->Draw();
+			m_model->Draw(1, PT_TRIANGLELIST, VertexFlag::VF_POSCOL);
 			
 
 		}; //object가 model의 정보를 알 필요가 없지. 

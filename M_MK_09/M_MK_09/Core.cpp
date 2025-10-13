@@ -41,14 +41,13 @@ bool Core::DX_Set()
     D3D11_DEPTH_STENCIL_DESC dsDesc = {};
     dsDesc.DepthEnable = FALSE; // Depth Test ºñÈ°¼ºÈ­
     dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // Depth Write ºñÈ°¼ºÈ­
-    dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS; // Test ¹«Á¶°Ç Åë°ú (DepthEnable=FALSE ½Ã ºÒÇÊ¿ä)
-    // Stencil ¼³Á¤Àº ÀÏ´Ü ±âº»°ªÀ¸·Î µÓ´Ï´Ù.
+    //dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS; // Test ¹«Á¶°Ç Åë°ú (DepthEnable=FALSE ½Ã ºÒÇÊ¿ä)
+    // Stencil ¼³Á¤Àº ÀÏ´Ü ±âº»°ªÀ¸·Î
 
 
     D3D11_RASTERIZER_DESC rsDesc = {};
     rsDesc.FillMode = D3D11_FILL_SOLID;
-    rsDesc.CullMode = D3D11_CULL_BACK;
-    // ... ³ª¸ÓÁö ¼³Á¤ ...
+    rsDesc.CullMode = D3D11_CULL_NONE;
 
     DX->m_Device->CreateRasterizerState(&rsDesc, &(DX->pSolidRS));
 
@@ -64,14 +63,10 @@ bool Core::ModuleInit()
     m_Asimmper = make_unique<Asimpper>();
     m_Asimmper->Initalize(DX->m_Device, DX->m_DXDC); //MODEL »ý¼º -> ¹öÆÛ »ý¼ºÀ» À§ÇÑ DEVICE, CONTEXT ÁÖÀÔ.
 	
-
     m_obj = make_unique<Object>();
 
-
-
-
     g_camera->SetDirty(true); 
-    CameraUpdate(0.0f);
+    //CameraUpdate(0.0f);
 
     return true;
 }
@@ -117,9 +112,6 @@ void Core::Update(float dTime)
 {
     DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
-    
-
-
 }
 
 void Core::Render(float dTime)
@@ -166,8 +158,7 @@ void Core::CameraUpdate(float dTime) //°ª ¾÷µ¥ÀÌÆ®´Â renderr¶û ¿¬µ¿ÇØ¾ß ÇÏ³ª ¾îÁ
 {
     g_camera->Update(dTime);
 
-            if (g_camera->GetDirty()) 
-            {
+           
                 XMVECTOR eye = g_camera->GetCameraMem().eye;
                 XMVECTOR lookat = g_camera->GetCameraMem().lookat;
                 XMVECTOR up = g_camera->GetCameraMem().up;
@@ -177,16 +168,12 @@ void Core::CameraUpdate(float dTime) //°ª ¾÷µ¥ÀÌÆ®´Â renderr¶û ¿¬µ¿ÇØ¾ß ÇÏ³ª ¾îÁ
                 XMMATRIX mProj = XMMatrixPerspectiveFovLH(fFov, fAspect, fZnear, fZfar);
 
 
-                XMMATRIX mScale = XMMatrixScaling(100.0f, 100.0f, 100.0f); // 100¹è È®´ë
-                XMMATRIX mTrans = XMMatrixTranslation(0.0f, 30.0f, 0.0f); // Y=30 (Ä«¸Þ¶ó LookAt YÃà À§Ä¡)·Î ÀÌµ¿
-                XMMATRIX mWorld = mScale * mTrans;
-                // -----------------------------------------------------------------
-
+                //ÀÏ´Ü ÇÏµåÄÚµù 
+                XMMATRIX mWorld = XMMatrixIdentity();
                 m_obj->m_effect->SetWorld(mWorld);
                 m_obj->m_effect->SetView(mView);
                 m_obj->m_effect->SetProj(mProj);
-                m_obj->m_effect->SetColor(COLOR{ 1,1,1,1 });
-
+                m_obj->m_effect->SetColor(COLOR{ 1,1,1,1 }); //ÀÌ°Ç »ó°ü¾ø±ä ÇÔ.
                 m_obj->m_effect->Update();
 
                 //¾îÂîº¸¸é Àü¿ª Ä«¸Þ¶ó ¿ÀºêÁ§Æ®°¡ Àü¿ªÀûÀÎ view¶û proj¸¦ °üÀåÇÏ´Â ¾Ö±ä ÇÏÁö. ¿©±â¼­ obj°¡ °®°í ÀÖ´Â shaderÀÇ Çà·Ä°ªÀ» ¹Þ´Â °Íµµ ±¦Âú¾Æ º¸ÀÌ±ä ÇÔ. 
@@ -195,7 +182,7 @@ void Core::CameraUpdate(float dTime) //°ª ¾÷µ¥ÀÌÆ®´Â renderr¶û ¿¬µ¿ÇØ¾ß ÇÏ³ª ¾îÁ
                 DX->GetGridFX()->GetFX()->SetView(mView); //Line ±×¸®´Â ¾Öµé ¤·¤· ±× fx 
                 DX->GetGridFX()->GetFX()->Update(); //line draw´Â render ´Ü°è¿¡¼­ 
                 g_camera->SetDirty(false);
-            }
+            
 
             //Ä«¸Þ¶óÀÇ ´õÆ¼ ÇÃ·¡±× ¸»°íµµ, Ä³¸¯ÅÍ ¿òÁ÷ÀÓÀ» Ä«¸Þ¶ó°¡ µû¶ó°¥ ¶§ Çà·Ä ¾÷µ¥ÀÌÆ® µÇ´Â °Ô ´õ ¸ÂÀ¸´Ï±ñ. Àú »óÈ²Àº ½¦ÀÌ´õ ¹× Ä«¸Þ¶ó µð¹ö±ëÀ¸·Î ¸¸µç°Å´Ï ÀÏ´Ü ¹«½Ã. 
     
@@ -203,28 +190,31 @@ void Core::CameraUpdate(float dTime) //°ª ¾÷µ¥ÀÌÆ®´Â renderr¶û ¿¬µ¿ÇØ¾ß ÇÏ³ª ¾îÁ
 
 void Core::ModelParssing()
 {
-  //  m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
+   // m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
+    m_Asimmper->LoadModel("Models/Test.obj", DX->m_Device);
 
-  //  Model* model = m_Asimmper->m_Models.front();
+    Model* model = m_Asimmper->m_Models.front();
 
-    Vertex manualVertices[] =
-    {
-        // V1: À§ÂÊ (¹àÀº »¡°­)
-        { {0.0f, 30.0f + 10.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
+#pragma region model
+    //Vertex manualVertices[] =
+    //{
+    //    // V1 (Apex): (0.0f, 11.66025f, 0.0f) - ¹àÀº »¡°­
+    // { {0.0f, 5.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
 
-        // V2: ¿ÞÂÊ ¾Æ·¡ (¹àÀº ÃÊ·Ï)
-        { {-10.0f, 30.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
+    // // V3 (Right Base): (5.0f, 3.0f, 0.0f) - ¹àÀº ÆÄ¶û
+    // { {10.0f, 3.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
 
-        // V3: ¿À¸¥ÂÊ ¾Æ·¡ (¹àÀº ÆÄ¶û)
-        { {10.0f, 30.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
-    };
+    // // V2 (Left Base): (-5.0f, 3.0f, 0.0f) - ¹àÀº ÃÊ·Ï
+    // { {-10.0f, 3.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
+    //};
 
-    UINT size = sizeof(manualVertices);
+    //UINT size = sizeof(manualVertices);
 
-    Model* model = new Model();
-    model->Create(DX->m_Device, manualVertices, size, VertexFlag::VF_POSCOL);
+    //Model* model = new Model();
+    //model->Create(DX->m_Device, manualVertices, size, VertexFlag::VF_POSCOL);
 
-
+#pragma endregion 
+    
     m_obj->m_model = model;
     Effect* effect = new Effect();
     effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);

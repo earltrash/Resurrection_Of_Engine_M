@@ -40,40 +40,53 @@ int Model:: Draw(float dTime, PRIMTYPE primType, VertexFlag Type) //일단 기본값�
 	m_Dct->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)primType);
 	m_Dct->Draw(Data[Type].m_VtxCnt, 0);
 
-	//std::cout << "CreateVB: Type=" << static_cast<int>(Type)
-	//	<< " Stride=" << Data[Type].m_Stride
-	//	<< " VtxCnt=" << Data[Type].m_VtxCnt << std::endl;
+	
+
+	VertexFlag actualType = (Type != VertexFlag::VF_NONE) ? Type : this->GetFlag();
+
 	return 1;
 }
 
 void Model::CreateVB(VOID* pBuff, UINT size, VertexFlag Type)
 {
-	ID3D11Buffer* pVB = nullptr; //얘는 DEFINE 해도 될 거 같다는 생각이 듦.
+	
+	ID3D11Buffer* pVB = nullptr;
 
 	HRESULT hr = S_OK;
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;					//버퍼 사용방식
-	bd.ByteWidth = size;							//버퍼 크기
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;		//버퍼 용도 : "정점 버퍼" 용로 설정 
+
+	// bd.Usage와 bd.BindFlags 설정은 문제없음
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = size;							// 120 바이트 (3 * 40 bytes)
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA rd;
 	ZeroMemory(&rd, sizeof(rd));
-	rd.pSysMem = pBuff;					//버퍼에 들어갈 데이터 설정 : "정점들"..
+	rd.pSysMem = pBuff;
 
-	//정점 버퍼 생성.
+	// 정점 버퍼 생성 및 HRESULT 확인
 	hr = m_Dev->CreateBuffer(&bd, &rd, &pVB);
+
 	if (FAILED(hr))
 	{
-		std::cout << "정점 버퍼 생성중 오류 발생함!" << std::endl;
+		std::cerr << " 정점 버퍼 생성 실패! HRESULT: 0x"
+			<< std::hex << hr << std::dec << " | pVB: " << pVB << std::endl;
 	}
+	else
+	{
+		std::cout << " 정점 버퍼 생성 성공! pVB: " << pVB << std::endl;
+	}
+
 
 	Data[Type].m_pVB = pVB;
 	Data[Type].m_Size = size;
-	//Data[Type].m_Stride = StrideFromFlag(Type);
-	Data[Type].m_Stride = sizeof(Vertex);
-	Data[Type].m_VtxCnt = size / Data[Type].m_Stride;
+
+	// **이전에 논의했던 스트라이드 및 정점 개수 수정 사항을 다시 적용합니다.**
+	Data[Type].m_Stride = static_cast<UINT>(StrideFromFlag(Type)); // VF_POSCOL에 맞춰 28바이트
+	Data[Type].m_Stride = sizeof(Vertex); // VF_POSCOL에 맞춰 28바이트
+
+	Data[Type].m_VtxCnt = size / sizeof(Vertex);                   // 실제 Vertex 크기(40바이트)로 나눠 정점 개수(3) 계산
 	Data[Type].m_Offset = 0;
-	
 }

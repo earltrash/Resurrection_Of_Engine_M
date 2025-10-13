@@ -362,6 +362,7 @@ int Effect::CreateInputLayout(VertexFlag modelFlag, ID3DBlob* pVSCode) //helper 
 
 void Effect::Apply(float dTime)
 {
+	    Update();
 		m_pDXDC->VSSetShader(m_pVS, nullptr, 0);
 		m_pDXDC->PSSetShader(m_pPS, nullptr, 0);
 		m_pDXDC->IASetInputLayout(m_pLayout);
@@ -371,8 +372,8 @@ void Effect::Apply(float dTime)
 			ID3D11Buffer* pCB = cb.get()->GetBuffer();
 			UINT slot = cb.get()->GetRegisterSlot();
 			m_pDXDC->VSSetConstantBuffers(slot, 1, &pCB);
-			//m_pDXDC->PSSetConstantBuffers(slot, 1, &pCB);
-
+			m_pDXDC->PSSetConstantBuffers(slot, 1, &pCB);
+			//std::cout << "slot num" << slot << endl;
 		}
 }
 
