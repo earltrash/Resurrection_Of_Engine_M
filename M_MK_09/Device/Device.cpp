@@ -126,6 +126,36 @@ HRESULT DX_Device::CreateDepthStencil()
 	return hr;
 }
 
+HRESULT DX_Device::CreateSampler()
+{
+	D3D11_SAMPLER_DESC sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	HRESULT hr = m_Device->CreateSamplerState(&sd, &m_Sampler_Desc);
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+		return 0;
+	}
+
+	return 1;
+
+	
+}
+
 void DX_Device::SetViewPort(float width, float height)
 {
 	D3D11_VIEWPORT vp;
@@ -185,7 +215,9 @@ HRESULT DX_Device::DX_SetUP(HWND hwnd)
 	hr = GridNAxis_SetUP(m_Device);
 	if (FAILED(hr)) assert(SUCCEEDED(hr));
 
-	
+	hr = CreateSampler();
+	if (FAILED(hr)) assert(SUCCEEDED(hr));
+
 	return hr;
 }
 

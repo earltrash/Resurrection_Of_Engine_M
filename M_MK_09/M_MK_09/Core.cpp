@@ -2,11 +2,17 @@
 #include "Core.h"
 
 
+//#pragma comment( lib, "DirectXTK.lib" )
+//#pragma comment( lib, "dxguid.lib" )
+
+#include "WICTextureLoader.h"
+
 
 //전역에서 관리되는 shader ?
 // 
 //Object가 렌더되기 위해서 가져야 하는 shader 객체 혹은 포인터도 결국 전역 정보와 오브젝트의 정보가 필요하긴 함. 
 //Model은 그냥 Model이고 
+ID3D11SamplerState* g_Sampler_Desc = nullptr;
 
 void Core::Sets()
 {
@@ -39,17 +45,29 @@ bool Core::DX_Set()
 
 
     D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-    dsDesc.DepthEnable = FALSE; // Depth Test 비활성화
-    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // Depth Write 비활성화
-    //dsDesc.DepthFunc = D3D11_COMPARISON_ALWAYS; // Test 무조건 통과 (DepthEnable=FALSE 시 불필요)
-    // Stencil 설정은 일단 기본값으로
+ 
+    dsDesc.DepthEnable = TRUE;
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+    DX->m_Device->CreateDepthStencilState(&dsDesc, &DX->pNoDepthDS);
 
 
     D3D11_RASTERIZER_DESC rsDesc = {};
+    //rsDesc.FillMode = D3D11_FILL_SOLID;
     rsDesc.FillMode = D3D11_FILL_SOLID;
+    rsDesc.FrontCounterClockwise = true;
+    rsDesc.DepthBias = 0;
+    rsDesc.DepthBiasClamp = 0;
+    rsDesc.SlopeScaledDepthBias = 0;
+    rsDesc.DepthClipEnable = true;
+    rsDesc.ScissorEnable = false;
+    rsDesc.MultisampleEnable = true;
+    rsDesc.AntialiasedLineEnable = true;
     rsDesc.CullMode = D3D11_CULL_NONE;
 
     DX->m_Device->CreateRasterizerState(&rsDesc, &(DX->pSolidRS));
+
+    g_Sampler_Desc = DX->m_Sampler_Desc;
 
 	return hr;
 }
@@ -66,7 +84,6 @@ bool Core::ModuleInit()
     m_obj = make_unique<Object>();
 
     g_camera->SetDirty(true); 
-    //CameraUpdate(0.0f);
 
     return true;
 }
@@ -152,7 +169,7 @@ float	fAspect = 1.6f;					//가로:세로 비율. 960:600 = 1.6:1 (16:10) 800:600 = 1.
 float	fZnear = 1.0f;					//시야 최소 거리 (1.0m) 
 float	fZfar = 300.0f;					//시야 최대 거리 (300m) 
 
-
+ID3D11ShaderResourceView* g_DinoTextureRv = nullptr;
 
 void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어지럽네
 {
@@ -173,7 +190,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 m_obj->m_effect->SetWorld(mWorld);
                 m_obj->m_effect->SetView(mView);
                 m_obj->m_effect->SetProj(mProj);
-                m_obj->m_effect->SetColor(COLOR{ 1,1,1,1 }); //이건 상관없긴 함.
+                m_obj->m_effect->SetColor(COLOR{ 0.5,1,1,1 }); //이건 상관없긴 함.
                 m_obj->m_effect->Update();
 
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
@@ -191,7 +208,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 void Core::ModelParssing()
 {
    // m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
-    m_Asimmper->LoadModel("Models/Test.obj", DX->m_Device);
+    m_Asimmper->LoadModel("Models/Cube_Coord.obj", DX->m_Device);
 
     Model* model = m_Asimmper->m_Models.front();
 
@@ -217,7 +234,23 @@ void Core::ModelParssing()
     
     m_obj->m_model = model;
     Effect* effect = new Effect();
-    effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
+   // effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
+
+
+    effect->Create(DX->m_Device, L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); //SHADER랑 안맞음
+    effect->SetSampleDesc(g_Sampler_Desc);
+
     m_obj->m_effect = effect;//일단 색상값만.
+
+    HRESULT hr = S_OK;
+    hr = DirectX::CreateWICTextureFromFile(DX->m_Device, L"../Data/dinoskin.jpg", nullptr, &g_DinoTextureRv);
+    if (FAILED(hr))
+    {
+        std::cout << "텍스쳐 로드 실패" << std::endl;
+    }
+
+    m_obj->m_effect->m_texture = g_DinoTextureRv;
+    
+
 }
 

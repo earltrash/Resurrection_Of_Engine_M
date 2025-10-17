@@ -67,15 +67,9 @@ void Camera::Update(float dTime)
         currentMovAmount -= MOVE_SPEED * dTime;
     }
 
-    //// A (왼쪽 회전)
-    //if (input.IsKeyPressed({ Left })) {
-    //    currentRotAmount -= ROT_SPEED * dTime;
-    //}
-    //// D (오른쪽 회전)
-    //if (input.IsKeyPressed({ Right })) {
-    //    currentRotAmount += ROT_SPEED * dTime;
-    //}
 
+
+  
 
     if (currentRotAmount != 0.0f)
     {

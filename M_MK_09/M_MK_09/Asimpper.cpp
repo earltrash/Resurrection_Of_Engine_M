@@ -68,6 +68,15 @@ Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
                 Flag |= VertexFlag::VF_NORMAL;
         }
 
+        if (mesh->mTextureCoords[0])
+        {
+            vertex.TexCoord = {
+         mesh->mTextureCoords[0][i].x,
+         mesh->mTextureCoords[0][i].y };
+
+            Flag |= VertexFlag::VF_TEXCOORD;
+        }
+
         if (mesh->mColors[0] != nullptr)
         {
             

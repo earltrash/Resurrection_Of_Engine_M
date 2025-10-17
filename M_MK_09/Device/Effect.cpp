@@ -173,7 +173,7 @@ HRESULT Effect::Compile(const WCHAR* FileName, const  char* EntryPoint, const ch
 	);
 	if (FAILED(hr))
 	{
-		std::wcout << " 셰이더 컴파일 실패! 파일: "
+		/*std::wcout << " 셰이더 컴파일 실패! 파일: "
 			<< std::wstring(FileName)
 			<< ", Entry: " << EntryPoint
 			<< ", Model: " << ShaderModel
@@ -183,7 +183,14 @@ HRESULT Effect::Compile(const WCHAR* FileName, const  char* EntryPoint, const ch
 		{
 			std::string errMsg((char*)pError->GetBufferPointer(), pError->GetBufferSize());
 			std::cout << "컴파일러 에러 메시지: \n" << errMsg << std::endl;
+		}*/
+		if (pError)
+		{
+			OutputDebugStringA((char*)pError->GetBufferPointer());
+			pError->Release();
 		}
+
+
 	}
 
 	SafeRelease(pError);
@@ -217,12 +224,12 @@ void Effect::Createbuffer_wrapped(VertexFlag type)
 		cbuffer_3->Create(m_pDev);
 		AddCB(std::move(cbuffer_3));
 	}
-	/*else if (type == VertexFlag::FX_LIGHT)
+	else if (type == VertexFlag::VF_POSCOLTEX)
 	{
-		auto cbuffer_1 = make_unique<cbLIGHT>();
+		auto cbuffer_1 = make_unique<cbDEFAULT>();
 		cbuffer_1->Create(m_pDev);
 		AddCB(std::move(cbuffer_1));
-	}*/
+	}
 	//나머지는 ANIMATION에서 처리 
 	else assert(SUCCEEDED(false));
 
@@ -351,6 +358,14 @@ int Effect::CreateInputLayout(VertexFlag modelFlag, ID3DBlob* pVSCode) //helper 
 		offset += sizeof(XMFLOAT3);
 	}
 
+	if ((modelFlag & VertexFlag::VF_TEXCOORD) != VertexFlag::VF_NONE)
+	{
+		layout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,
+						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		offset += sizeof(XMFLOAT2);
+	}
+
+
 	HRESULT hr = m_pDev->CreateInputLayout(
 		layout.data(), layout.size(),
 		pVSCode->GetBufferPointer(), pVSCode->GetBufferSize(),
@@ -366,6 +381,13 @@ void Effect::Apply(float dTime)
 		m_pDXDC->VSSetShader(m_pVS, nullptr, 0);
 		m_pDXDC->PSSetShader(m_pPS, nullptr, 0);
 		m_pDXDC->IASetInputLayout(m_pLayout);
+
+
+		if (m_texture != nullptr)
+		{
+			m_pDXDC->PSSetShaderResources(0, 1, &m_texture);
+			m_pDXDC->PSSetSamplers(0, 1, &m_Sampler_Desc);
+		}
 
 		for (const auto& cb : m_ConstantBuffers)
 		{

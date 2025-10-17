@@ -10,18 +10,18 @@ public:
 
 protected:
 	
-	ID3D11Device* m_pDev;           
-	ID3D11DeviceContext* m_pDXDC;   
-
+	ID3D11Device* m_pDev = nullptr;
+	ID3D11DeviceContext* m_pDXDC = nullptr;
+	ID3D11SamplerState* m_Sampler_Desc = nullptr;
 protected:
 	
-	ID3D11VertexShader* m_pVS;     
-	ID3D11PixelShader* m_pPS;   
+	ID3D11VertexShader* m_pVS = nullptr;
+	ID3D11PixelShader* m_pPS = nullptr;
 
-	ID3DBlob* m_pVSCode;            
-	ID3D11Buffer* m_pCB;            
+	ID3DBlob* m_pVSCode = nullptr;
+	ID3D11Buffer* m_pCB = nullptr;
 
-	ID3D11InputLayout* m_pLayout;   
+	ID3D11InputLayout* m_pLayout = nullptr;
 
 
 protected:
@@ -49,8 +49,11 @@ public:
 	virtual void Release();
 	virtual int UpdateConstantBuffers();
 	void AddCB(std::unique_ptr<IConstBuffer> val) { m_ConstantBuffers.push_back(std::move(val)); }
-
+	void SetSampleDesc(ID3D11SamplerState* sd) { m_Sampler_Desc = sd; }
 	
+	ID3D11ShaderResourceView* m_texture = nullptr;
+
+
 	//virtual int UpdateCB();
 	
 	 virtual void SetWorld(XMMATRIX mTM);
