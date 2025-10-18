@@ -337,66 +337,78 @@ int Effect::CreateInputLayout(VertexFlag modelFlag, ID3DBlob* pVSCode) //helper 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
 	UINT offset = 0;
 
+	// POSITION
 	if ((modelFlag & VertexFlag::VF_POSITION) != VertexFlag::VF_NONE)
 	{
 		layout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
 						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
-		offset += sizeof(XMFLOAT3);
+		offset += sizeof(XMFLOAT3); // 수정: if 블록 안으로 이동
 	}
 
+	// COLOR
 	if ((modelFlag & VertexFlag::VF_COLOR) != VertexFlag::VF_NONE)
 	{
 		layout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,
 						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
-		offset += sizeof(XMFLOAT4);
+		offset += sizeof(XMFLOAT4); // 수정: if 블록 안으로 이동
 	}
 
-	if ((modelFlag & VertexFlag::VF_NORMAL) != VertexFlag::VF_NONE)
-	{
-		layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
-		offset += sizeof(XMFLOAT3);
-	}
-
+	// TEXCOORD
 	if ((modelFlag & VertexFlag::VF_TEXCOORD) != VertexFlag::VF_NONE)
 	{
 		layout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,
 						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
-		offset += sizeof(XMFLOAT2);
+		offset += sizeof(XMFLOAT2); // 수정: if 블록 안으로 이동
 	}
 
+	// NORMAL
+	if ((modelFlag & VertexFlag::VF_NORMAL) != VertexFlag::VF_NONE)
+	{
+		layout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+						   0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+		offset += sizeof(XMFLOAT3); // 수정: if 블록 안으로 이동
+	}
+
+	// 실제 생성
+	if (layout.empty())
+		return -1;
 
 	HRESULT hr = m_pDev->CreateInputLayout(
-		layout.data(), layout.size(),
-		pVSCode->GetBufferPointer(), pVSCode->GetBufferSize(),
+		layout.data(), (UINT)layout.size(),
+		pVSCode->GetBufferPointer(),
+		pVSCode->GetBufferSize(),
 		&m_pLayout
 	);
 
-	return SUCCEEDED(hr) ? 1 : E_FAIL;
+	if (FAILED(hr))
+		return -1;
+
+	return 1;
 }
 
-void Effect::Apply(float dTime)
+
+void Effect::Apply(float dTime, SamplerIndex flag)
 {
-	    Update();
-		m_pDXDC->VSSetShader(m_pVS, nullptr, 0);
-		m_pDXDC->PSSetShader(m_pPS, nullptr, 0);
-		m_pDXDC->IASetInputLayout(m_pLayout);
+	Update();
+	m_pDXDC->VSSetShader(m_pVS, nullptr, 0);
+	m_pDXDC->PSSetShader(m_pPS, nullptr, 0);
+	m_pDXDC->IASetInputLayout(m_pLayout);
 
 
-		if (m_texture != nullptr)
-		{
-			m_pDXDC->PSSetShaderResources(0, 1, &m_texture);
-			m_pDXDC->PSSetSamplers(0, 1, &m_Sampler_Desc);
-		}
+	if (m_texture != nullptr)
+	{
+		m_pDXDC->PSSetShaderResources(0, 1, &m_texture);
+		m_pDXDC->PSSetSamplers(0, 1, &GlobalSampler[static_cast<int>(flag)]);
+	}
 
-		for (const auto& cb : m_ConstantBuffers)
-		{
-			ID3D11Buffer* pCB = cb.get()->GetBuffer();
-			UINT slot = cb.get()->GetRegisterSlot();
-			m_pDXDC->VSSetConstantBuffers(slot, 1, &pCB);
-			m_pDXDC->PSSetConstantBuffers(slot, 1, &pCB);
-			//std::cout << "slot num" << slot << endl;
-		}
+	for (const auto& cb : m_ConstantBuffers)
+	{
+		ID3D11Buffer* pCB = cb.get()->GetBuffer();
+		UINT slot = cb.get()->GetRegisterSlot();
+		m_pDXDC->VSSetConstantBuffers(slot, 1, &pCB);
+		m_pDXDC->PSSetConstantBuffers(slot, 1, &pCB);
+		//std::cout << "slot num" << slot << endl;
+	}
 }
 
 void Effect::Update(float dTime)

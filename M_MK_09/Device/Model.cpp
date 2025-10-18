@@ -85,9 +85,11 @@ void Model::CreateVB(VOID* pBuff, UINT size, VertexFlag Type)
 
 
 
-	Data[Type].m_Stride = static_cast<UINT>(StrideFromFlag(Type));  // VF_POSCOL에 맞춰 28바이트
+	//Data[Type].m_Stride = static_cast<UINT>(StrideFromFlag(Type));  // VF_POSCOL에 맞춰 28바이트
 	Data[Type].m_Stride = sizeof(Vertex);                           // VF_POSCOL에 맞춰 28바이트
 
-	Data[Type].m_VtxCnt = size / sizeof(Vertex);                   // 실제 Vertex 크기(40바이트)로 나눠 정점 개수(3) 계산
+	//Data[Type].m_VtxCnt = size / sizeof(Vertex);                   // 실제 Vertex 크기(40바이트)로 나눠 정점 개수(3) 계산
+	Data[Type].m_VtxCnt = size / Data[Type].m_Stride;
+
 	Data[Type].m_Offset = 0;
 }

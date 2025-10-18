@@ -24,7 +24,6 @@ public: //일단 공부해야 하니깐 열어 버려
 
 	ID3D11RasterizerState* pSolidRS = nullptr;
 	ID3D11DepthStencilState* pNoDepthDS = nullptr;
-	ID3D11SamplerState* m_Sampler_Desc = nullptr;
 private:
 	unique_ptr<GridNAxis> GDNAX;
 

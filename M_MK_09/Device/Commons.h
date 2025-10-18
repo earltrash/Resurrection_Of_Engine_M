@@ -47,15 +47,23 @@ enum class VertexFlag : uint32_t
 	VF_COLOR = 1 << 3,  // 0x00000008 (Color)
 
 
+
+
+
 	VF_POSCOL = VF_POSITION | VF_COLOR,
 
 	VF_POSNOR = VF_POSITION | VF_NORMAL,
 
 	VK_POSCOLNOR = VF_POSITION | VF_COLOR | VF_NORMAL,
 
-
+	VF_POSTEXNOR = VF_POSITION | VF_TEXCOORD | VF_NORMAL, //아마 얘를 가장 많이 쓸 거 같긴 함.
 
 	VF_POSCOLTEX = VF_POSITION | VF_COLOR | VF_TEXCOORD,
+
+	VF_POSCOLTEXNOR = VF_POSITION | VF_COLOR | VF_TEXCOORD |VF_NORMAL,
+
+
+
 
 #pragma region later
 	// 3. PBR / 노멀 매핑 속성
@@ -120,6 +128,29 @@ enum PRIMTYPE {
 };
 #pragma endregion
 
+
+#pragma region globalDX
+
+enum class SamplerIndex // ANISOTROPIC가 DEFAULT
+{
+	DEFAULT =0, //Wrapped 
+	MIRROR =1,
+	CLAMP =2 ,
+	BORDER =3 ,
+	MIRRORONCE =4 ,
+
+	SamplerMax =5 
+};
+
+
+
+extern ID3D11SamplerState** GlobalSampler;
+
+#pragma endregion
+
+
+
+
 #pragma region helperfunc
 
 template<typename T>
@@ -142,6 +173,7 @@ HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, LPVOID pData,
 int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD num, ID3DBlob* pVSCode, ID3D11InputLayout** ppLayout);
 HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size);
 
+void GlobalSamplerCreate(ID3D11Device*& device);
 
 
 

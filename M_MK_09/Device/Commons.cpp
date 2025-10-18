@@ -1,6 +1,9 @@
 #include "Commons.h"
 
-float StrideFromFlag(VertexFlag Flag) //For Bytes 
+
+ID3D11SamplerState** GlobalSampler = nullptr;
+
+float StrideFromFlag(VertexFlag Flag) // 근데 그냥 stride는 vertex 단위로 받을 거라. 얘는 아마 폐지 되지 않을까 싶긴 해. 
 {
 	size_t stride = 0;
 	if ((Flag & VertexFlag::VF_POSITION) != VertexFlag::VF_NONE) stride += sizeof(XMFLOAT3);
@@ -199,6 +202,136 @@ HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, L
 	pDXDC->Unmap(pBuff, 0);						//버퍼 닫기 : 감금해제 "Unlocked"
 
 	return hr;
+}
+void GlobalSamplerCreate(ID3D11Device*& device)
+{
+	GlobalSampler = new ID3D11SamplerState * [static_cast<int>(SamplerIndex::SamplerMax)];
+
+	D3D11_SAMPLER_DESC sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	HRESULT hr = device->CreateSamplerState(&sd, &GlobalSampler[static_cast<int>(SamplerIndex::DEFAULT)]);
+
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+		
+	}
+
+	sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	 hr = device->CreateSamplerState(&sd, &GlobalSampler[static_cast<int>(SamplerIndex::MIRROR)]);
+
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+
+	}
+
+
+	sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	 hr = device->CreateSamplerState(&sd, &GlobalSampler[static_cast<int>(SamplerIndex::CLAMP)]);
+
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+
+	}
+
+
+	sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	 hr = device->CreateSamplerState(&sd, &GlobalSampler[static_cast<int>(SamplerIndex::BORDER)]);
+
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+
+	}
+
+	sd = {};
+	sd.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	sd.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	sd.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
+
+	sd.MaxAnisotropy = 1;
+	sd.MinLOD = 0;
+	sd.MaxLOD = D3D11_FLOAT32_MAX;
+	sd.MipLODBias = 0;
+	sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sd.BorderColor[0] = 1;
+	sd.BorderColor[1] = 1;
+	sd.BorderColor[2] = 1;
+	sd.BorderColor[3] = 1;
+
+	hr = device->CreateSamplerState(&sd, &GlobalSampler[static_cast<int>(SamplerIndex::MIRRORONCE)]);
+
+	if (FAILED(hr))
+	{
+		std::cout << "텍스쳐 샘플러 못 만듦" << std::endl;
+
+	}
+
+
+	
+	
 }
 #pragma endregion
 

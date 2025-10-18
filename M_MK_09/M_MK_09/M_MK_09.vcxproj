@@ -116,7 +116,7 @@
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "C:\Users\User\Desktop\M\Resurrection_Of_Engine_M-main\M_MK_09\External\assimp-master\Build\bin\Debug\assimp-vc143-mtd.dll" "$(OutDir)" /Y</Command>
+      <Command>xcopy "$(SolutionDir)\External\assimp-master\Build\bin\Debug" "$(OutDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

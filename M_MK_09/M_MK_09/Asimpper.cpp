@@ -2,15 +2,11 @@
 #include "Asimpper.h"
 
 
-
-bool Asimpper::LoadModel(const std::string& filePath, ID3D11Device* device)
+bool Assimper::LoadModel(const std::string& filePath, ID3D11Device* device)
 {
     const unsigned int flags =
-        aiProcess_Triangulate |             // 사각형 이상을 삼각형으로 변환 (필수)
-        aiProcess_ConvertToLeftHanded |     // 왼손 좌표계로 변환 (DirectX 필수)
-        aiProcess_CalcTangentSpace |        // PBR을 위한 탄젠트 벡터 계산
-        aiProcess_JoinIdenticalVertices |   // 정점 최적화
-        aiProcess_SortByPType;              // 하나의 메쉬가 여러 기본 요소를 가지지 않도록 분리
+        aiProcess_Triangulate |             // 삼각형화 (거의 필수)
+        aiProcess_ConvertToLeftHanded;      // 왼손 좌표계 변환 (DirectX 용)
 
     const aiScene* scene = m_Importer.ReadFile(filePath, flags);
 
@@ -26,7 +22,7 @@ bool Asimpper::LoadModel(const std::string& filePath, ID3D11Device* device)
     return true;
 }
 
-void Asimpper::ProcessNode(aiNode* node, const aiScene* scene)
+void Assimper::ProcessNode(aiNode* node, const aiScene* scene)
 {
     // 1. 현재 노드가 참조하는 모든 메쉬 인덱스를 순회합니다.
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -43,9 +39,23 @@ void Asimpper::ProcessNode(aiNode* node, const aiScene* scene)
     {
         ProcessNode(node->mChildren[i], scene);
     }
+
+
+    //if (scene->mRootNode->mNumMeshes == 0) //만약 없어도. scene의 mesh data를 읽어서 처리시키기.
+    //{
+    //    for (unsigned int i = 0; i < scene->mNumMeshes; i++)
+    //    {
+    //        aiMesh* mesh = scene->mMeshes[i];
+    //        Model* model = ProcessModel(mesh, scene);
+    //        m_Models.push_back(model);
+    //    }
+    //}
+
+
+
 }
 
-Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
+Model* Assimper::ProcessModel(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -77,22 +87,20 @@ Model* Asimpper::ProcessModel(aiMesh* mesh, const aiScene* scene)
             Flag |= VertexFlag::VF_TEXCOORD;
         }
 
-        if (mesh->mColors[0] != nullptr)
+        if (mesh->HasVertexColors(0))
         {
-            
-            vertex.Color = {
-                mesh->mColors[0][i].r,
-                mesh->mColors[0][i].g,
-                mesh->mColors[0][i].b,
-                mesh->mColors[0][i].a
-            };
-            Flag |= VertexFlag::VF_COLOR;
+            aiColor4D& color = mesh->mColors[0][i];
+            vertex.Color = { color.r, color.g, color.b, 1.0f }; //  여기서 A에 1.0f를 추가!
+        }
+        else
+        {
+            vertex.Color = { 1.0f, 1.0f, 1.0f, 1.0f }; // 정점 색상이 없을 경우 기본값
         }
         
         vertices.push_back(vertex);
 
     }
-
+    std::cout << "Assimp Reported Vertex Count: " << mesh->mNumVertices << std::endl;
     UINT totalSize = vertices.size() * sizeof(Vertex);
     model->Create(m_Device, vertices.data(), totalSize, Flag);
 

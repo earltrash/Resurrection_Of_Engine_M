@@ -16,7 +16,7 @@ cbuffer cbDEFAULT : register(b0)
     matrix mProj;   //투영 변환 행렬. 
     matrix mWV; //월드-뷰 변환 행렬. 
     
-    float4 col;
+    float4 Color;
 };
 
 
@@ -44,7 +44,7 @@ float4 Light(float4 nrm);
 
 VSOutput VS_Main(
 				 float4 pos : POSITION0,
-                 float4 nor0 : COLOR0,
+                 float4 col : COLOR0,
                  float2 uv0 : TEXCOORD0
 				)
 {

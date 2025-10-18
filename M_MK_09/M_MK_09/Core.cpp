@@ -12,7 +12,6 @@
 // 
 //Object가 렌더되기 위해서 가져야 하는 shader 객체 혹은 포인터도 결국 전역 정보와 오브젝트의 정보가 필요하긴 함. 
 //Model은 그냥 Model이고 
-ID3D11SamplerState* g_Sampler_Desc = nullptr;
 
 void Core::Sets()
 {
@@ -67,8 +66,6 @@ bool Core::DX_Set()
 
     DX->m_Device->CreateRasterizerState(&rsDesc, &(DX->pSolidRS));
 
-    g_Sampler_Desc = DX->m_Sampler_Desc;
-
 	return hr;
 }
 bool Core::ModuleInit()
@@ -78,7 +75,7 @@ bool Core::ModuleInit()
     g_camera = make_unique<Camera>();
     g_camera->Initalize();
 
-    m_Asimmper = make_unique<Asimpper>();
+    m_Asimmper = make_unique<Assimper>();
     m_Asimmper->Initalize(DX->m_Device, DX->m_DXDC); //MODEL 생성 -> 버퍼 생성을 위한 DEVICE, CONTEXT 주입.
 	
     m_obj = make_unique<Object>();
@@ -134,13 +131,12 @@ void Core::Update(float dTime)
 void Core::Render(float dTime)
 {
     DX->Clear();
-
     DX->DrawGridNAxis();
-    
     DX->m_DXDC->RSSetState(DX->pSolidRS);
     //이건 유닛단위에서 실행하는 게 맞는듯, 일단 Object의 멤버로 두고, MeshComponent랑 animation Component로 분리 하자 (이건 발표 때 설명 
-
     DX->m_DXDC->OMSetDepthStencilState(DX->pNoDepthDS, 0);
+
+
     m_obj->Render(); //나중에는 component를 통해서 render를 하던가 하겠음 ㅇㅇ .
     DX->Flip();
 }
@@ -184,6 +180,8 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
                 XMMATRIX mProj = XMMatrixPerspectiveFovLH(fFov, fAspect, fZnear, fZfar);
 
+                float aspectRatio = static_cast<float>(w_width) / static_cast<float>(w_height);
+                 mProj = XMMatrixPerspectiveFovLH(fFov, aspectRatio, fZnear, fZfar);
 
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();
@@ -207,8 +205,9 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
 void Core::ModelParssing()
 {
-   // m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
+  //  m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
     m_Asimmper->LoadModel("Models/Cube_Coord.obj", DX->m_Device);
+    //m_Asimmper->LoadModel("Models/Cube_Clean.obj", DX->m_Device);
 
     Model* model = m_Asimmper->m_Models.front();
 
@@ -231,14 +230,14 @@ void Core::ModelParssing()
     //model->Create(DX->m_Device, manualVertices, size, VertexFlag::VF_POSCOL);
 
 #pragma endregion 
-    
+   
+
     m_obj->m_model = model;
     Effect* effect = new Effect();
    // effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
 
 
-    effect->Create(DX->m_Device, L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); //SHADER랑 안맞음
-    effect->SetSampleDesc(g_Sampler_Desc);
+    effect->Create(DX->m_Device, L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); //
 
     m_obj->m_effect = effect;//일단 색상값만.
 

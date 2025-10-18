@@ -7,7 +7,7 @@
 #include "Model.h"
 
 
-class Asimpper
+class Assimper
 {
 private:
 
@@ -16,6 +16,9 @@ private:
     ID3D11DeviceContext* m_DXDC = nullptr;
 
 public:
+  
+
+
     void Initalize(ID3D11Device* DV, ID3D11DeviceContext* DC) { SetDevices(DV, DC); }
     void SetDevices(ID3D11Device* DV, ID3D11DeviceContext* DC) { m_Device = DV; m_DXDC = DC; }
     std::vector<Model*> m_Models;

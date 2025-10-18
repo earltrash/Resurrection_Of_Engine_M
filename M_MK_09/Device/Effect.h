@@ -12,7 +12,6 @@ protected:
 	
 	ID3D11Device* m_pDev = nullptr;
 	ID3D11DeviceContext* m_pDXDC = nullptr;
-	ID3D11SamplerState* m_Sampler_Desc = nullptr;
 protected:
 	
 	ID3D11VertexShader* m_pVS = nullptr;
@@ -45,11 +44,12 @@ public:
 
 	virtual int Create(ID3D11Device* pDev, const TCHAR* filename , VertexFlag flag); // LPDEVICE -> ID3D11Device*
 	virtual void Update(float dTime = 0);
-	virtual void Apply(float dTime = 0);
+
+	virtual void Apply(float dTime = 0 , SamplerIndex flag = SamplerIndex::DEFAULT);
+
 	virtual void Release();
 	virtual int UpdateConstantBuffers();
 	void AddCB(std::unique_ptr<IConstBuffer> val) { m_ConstantBuffers.push_back(std::move(val)); }
-	void SetSampleDesc(ID3D11SamplerState* sd) { m_Sampler_Desc = sd; }
 	
 	ID3D11ShaderResourceView* m_texture = nullptr;
 
