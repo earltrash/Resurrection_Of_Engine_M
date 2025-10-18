@@ -7,6 +7,9 @@
 
 #include "D3D11.h"
 #include "DirectXMath.h"
+
+
+
 using namespace DirectX;
 
 typedef XMFLOAT4		COLOR;
@@ -25,9 +28,9 @@ struct PosNNor
 
 struct Model_Prop
 {
-	ID3D11Buffer* m_pVB = nullptr;			//!< 정점 버퍼
+	ID3D11Buffer* m_pVB = nullptr;		//!< 정점 버퍼
 	UINT			m_Size = 0;			//!< 버퍼 전체 크기(바이트)
-	UINT			m_Stride = 0;	//!< 정점 크기.
+	UINT			m_Stride = 0;	    //!< 정점 크기.
 	UINT			m_Offset = 0;		//!< 렌더링 시작 정점 (offset)
 	UINT			m_VtxCnt = 0;		//!< 정점 개수.
 };
@@ -36,7 +39,7 @@ struct Model_Prop
 
 enum class VertexFlag : uint32_t
 {
-	VF_NONE =0,
+	VF_NONE = 0,
 
 	VF_POSITION = 1 << 0,  // 0x00000001 (Pos)
 	VF_NORMAL = 1 << 1,  // 0x00000002 (Nor)
@@ -49,6 +52,10 @@ enum class VertexFlag : uint32_t
 	VF_POSNOR = VF_POSITION | VF_NORMAL,
 
 	VK_POSCOLNOR = VF_POSITION | VF_COLOR | VF_NORMAL,
+
+
+
+	VF_POSCOLTEX = VF_POSITION | VF_COLOR | VF_TEXCOORD,
 
 #pragma region later
 	// 3. PBR / 노멀 매핑 속성
@@ -90,9 +97,10 @@ struct Vertex
 {
 	XMFLOAT3 Position;
 	XMFLOAT4 Color;
+	XMFLOAT2 TexCoord;
 	XMFLOAT3 Normal;
 
-	//XMFLOAT2 TexCoord;
+	
 	//XMFLOAT3 Tangent;
 	//XMFLOAT3 BiNormal;
 	//uint32_t BoneInidces[4];

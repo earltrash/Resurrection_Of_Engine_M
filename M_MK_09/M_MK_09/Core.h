@@ -8,6 +8,8 @@
 
 using namespace std;
 
+extern ID3D11SamplerState* g_Sampler_Desc;
+
 class Core : public Window
 {
 public:
@@ -48,7 +50,6 @@ private:
 	unique_ptr<GameTimer> m_timer = nullptr;
 	unique_ptr<Camera> g_camera = nullptr;
 	unique_ptr<Asimpper> m_Asimmper = nullptr;
-
 
 	unique_ptr<Object> m_obj = nullptr;
 

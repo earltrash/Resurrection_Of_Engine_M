@@ -58,5 +58,8 @@
     <FxCompile Include="Shader\Default.fx">
       <Filter>리소스 파일</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\Demo_3.fx">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

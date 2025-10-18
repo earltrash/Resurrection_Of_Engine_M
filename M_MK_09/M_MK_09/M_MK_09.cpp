@@ -2,9 +2,11 @@
 #include <iostream>
 #include <Windows.h>
 #include "Core.h"
-
 int main()
 {
+
+	
+
 	Core core;
 	core.Sets();
 	core.MessagePump();

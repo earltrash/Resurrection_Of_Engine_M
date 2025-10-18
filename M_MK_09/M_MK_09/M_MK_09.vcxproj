@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include;$(SolutionDir)External\DXTK\Inc</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -111,12 +111,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)External\assimp-master\Build\lib\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)External\assimp-master\Build\lib\Debug;$(SolutionDir)External\DXTK\Lib;$(SolutionDir)External\DXTEX\DirectXTex-main\DirectXTex\Bin\Desktop_2022_Win10\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mtd.lib;DirectXTK.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "C:\Users\dadad\Desktop\Engine_M\M_MK_09\External\assimp-master\Build\bin\Debug\assimp-vc143-mtd.dll" "$(OutDir)" /Y
-</Command>
+      <Command>xcopy "C:\Users\User\Desktop\M\Resurrection_Of_Engine_M-main\M_MK_09\External\assimp-master\Build\bin\Debug\assimp-vc143-mtd.dll" "$(OutDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,6 +132,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "C:\Users\User\Desktop\M\Resurrection_Of_Engine_M-main\M_MK_09\External\assimp-master\Build\bin\Debug\assimp-vc143-mtd.dll" "$(OutDir)" /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Asimpper.cpp" />
@@ -165,6 +168,11 @@
   <ItemGroup>
     <FxCompile Include="Shader\Default.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Demo_3.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
