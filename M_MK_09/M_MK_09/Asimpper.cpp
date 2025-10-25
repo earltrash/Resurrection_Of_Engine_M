@@ -7,10 +7,10 @@ bool Asimpper::LoadModel(const std::string& filePath, ID3D11Device* device)
 {
     const unsigned int flags =
         aiProcess_Triangulate |             // 사각형 이상을 삼각형으로 변환 (필수)
-        aiProcess_ConvertToLeftHanded |     // 왼손 좌표계로 변환 (DirectX 필수)
-        aiProcess_CalcTangentSpace |        // PBR을 위한 탄젠트 벡터 계산
-        aiProcess_JoinIdenticalVertices |   // 정점 최적화
-        aiProcess_SortByPType;              // 하나의 메쉬가 여러 기본 요소를 가지지 않도록 분리
+        aiProcess_ConvertToLeftHanded;      // 왼손 좌표계로 변환 (DirectX 필수)
+        //aiProcess_CalcTangentSpace |        // PBR을 위한 탄젠트 벡터 계산
+        //aiProcess_JoinIdenticalVertices |   // 정점 최적화
+        //aiProcess_SortByPType;              // 하나의 메쉬가 여러 기본 요소를 가지지 않도록 분리
 
     const aiScene* scene = m_Importer.ReadFile(filePath, flags);
 
