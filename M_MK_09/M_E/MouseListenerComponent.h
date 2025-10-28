@@ -1,5 +1,5 @@
 #pragma once
-#include "Listener.h"
+#include "ListenerComponent.h"
 #include "InputManager.h"
 
 class MouseListenerComponent : public ListenerComponent //새로운 shared-raw-shared로 소유권 이중화를 막기 위함.

@@ -8,8 +8,6 @@ extern class GridNAxis;
 
 
 using namespace DirectX;
-using namespace std;
-
 class DX_Device
 {
 public: //일단 공부해야 하니깐 열어 버려 
@@ -26,7 +24,7 @@ public: //일단 공부해야 하니깐 열어 버려
 	ID3D11DepthStencilState* pNoDepthDS = nullptr;
 	ID3D11SamplerState* m_Sampler_Desc = nullptr;
 private:
-	unique_ptr<GridNAxis> GDNAX;
+	std::unique_ptr<GridNAxis> GDNAX;
 
 private:
 

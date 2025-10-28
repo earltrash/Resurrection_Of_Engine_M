@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 class Object;
 
 class Component
@@ -8,6 +10,7 @@ public:
 		virtual void Update() {}
 		virtual void FixedUpdate(float dt) {}
 
-		void SetOwner(Object* owner) { m_Owner = owner; }
-		Object* m_Owner = nullptr;
+		void SetOwner(std::shared_ptr<Object> owner) { m_Owner = owner; }
+		std::weak_ptr<Object> GetOwner() { return m_Owner; }
+		std::weak_ptr<Object> m_Owner;
 };

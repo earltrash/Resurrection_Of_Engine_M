@@ -6,7 +6,6 @@
 #include "Camera.h"
 #include "Asimpper.h"
 
-using namespace std;
 
 extern ID3D11SamplerState* g_Sampler_Desc;
 
@@ -45,13 +44,13 @@ public:
 
 
 private:
-	shared_ptr<DX_Device> DX = nullptr;
+	std::shared_ptr<DX_Device> DX = nullptr;
 	
-	unique_ptr<GameTimer> m_timer = nullptr;
-	unique_ptr<Camera> g_camera = nullptr;
-	unique_ptr<Asimpper> m_Asimmper = nullptr;
+	std::unique_ptr<GameTimer> m_timer = nullptr;
+	std::unique_ptr<Camera> g_camera = nullptr;
+	std::unique_ptr<Asimpper> m_Asimmper = nullptr;
 
-	unique_ptr<Object> m_obj = nullptr;
+	std::unique_ptr<Object> m_obj = nullptr;
 
 	//리소스 매니저
 	//사운드 매니저

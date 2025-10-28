@@ -103,7 +103,7 @@ HRESULT DX_Device::CreateDepthStencil()
 	hr = m_Device->CreateTexture2D(&td, NULL, &m_pDS);
 	if (FAILED(hr))
 	{
-		std::cout << "깊이/스텐실 전용 텍스쳐 생성 오류" << endl;
+		std::cout << "깊이/스텐실 전용 텍스쳐 생성 오류" << std::endl;
 		return hr;
 	}
 
@@ -120,7 +120,7 @@ HRESULT DX_Device::CreateDepthStencil()
 	hr = m_Device->CreateDepthStencilView(m_pDS, &dd, &m_pDSView);
 	if (FAILED(hr))
 	{
-		std::cout << "깊이/스텐실뷰 생성 실패." << endl;
+		std::cout << "깊이/스텐실뷰 생성 실패." << std::endl;
 		return hr;
 	}
 	return hr;
@@ -224,7 +224,7 @@ HRESULT DX_Device::DX_SetUP(HWND hwnd)
 HRESULT DX_Device::GridNAxis_SetUP(ID3D11Device* Dev)
 {
 	HRESULT hr;
-	GDNAX = make_unique<GridNAxis>();
+	GDNAX = std::make_unique<GridNAxis>();
 	hr = GDNAX->Set_GridNAxis( Dev);
 	
 	return hr;

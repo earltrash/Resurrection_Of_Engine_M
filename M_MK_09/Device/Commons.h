@@ -37,6 +37,8 @@ struct Model_Prop
 
 #pragma region VertexFlags
 
+//이거 버릴 거임. 
+
 enum class VertexFlag : uint32_t
 {
 	VF_NONE = 0,
@@ -56,34 +58,6 @@ enum class VertexFlag : uint32_t
 
 
 	VF_POSCOLTEX = VF_POSITION | VF_COLOR | VF_TEXCOORD,
-
-#pragma region later
-	// 3. PBR / 노멀 매핑 속성
-	//VF_TANGENT = 1 << 4,  // 0x00000010 (Tangent)
-	//VF_BINORMAL = 1 << 5,  // 0x00000020 (BiNormal/BiTangent)
-
-	//// 4. 애니메이션 속성 (스킨드 메쉬에 필수)
-	//VF_BONE_ID = 1 << 6,  // 0x00000040 (Bone Indices)
-	//VF_WEIGHT = 1 << 7,  // 0x00000080 (Bone Weights)
-
-	//// 5. 기타 (추후 확장 가능)
-	//VF_VELOCITY = 1 << 8,  // 0x00000100 (모션 블러 등)
-
-	//// A. 단순 렌더링 (Basic Unlit)
-	//VF_BASIC = VF_POSITION | VF_TEXCOORD,
-
-	//// B. 표준 라이팅 모델 (Phong/Blinn-Phong)
-	//VF_STANDARD = VF_POSITION | VF_NORMAL | VF_TEXCOORD,
-
-	//// C. PBR 렌더링 (노멀맵 사용)
-	//VF_PBR = VF_STANDARD | VF_TANGENT | VF_BINORMAL,
-
-	//// D. 스킨드 애니메이션 (Skinning)
-	//VF_SKINNED = VF_STANDARD | VF_BONE_ID | VF_WEIGHT,
-
-	//// E. 풀 스펙 스킨드 PBR 모델
-	//VF_FULL_SKIN = VF_PBR | VF_BONE_ID | VF_WEIGHT,
-#pragma endregion
 
 	VF_MAX
 };

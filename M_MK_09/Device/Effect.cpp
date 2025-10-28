@@ -204,29 +204,29 @@ void Effect::Createbuffer_wrapped(VertexFlag type)
 {
 	if (type == VertexFlag::VF_POSCOL) //NOLIGHT가 맞는듯?
 	{
-		auto cbuffer = make_unique<cbDEFAULT>();
+		auto cbuffer = std::make_unique<cbDEFAULT>();
 		cbuffer->Create(m_pDev);
 		AddCB(std::move(cbuffer));
 	}
 
 	else if (type == VertexFlag::VF_POSNOR) // Light는 전역에서 관리. 후에는 Light 전용 Class에서 운용 
 	{
-		auto cbuffer_1 = make_unique<cbDEFAULT>();
+		auto cbuffer_1 = std::make_unique<cbDEFAULT>();
 		cbuffer_1->Create(m_pDev);
 		AddCB(std::move(cbuffer_1));
 
-		auto cbuffer_2 = make_unique<cbMATERIAL>();
+		auto cbuffer_2 = std::make_unique<cbMATERIAL>();
 		cbuffer_2->Create(m_pDev);
 		AddCB(std::move(cbuffer_2));
 
 
-		auto cbuffer_3 = make_unique<cbLIGHT>();
+		auto cbuffer_3 = std::make_unique<cbLIGHT>();
 		cbuffer_3->Create(m_pDev);
 		AddCB(std::move(cbuffer_3));
 	}
 	else if (type == VertexFlag::VF_POSCOLTEX)
 	{
-		auto cbuffer_1 = make_unique<cbDEFAULT>();
+		auto cbuffer_1 = std::make_unique<cbDEFAULT>();
 		cbuffer_1->Create(m_pDev);
 		AddCB(std::move(cbuffer_1));
 	}
@@ -283,7 +283,7 @@ HRESULT Effect::CreateDynaConstBuffer(UINT size, void* pData, ID3D11Buffer** ppC
 	hr = m_pDev->CreateBuffer(&bd, &sd, &pCB);
 	if (FAILED(hr))
 	{
-		std::cout << "동적 상수 버퍼 생성 오류" << endl;;
+		std::cout << "동적 상수 버퍼 생성 오류" << std::endl;;
 
 		return hr;
 	}
@@ -302,7 +302,7 @@ HRESULT Effect::UpdateDynaConstBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource
 	hr = pDXDC->Map(pBuff, 0, D3D11_MAP_WRITE_DISCARD, 0, &mr);
 	if (FAILED(hr))
 	{
-		std::cout << "동적 상수 버퍼 업뎅이트 오류" << endl;;
+		std::cout << "동적 상수 버퍼 업뎅이트 오류" << std::endl;;
 		return hr;
 	}
 
@@ -325,7 +325,7 @@ int Effect::CreateInputLayout() //이거 shader 만들 떄, flag 넣어서 처�
 
 	if (FAILED(hr))
 	{
-		std::cout << "'레이아웃 셍성 오류" << endl;;
+		std::cout << "'레이아웃 셍성 오류" << std::endl;;
 		return hr;
 	}
 

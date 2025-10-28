@@ -1,9 +1,6 @@
 #pragma once
 #include "Input.h"
 #include "Dispatcher.h"
-
-using namespace std;
-
 class InputManager
 {
 public:
@@ -27,7 +24,7 @@ public:
     void TogglelCancled() {  InputCancled = !InputCancled; };
     // 이러면 msgcheck가 들어가지 않고 입력처리를 editor에서 처리할 수 있게 한다? //c의 전역 스타일로  
 
-    unique_ptr<EventDispatcher> m_broadcaster = nullptr;
+    std::unique_ptr<EventDispatcher> m_broadcaster = nullptr;
 
     // 임시
     void SetWindowHandle(HWND hWnd) { m_hWnd = hWnd; }

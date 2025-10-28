@@ -2,7 +2,6 @@
 #include "Commons.h"
 #include "Effect.h"
 
-using namespace std;
 
 struct Axis
 {
@@ -35,7 +34,7 @@ public:
 
 
 public:
-	vector<PosNCol> GridVertices;
+	std::vector<PosNCol> GridVertices;
 	inline Effect* GetFX() { return fx.get(); }
 private:
 	ID3D11Buffer* m_AxisVB = nullptr;
@@ -47,6 +46,5 @@ private:
 
 private:
 
-	unique_ptr<Effect> fx = nullptr;
+	std::unique_ptr<Effect> fx = nullptr;
 };
-

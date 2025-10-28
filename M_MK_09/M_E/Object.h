@@ -1,11 +1,15 @@
 #pragma once
 #include "Component.h"
-#include "Listener.h"
+#include "ListenerComponent.h" //이거 고칠 수 있으면 고쳐보자. 너무 이상해
+#include "Transform.h"
 
+//class Transform;
+
+//버릴 예정 
 #include "Effect.h"
 #include "Model.h"
 
-class Object 
+class Object  //Transform을 자식으로 하고, Local Position을 조정하게 하는 wrwapping이 필요함. 
 {
 public:
 	Object() {}
@@ -14,13 +18,13 @@ public:
 
 		virtual void Update() 
 		{
-			/*for (auto& obj : m_Components)
+			for (auto& cmp : m_Components)
 			{
-				obj->Update();
-			}*/
+				cmp->Update();
+			}
 
 
-			m_effect->Update(); //fx에게 업데이트를 해줌 
+			m_effect->Update(); //임시
 
 		};
 
@@ -34,16 +38,32 @@ public:
 
 		virtual void Render() 
 		{
+			//임시
 			m_effect->Apply(); //update까지 같이 ㄴ
 			m_model->Draw(1, PT_TRIANGLELIST, VertexFlag::VF_POSCOLTEX);
 			
 
-		}; //object가 model의 정보를 알 필요가 없지. 
+		}; 
 
-		void SetActive(bool b) { activated = b; };
-		bool isActive() { return activated; }
+		void SetPosition(XMFLOAT3 position);
+		void SetRotation(XMFLOAT3 rotation);
+		void SetScale(XMFLOAT3 scale);
+		
+		XMFLOAT3 Get_L_Pos();
+		XMFLOAT3 Get_L_Rot();
+		XMFLOAT3 Get_L_Scl();
+
+		XMFLOAT3 Get_W_Pos();
+		XMFLOAT3 Get_W_Rot();
+		XMFLOAT3 Get_W_Scl();
+
+
+		void SetParent(shared_ptr<Object> parent);
+		weak_ptr<Object> GetParent();
+		 Transform GetTransform();  
 public:
 		
+	//이 친구들 전부 컴포넌트 행 
 	Model* m_model = nullptr;
 	Effect* m_effect = nullptr;
 
@@ -56,9 +76,11 @@ public:
 		void ComponentClear() { m_Components.clear(); }
 
 protected:
+  weak_ptr<Object> m_parent;
+  std::vector<std::shared_ptr<Component>> m_Components;		
+  Transform m_transform;
+  
 
-		std::vector<std::shared_ptr<Component>> m_Components;		
-		bool activated = true;
 };
 
 #pragma region Component
@@ -82,7 +104,6 @@ inline T* Object::AddComponent(Args && ...args)
 
 		return ptr;
 }
-
 template<typename T>
 inline T* Object::GetComponent() const 
 {

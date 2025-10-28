@@ -1,9 +1,8 @@
 #pragma once
-#include "Input.h"     // InputEvent 정의 필요
+#include "Input.h"    
 #include <vector>
 #include <memory>
 
-// ListenerComponent 전방 선언 (순환 include 방지)
 class ListenerComponent;
 
 class EventDispatcher

@@ -1,9 +1,5 @@
 #pragma once
 #include "Commons.h"
-using namespace std;
-
-
-
 class Editor
 {
 private:
