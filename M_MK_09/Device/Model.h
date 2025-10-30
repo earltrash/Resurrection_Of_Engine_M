@@ -1,6 +1,8 @@
 #pragma once
 #include "Commons.h"
 
+
+//Æó±â
 class Model
 {
 public:

@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "Core.h"
-
-
-//#pragma comment( lib, "DirectXTK.lib" )
-//#pragma comment( lib, "dxguid.lib" )
-
 #include "WICTextureLoader.h"
 
 
@@ -12,7 +7,6 @@
 // 
 //Object가 렌더되기 위해서 가져야 하는 shader 객체 혹은 포인터도 결국 전역 정보와 오브젝트의 정보가 필요하긴 함. 
 //Model은 그냥 Model이고 
-ID3D11SamplerState* g_Sampler_Desc = nullptr;
 
 void Core::Sets()
 {
@@ -38,48 +32,23 @@ bool Core::WinSet()
 }
 bool Core::DX_Set()
 {
-    DX = make_shared< DX_Device>();
-	HRESULT hr = DX->DX_SetUP(m_hWnd); //swap device context 모두 여기서 처리. 
+    DX = make_shared< DX_Renderer>(); 
 
-    DX->SetViewPort(w_width, w_height);
+     DX->DX_SetUP(m_hWnd, w_width, w_height); //Graphics & State 생성 
 
+     DX->GridNAxis_SetUP(DX->m_Device.Get());
 
-    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
- 
-    dsDesc.DepthEnable = TRUE;
-    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
-    DX->m_Device->CreateDepthStencilState(&dsDesc, &DX->pNoDepthDS);
-
-
-    D3D11_RASTERIZER_DESC rsDesc = {};
-    //rsDesc.FillMode = D3D11_FILL_SOLID;
-    rsDesc.FillMode = D3D11_FILL_SOLID;
-    rsDesc.FrontCounterClockwise = true;
-    rsDesc.DepthBias = 0;
-    rsDesc.DepthBiasClamp = 0;
-    rsDesc.SlopeScaledDepthBias = 0;
-    rsDesc.DepthClipEnable = true;
-    rsDesc.ScissorEnable = false;
-    rsDesc.MultisampleEnable = true;
-    rsDesc.AntialiasedLineEnable = true;
-    rsDesc.CullMode = D3D11_CULL_NONE;
-
-    DX->m_Device->CreateRasterizerState(&rsDesc, &(DX->pSolidRS));
-
-    g_Sampler_Desc = DX->m_Sampler_Desc;
-
-	return hr;
+    return 1;
 }
 bool Core::ModuleInit()
 {
     m_timer = make_unique<GameTimer>();
 
-    g_camera = make_unique<Camera>();
+    g_camera = make_shared<Camera>(); 
     g_camera->Initalize();
 
     m_Asimmper = make_unique<Asimpper>();
-    m_Asimmper->Initalize(DX->m_Device, DX->m_DXDC); //MODEL 생성 -> 버퍼 생성을 위한 DEVICE, CONTEXT 주입.
+    m_Asimmper->Initalize(DX->m_Device.Get(), DX->m_DXDC.Get()); //MODEL 생성 -> 버퍼 생성을 위한 DEVICE, CONTEXT 주입. //리소스 매너지로 통합될 예정 혹은 Mesh에 책임
 	
     m_obj = make_unique<Object>();
 
@@ -127,21 +96,22 @@ void Core::FixedUpdate(float dTimme)
 
 void Core::Update(float dTime)
 {
-    DX->UpdateGrid(dTime);
+   // DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
 }
 
-void Core::Render(float dTime)
+void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
     DX->Clear();
 
-    DX->DrawGridNAxis();
-    
-    DX->m_DXDC->RSSetState(DX->pSolidRS);
-    //이건 유닛단위에서 실행하는 게 맞는듯, 일단 Object의 멤버로 두고, MeshComponent랑 animation Component로 분리 하자 (이건 발표 때 설명 
+     DX->StateSet_BeforeRender();
 
-    DX->m_DXDC->OMSetDepthStencilState(DX->pNoDepthDS, 0);
-    m_obj->Render(); //나중에는 component를 통해서 render를 하던가 하겠음 ㅇㅇ .
+
+    DX->DrawGridNAxis();
+
+   
+
+    m_obj->Render();
     DX->Flip();
 }
 
@@ -195,9 +165,11 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
                 
+                DX->SetGridNAxis(mView);
+
                 // DX 시스템에 업데이트
-                DX->GetGridFX()->GetFX()->SetView(mView); //Line 그리는 애들 ㅇㅇ 그 fx 
-                DX->GetGridFX()->GetFX()->Update(); //line draw는 render 단계에서 
+              //  DX->GetGridFX()->GetFX()->SetView(mView); //Line 그리는 애들 ㅇㅇ 그 fx 
+               // DX->GetGridFX()->GetFX()->Update(); //line draw는 render 단계에서 
                 g_camera->SetDirty(false);
             
 
@@ -208,7 +180,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 void Core::ModelParssing()
 {
    // m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
-    m_Asimmper->LoadModel("Models/Cube_Coord.obj", DX->m_Device);
+    m_Asimmper->LoadModel("Models/Cube_Coord.obj", DX->m_Device.Get());
 
     Model* model = m_Asimmper->m_Models.front();
 
@@ -237,13 +209,14 @@ void Core::ModelParssing()
    // effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
 
 
-    effect->Create(DX->m_Device, L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); //SHADER랑 안맞음
-    effect->SetSampleDesc(g_Sampler_Desc);
+    effect->Create(DX->m_Device.Get(), L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); 
+    ID3D11SamplerState* state = DX->Get_SamplerState().Get();
+    effect->SetSampleDesc(state);
 
     m_obj->m_effect = effect;//일단 색상값만.
 
     HRESULT hr = S_OK;
-    hr = DirectX::CreateWICTextureFromFile(DX->m_Device, L"../Data/dinoskin.jpg", nullptr, &g_DinoTextureRv);
+    hr = DirectX::CreateWICTextureFromFile(DX->m_Device.Get(), L"../Data/dinoskin.jpg", nullptr, &g_DinoTextureRv);
     if (FAILED(hr))
     {
         std::cout << "텍스쳐 로드 실패" << std::endl;

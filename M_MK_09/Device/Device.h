@@ -1,49 +1,61 @@
 #pragma once
 #include "Commons.h" 
-#include "GridNAxis.h"
+using Microsoft::WRL::ComPtr;
 
 
 extern class GridNAxis;
+class Graphics;
+class State;
+
+//Renderer의 역할을 분리하고자 
+// Render시의 상태
+// 생성 시에 필요하거나, 렌더링의 근본적으로 필요한 객체들을 해당 클래스로 관리.
+//얘네는 포인터
 
 
+//Pipe line에서 설정하는 값들.
+//Sampler BlendState DepthStencilState RasterizerState
+//COMPTR로 
+
+
+
+//얘는 Engine에 존재하는 ResourceManager -> Mesh Data랑 연결돼서 Buffer 생성 같은 경우. (아마 Graphics가 처리할 거 같긴 한데) Engine이 DX를 들고 있으니
+//Engine에서 Device 빌려주는 거 그 이상은 사용 안 할듯.
+//나중에 Class를 Renderer로 수정하면서 역할 자체는 Engine에서 그려야 하는 정보를 받아서 Render하는 식으로 처리.
 
 using namespace DirectX;
-class DX_Device
+
+//너는 이제부터 Core로 Singleton으로 가져올 거임.
+class DX_Renderer
 {
-public: //일단 공부해야 하니깐 열어 버려 
-	ID3D11Device* m_Device = nullptr;
-	ID3D11DeviceContext* m_DXDC = nullptr;
-
-	IDXGISwapChain* m_SwapChain = nullptr;
-	ID3D11RenderTargetView* m_RTView = nullptr;
-
-	ID3D11Texture2D* m_pDS = nullptr;					//깊이-스텐실 버퍼.
-	ID3D11DepthStencilView* m_pDSView = nullptr;				//깊이-스텐실 버퍼-뷰 
-
-	ID3D11RasterizerState* pSolidRS = nullptr;
-	ID3D11DepthStencilState* pNoDepthDS = nullptr;
-	ID3D11SamplerState* m_Sampler_Desc = nullptr;
+public: 
+	ComPtr<ID3D11Device> m_Device = nullptr;
+	ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;
 private:
-	std::unique_ptr<GridNAxis> GDNAX;
-
-private:
-
-	HRESULT CreateDeviceSwapChain(HWND hwnd);
-	HRESULT CreateRenderTargetView();
-	HRESULT CreateDepthStencil();
-	HRESULT CreateSampler();
+	GridNAxis* GDNAX; //디버깅이긴 한데, 
 public:
-	HRESULT DX_SetUP(HWND hwnd);
+	HRESULT DX_SetUP(HWND hwnd, float width, float height);
+
+
+	void StateSet_BeforeRender();
+	void SetGridNAxis(XMMATRIX view);
+
+	//GRID Axis도 멤버로 만들어서 처리시킬까 고민중. 프로토 타입, 엔진 개발중이니 일단 냅둠.
 	HRESULT GridNAxis_SetUP(ID3D11Device* device);
-	void SetViewPort(float widh, float ht);
-	
 	GridNAxis* GetGridFX();
-
 	void UpdateGrid(float dTime);
-
-
 	void DrawGridNAxis();
+
+
+	ComPtr<ID3D11SamplerState> Get_SamplerState();
+
+
+
+
+	//wrapping only 
 	void Flip();
 	void Clear();
-
+private:
+	std::shared_ptr<State> m_DxState;
+	std::shared_ptr<Graphics> m_DxGraphics;
 };

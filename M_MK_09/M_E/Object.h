@@ -9,7 +9,8 @@
 #include "Effect.h"
 #include "Model.h"
 
-class Object  //Transform을 자식으로 하고, Local Position을 조정하게 하는 wrwapping이 필요함. 
+class Object : public std::enable_shared_from_this<Object>
+	//Transform을 자식으로 하고, Local Position을 조정하게 하는 wrwapping이 필요함. 
 {
 public:
 	Object() {}
@@ -91,7 +92,7 @@ inline T* Object::AddComponent(Args && ...args)
 
 		auto comp = std::make_shared<T>(std::forward<Args>(args)...);
 
-		comp->SetOwner(this);
+		comp->SetOwner(shared_from_this());
 
 		T* ptr = comp.get();
 

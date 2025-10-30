@@ -110,6 +110,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\External\assimp-master\include;(ProjectDir)..\External\assimp-master\Build\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -143,19 +145,26 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="GridNAxis.h" />
     <ClInclude Include="IConsttBuffer.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Mesh\StaticModel.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConstBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GridNAxis.cpp" />
     <ClCompile Include="Commons.cpp" />
     <ClCompile Include="IConsttBuffer.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Default.fx">

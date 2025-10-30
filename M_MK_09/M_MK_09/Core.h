@@ -7,8 +7,6 @@
 #include "Asimpper.h"
 
 
-extern ID3D11SamplerState* g_Sampler_Desc;
-
 class Core : public Window
 {
 public:
@@ -44,10 +42,10 @@ public:
 
 
 private:
-	std::shared_ptr<DX_Device> DX = nullptr;
+	std::shared_ptr<DX_Renderer> DX = nullptr;
 	
 	std::unique_ptr<GameTimer> m_timer = nullptr;
-	std::unique_ptr<Camera> g_camera = nullptr;
+	std::shared_ptr<Camera> g_camera = nullptr;
 	std::unique_ptr<Asimpper> m_Asimmper = nullptr;
 
 	std::unique_ptr<Object> m_obj = nullptr;
