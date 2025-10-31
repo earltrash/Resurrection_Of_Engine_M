@@ -110,6 +110,7 @@ inline void SafeDelete(T*& ptr)
 	delete ptr; ptr = nullptr;
 }
 
+
 DWORD AlignCBSize(DWORD size);
 int CreateVertexBuffer(ID3D11Device* pDev, LPVOID pData, UINT size, ID3D11Buffer** ppVB);
 int CreateConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer** ppCB);

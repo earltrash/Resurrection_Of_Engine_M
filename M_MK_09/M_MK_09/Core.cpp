@@ -98,16 +98,19 @@ void Core::Update(float dTime)
 {
    // DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
+    //
+    // 
+    // 물리 컴포넌트 
+    // 렌더 컴포넌트 
+    //
+    //
 }
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
     DX->Clear();
-
      DX->StateSet_BeforeRender();
-
-
-    DX->DrawGridNAxis();
+     DX->DrawGridNAxis();
 
    
 
@@ -165,11 +168,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
                 
-                DX->SetGridNAxis(mView);
-
-                // DX 시스템에 업데이트
-              //  DX->GetGridFX()->GetFX()->SetView(mView); //Line 그리는 애들 ㅇㅇ 그 fx 
-               // DX->GetGridFX()->GetFX()->Update(); //line draw는 render 단계에서 
+                DX->SetGridNAxis(mView); 
                 g_camera->SetDirty(false);
             
 
@@ -206,9 +205,6 @@ void Core::ModelParssing()
     
     m_obj->m_model = model;
     Effect* effect = new Effect();
-   // effect->Create(DX->m_Device, L"Shader/Default.fx", VertexFlag::VF_POSCOL);
-
-
     effect->Create(DX->m_Device.Get(), L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); 
     ID3D11SamplerState* state = DX->Get_SamplerState().Get();
     effect->SetSampleDesc(state);

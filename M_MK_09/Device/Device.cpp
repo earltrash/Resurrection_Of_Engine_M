@@ -61,6 +61,13 @@ void DX_Renderer::SetGridNAxis(XMMATRIX view)
 	GDNAX->GetFX()->Update();
 }
 
+DX_Renderer DX_Renderer::Get_Instance()
+{
+	static DX_Renderer instance;
+
+	return instance;
+}
+
 
 HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 {

@@ -35,7 +35,7 @@ class Mesh
 {
 
 public:
-	void Create(aiMesh*);
+	void Create(aiMesh*); //ai mesh를 읽고. 
 	
 
 	//STATIC MESH & ANIMATION /이 둘 다 Mesh에서 처리할 수 있게. 
@@ -67,7 +67,10 @@ inline void Mesh::CreateVertexBuffer(T* vertices, UINT vertexCount, ID3D11Buffer
 	D3D11_SUBRESOURCE_DATA vbData = {};
 	vbData.pSysMem = vertices;
 
-	//HR_T(m_Device->CreateBuffer(&bd, &vbData, vertexBuffer));
+	DX_Renderer instance = DX_Renderer::Get_Instance();
+
+	//이게 걸린다면, resourcemanager나, device를 갖고 있는 객체, 근데 결국 instance로 받아야 하긴 함. 
+	HR_T(instance.m_Device.Get()->CreateBuffer(&bd, &vbData, vertexBuffer));
 
 	m_VtxCnt = vertexCount;
 	m_Stride = sizeof(T);

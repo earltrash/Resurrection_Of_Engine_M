@@ -28,34 +28,36 @@ using namespace DirectX;
 //너는 이제부터 Core로 Singleton으로 가져올 거임.
 class DX_Renderer
 {
-public: 
-	ComPtr<ID3D11Device> m_Device = nullptr;
-	ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;
-private:
-	GridNAxis* GDNAX; //디버깅이긴 한데, 
+	private:
+		DX_Renderer() = default;
+		~DX_Renderer() = default;
+
+
+
+
 public:
 	HRESULT DX_SetUP(HWND hwnd, float width, float height);
-
-
+	HRESULT GridNAxis_SetUP(ID3D11Device* device);
 	void StateSet_BeforeRender();
 	void SetGridNAxis(XMMATRIX view);
 
-	//GRID Axis도 멤버로 만들어서 처리시킬까 고민중. 프로토 타입, 엔진 개발중이니 일단 냅둠.
-	HRESULT GridNAxis_SetUP(ID3D11Device* device);
+	static DX_Renderer Get_Instance();
+
 	GridNAxis* GetGridFX();
+	
+	ComPtr<ID3D11SamplerState> Get_SamplerState(); ///얘는 나중에 빠질 예정임.
+
 	void UpdateGrid(float dTime);
 	void DrawGridNAxis();
-
-
-	ComPtr<ID3D11SamplerState> Get_SamplerState();
-
-
-
-
-	//wrapping only 
 	void Flip();
 	void Clear();
 private:
 	std::shared_ptr<State> m_DxState;
 	std::shared_ptr<Graphics> m_DxGraphics;
+	GridNAxis* GDNAX; //디버깅이긴 한데, 
+
+public:
+	ComPtr<ID3D11Device> m_Device = nullptr;
+	ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;
+
 };
