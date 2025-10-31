@@ -108,10 +108,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\External\assimp-master\include;(ProjectDir)..\External\assimp-master\Build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\External\assimp-master\include;$(ProjectDir)..\External\assimp-master\Build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -142,31 +142,41 @@
   <ItemGroup>
     <ClInclude Include="Commons.h" />
     <ClInclude Include="ConstBuffer.h" />
-    <ClInclude Include="Device.h" />
+    <ClInclude Include="DX_Renderer.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GridNAxis.h" />
     <ClInclude Include="IConsttBuffer.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Mesh\StaticModel.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="MeshResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConstBuffer.cpp" />
-    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DX_Renderer.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GridNAxis.cpp" />
     <ClCompile Include="Commons.cpp" />
     <ClCompile Include="IConsttBuffer.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="MeshResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Default.fx">

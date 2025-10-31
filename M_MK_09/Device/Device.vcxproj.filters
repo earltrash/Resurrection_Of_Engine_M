@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Device.h">
+    <ClInclude Include="DX_Renderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Commons.h">
@@ -36,13 +36,10 @@
     <ClInclude Include="ConstBuffer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh\StaticModel.h">
+    <ClInclude Include="Model.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
@@ -54,9 +51,24 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshResource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Device.cpp">
+    <ClCompile Include="DX_Renderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GridNAxis.cpp">
@@ -77,9 +89,6 @@
     <ClCompile Include="ConstBuffer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -90,6 +99,21 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshResource.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

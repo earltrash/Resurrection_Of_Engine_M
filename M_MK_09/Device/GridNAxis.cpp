@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "GridNAxis.h"
 #include "Effect.h"
 #include "Commons.h" // StrideFromFlag, VertexFlag Á¤ÀÇ

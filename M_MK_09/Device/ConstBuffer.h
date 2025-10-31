@@ -1,6 +1,5 @@
 #pragma once
 #include "IConsttBuffer.h"
-#include "DirectXMath.h"
 
 using namespace DirectX;
 

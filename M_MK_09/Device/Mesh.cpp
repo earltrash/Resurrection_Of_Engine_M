@@ -1,22 +1,12 @@
+#include "pch.h"
 
 #include "Mesh.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "ResourceManager.h"
 
-//XMFLOAT4 Pos;
-//XMFLOAT3 Nor;
-//XMFLOAT3 Tangent;
-//XMFLOAT2 Uv;
-//12
 
 void Mesh::Create(aiMesh* mesh)
 {
-   // std::vector<unsigned int> indices; -> 얘는 나중에 
-
-     // 이제 flag로 만들지 않음. vertex 데이터 자체는 고정으로 가져갈 거임.
-      //정점 데이터 (위치, 노멀, UV, 탄젠트)
-
+    // std::vector<unsigned int> indices; -> 얘는 나중에 
     m_Vertex.reserve(mesh->mNumVertices);
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -32,11 +22,24 @@ void Mesh::Create(aiMesh* mesh)
         m_Vertex.push_back( vertex);
     }
 
-    UINT totalSize = m_Vertex.size() * sizeof(V);
+    UINT vertexCount = m_Vertex.size() * sizeof(V);
+    CreateVertexBuffer(&m_Vertex[0], vertexCount, &m_Vertexbuffer);
+}
 
-    //버텍스 버퍼 업데이트.
-
-    CreateVertexBuffer<V>(&m_Vertex[0], totalSize, &m_Vertexbuffer);
-
-   
+void Mesh::CreateVertexBuffer(V* vertices, UINT vertexCount, ID3D11Buffer** vertexBuffer)
+{
+    D3D11_BUFFER_DESC bd = {};
+    	bd.ByteWidth = sizeof(V) * vertexCount;
+    	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    	bd.Usage = D3D11_USAGE_DEFAULT;
+    	bd.CPUAccessFlags = 0;
+    
+    	D3D11_SUBRESOURCE_DATA vbData = {};
+    	vbData.pSysMem = vertices;
+    
+    	ResourceManager::Instance().GetDevice()->CreateBuffer(&bd, &vbData, vertexBuffer);
+    
+    	m_VtxCnt = vertexCount;
+    	m_Stride = sizeof(V);
+    	m_Offset = 0;
 }

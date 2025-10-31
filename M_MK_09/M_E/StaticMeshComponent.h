@@ -1,5 +1,6 @@
 #pragma once
-#include "Component.h"
+#include "RenderComponent.h"
+#include "Model.h"
 
 //얘는 ResourceManager나 mesh의 상위 혹은 하위 데이터를 운용해야 할듯?
 
@@ -17,17 +18,29 @@
 //Texrture // Model 
 
 
-
+// 얘가 RenderComponent를 상속 받을거임.
+// RenderComponent가 -> 
 // ResourceManager는 필요한 자원에 따른, (의존성을 줄이기 위한), 하위 Maanger가 있음.
 
-class StaticMeshComponent : public Component
+//해당 컴포넌트가 Update 될 일은 없지? 
+//업데이트라고 한다면 상수버퍼나 shader 쪽이니깐. 
+
+class StaticMeshComponent : public RenderComponent
 {
+public:
+    StaticMeshComponent() = default;
+    ~StaticMeshComponent() = default;
+public:
+    virtual void Update() {}
+    virtual void FixedUpdate(float dt) {}
+
+
+    //렌더 단계에서. 갖고 있는 Model 정보를 Renderer에게 넘겨주는 
+    virtual void Render();
+
+
+private:
+    std::unique_ptr<Model> m_Model;
     
-
-
-
-
-
-
 };
 

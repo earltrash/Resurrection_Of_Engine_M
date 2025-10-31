@@ -1,7 +1,6 @@
 #pragma once
-#include "Commons.h" 
-
-using Microsoft::WRL::ComPtr;
+//#include "Commons.h" 
+//using Microsoft::WRL::ComPtr;
 
 struct Graphics_Set
 {

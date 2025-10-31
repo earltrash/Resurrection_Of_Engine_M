@@ -1,4 +1,5 @@
-#pragma once
+#include "pch.h"
+
 #include "IConsttBuffer.h"
-#include "Device.h"
+#include "DX_Renderer.h"
 

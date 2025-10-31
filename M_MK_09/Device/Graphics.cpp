@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Graphics.h"
 
 void Graphics::SetUp(Graphics_Set set)

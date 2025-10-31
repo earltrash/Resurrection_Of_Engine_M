@@ -1,8 +1,4 @@
 #pragma once 
-//#include "Device.h"
-#include <iostream>
-#include "D3D11.h"
-
 class IConstBuffer
 {
 public:

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Core.h"
 #include "WICTextureLoader.h"
-
+#include "ResourceManager.h"
 
 //전역에서 관리되는 shader ?
 // 
@@ -32,7 +32,8 @@ bool Core::WinSet()
 }
 bool Core::DX_Set()
 {
-    DX = make_shared< DX_Renderer>(); 
+
+     DX = make_shared< DX_Renderer>(); 
 
      DX->DX_SetUP(m_hWnd, w_width, w_height); //Graphics & State 생성 
 
@@ -45,14 +46,23 @@ bool Core::ModuleInit()
     m_timer = make_unique<GameTimer>();
 
     g_camera = make_shared<Camera>(); 
-    g_camera->Initalize();
-
-    m_Asimmper = make_unique<Asimpper>();
-    m_Asimmper->Initalize(DX->m_Device.Get(), DX->m_DXDC.Get()); //MODEL 생성 -> 버퍼 생성을 위한 DEVICE, CONTEXT 주입. //리소스 매너지로 통합될 예정 혹은 Mesh에 책임
-	
+    g_camera->Initalize();	
     m_obj = make_unique<Object>();
 
     g_camera->SetDirty(true); 
+
+
+
+    //Wrapping needed
+    RM_Set set;
+    set.Device = DX->m_Device.Get();
+    set.DeviceContext = DX->m_DXDC.Get();
+
+    ResourceManager::Instance().Set_Up(set);
+
+
+    ResourceManager::Instance().ModelLoad("..\Models\Cube.obj" ,  ModelType::Static);
+
 
     return true;
 }
@@ -160,11 +170,11 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();
-                m_obj->m_effect->SetWorld(mWorld);
-                m_obj->m_effect->SetView(mView);
-                m_obj->m_effect->SetProj(mProj);
-                m_obj->m_effect->SetColor(COLOR{ 0.5,1,1,1 }); //이건 상관없긴 함.
-                m_obj->m_effect->Update();
+                //m_obj->m_effect->SetWorld(mWorld);
+                //m_obj->m_effect->SetView(mView);
+                //m_obj->m_effect->SetProj(mProj);
+                //m_obj->m_effect->SetColor(COLOR{ 0.5,1,1,1 }); //이건 상관없긴 함.
+                //m_obj->m_effect->Update();
 
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
                 
@@ -178,48 +188,8 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
 void Core::ModelParssing()
 {
-   // m_Asimmper->LoadModel("Models/test.obj", DX->m_Device);
-    m_Asimmper->LoadModel("Models/Cube_Coord.obj", DX->m_Device.Get());
-
-    Model* model = m_Asimmper->m_Models.front();
-
-#pragma region model
-    //Vertex manualVertices[] =
-    //{
-    //    // V1 (Apex): (0.0f, 11.66025f, 0.0f) - 밝은 빨강
-    // { {0.0f, 5.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
-
-    // // V3 (Right Base): (5.0f, 3.0f, 0.0f) - 밝은 파랑
-    // { {10.0f, 3.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
-
-    // // V2 (Left Base): (-5.0f, 3.0f, 0.0f) - 밝은 초록
-    // { {-10.0f, 3.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f} },
-    //};
-
-    //UINT size = sizeof(manualVertices);
-
-    //Model* model = new Model();
-    //model->Create(DX->m_Device, manualVertices, size, VertexFlag::VF_POSCOL);
-
-#pragma endregion 
-    
-    m_obj->m_model = model;
-    Effect* effect = new Effect();
-    effect->Create(DX->m_Device.Get(), L"Shader/Demo_3.fx", VertexFlag::VF_POSCOLTEX); 
-    ID3D11SamplerState* state = DX->Get_SamplerState().Get();
-    effect->SetSampleDesc(state);
-
-    m_obj->m_effect = effect;//일단 색상값만.
-
-    HRESULT hr = S_OK;
-    hr = DirectX::CreateWICTextureFromFile(DX->m_Device.Get(), L"../Data/dinoskin.jpg", nullptr, &g_DinoTextureRv);
-    if (FAILED(hr))
-    {
-        std::cout << "텍스쳐 로드 실패" << std::endl;
-    }
-
-    m_obj->m_effect->m_texture = g_DinoTextureRv;
-    
+ 
+   
 
 }
 

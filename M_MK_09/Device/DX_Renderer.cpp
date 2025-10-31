@@ -1,8 +1,13 @@
-﻿#include "Device.h"
+﻿#pragma once
+
+#include "pch.h"
+
+
+#include "DX_Renderer.h"
 #include "GridNAxis.h"
 #include "Graphics.h"
 #include "State.h"
-
+#include "Model.h"
 
 //Graphics로 대체시킬 예정 삭제 예정 
 
@@ -39,6 +44,45 @@ void DX_Renderer::Clear()
 
 }
 
+
+//쉐이더 코드를 하나로 통일할 거기 때문에.
+
+void DX_Renderer::StaticMeshRender()
+{
+
+	//쉐이더 세팅
+	//상수버퍼 -> 특히 월드 행렬.
+	//Layout 정렬하기 .
+
+
+
+
+
+	for (const auto& model : m_BeDrawnModel)
+	{
+		//
+
+
+		model->Render(m_DXDC.Get());
+	}
+}
+
+void DX_Renderer::Render()
+{
+	Clear();
+	StateSet_BeforeRender(); //State Set
+	DrawGridNAxis();
+
+	//Shader Set
+
+	//Model Set
+
+
+	StaticMeshRender();
+
+	Flip();
+}
+
 void DX_Renderer::StateSet_BeforeRender()
 {
 	
@@ -51,7 +95,7 @@ void DX_Renderer::StateSet_BeforeRender()
 		m_DxGraphics->GetDepthStencilView().Get()          
 	);
 
-	
+	m_DXDC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 }
 
@@ -59,13 +103,6 @@ void DX_Renderer::SetGridNAxis(XMMATRIX view)
 {
 	GDNAX->GetFX()->SetView(view);
 	GDNAX->GetFX()->Update();
-}
-
-DX_Renderer DX_Renderer::Get_Instance()
-{
-	static DX_Renderer instance;
-
-	return instance;
 }
 
 

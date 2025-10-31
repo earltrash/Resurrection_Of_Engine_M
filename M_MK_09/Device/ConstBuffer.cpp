@@ -1,5 +1,7 @@
+#include "pch.h"
+
 #include "ConstBuffer.h"
-#include "Device.h"
+#include "DX_Renderer.h"
 
 HRESULT cbDEFAULT::Create(ID3D11Device* pDev)
 {

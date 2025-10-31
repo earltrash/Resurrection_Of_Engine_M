@@ -1,9 +1,9 @@
 #pragma once
-#include "Device.h" 
+
+#include "pch.h"
+#include "DX_Renderer.h" 
 #include "Effect.h"
-#include "Commons.h" 
-#include <d3dcompiler.h>
-#include "Model.h"
+#include <d3dcompiler.h>  // -> 어차피 버려질 거긴 함.
 
 #pragma comment(lib, "D3DCompiler.lib")
 

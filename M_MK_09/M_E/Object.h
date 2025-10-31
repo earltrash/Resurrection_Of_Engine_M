@@ -7,7 +7,6 @@
 
 //버릴 예정 
 #include "Effect.h"
-#include "Model.h"
 
 class Object : public std::enable_shared_from_this<Object>
 	//Transform을 자식으로 하고, Local Position을 조정하게 하는 wrwapping이 필요함. 
@@ -40,10 +39,7 @@ public:
 		virtual void Render() 
 		{
 			//임시
-			m_effect->Apply(); //update까지 같이 ㄴ
-			m_model->Draw(1, PT_TRIANGLELIST, VertexFlag::VF_POSCOLTEX);
-			
-
+			//m_effect->Apply(); //update까지 같이 ㄴ
 		}; 
 
 		void SetPosition(XMFLOAT3 position);
@@ -65,7 +61,6 @@ public:
 public:
 		
 	//이 친구들 전부 컴포넌트 행 
-	Model* m_model = nullptr;
 	Effect* m_effect = nullptr;
 
 public:

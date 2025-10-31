@@ -1,10 +1,8 @@
 #pragma once
 #include "Window.h"
-#include "Device.h" 
 #include "Modules.h" //Engine Module
-
+#include "DX_Renderer.h"
 #include "Camera.h"
-#include "Asimpper.h"
 
 
 class Core : public Window
@@ -46,7 +44,6 @@ private:
 	
 	std::unique_ptr<GameTimer> m_timer = nullptr;
 	std::shared_ptr<Camera> g_camera = nullptr;
-	std::unique_ptr<Asimpper> m_Asimmper = nullptr;
 
 	std::unique_ptr<Object> m_obj = nullptr;
 

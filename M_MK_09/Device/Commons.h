@@ -1,18 +1,13 @@
 #pragma once
-#include <vector>
-#include <array>
-#include <memory>
-#include <unordered_map>
-#include <iostream>
-
 #include "D3D11.h"
 #include "DirectXMath.h"
 #include <wrl/client.h>
-
-
-
-
+using Microsoft::WRL::ComPtr;
 using namespace DirectX;
+
+
+//여기 helper 함수 포함해서 다 지울 예정.
+
 
 typedef XMFLOAT4		COLOR;
 

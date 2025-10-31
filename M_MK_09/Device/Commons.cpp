@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Commons.h"
 
 float StrideFromFlag(VertexFlag Flag) //For Bytes 
