@@ -49,19 +49,19 @@ void MeshResource::LoadFile(std::string FilePath , ModelType Type)
 	}
 
 	
-	model.m_Mesh.resize(Fbx_Model->mNumMeshes);
+	//model.m_Meshresize(Fbx_Model->mNumMeshes);
 
 
-	for (int i = 0; i < Fbx_Model->mNumMeshes; i++)
-	{
-		aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
+	//for (int i = 0; i < Fbx_Model->mNumMeshes; i++)
+	//{
+	//	aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
 
-		model.m_Mesh[i].Create(pAiMesh);
-		//내부에서는 Mesh // Buffer // stride 같은 것들이 모두 처리가 됨. 
-	}
+	//	model.m_Mesh[i].Create(pAiMesh);
+	//	//내부에서는 Mesh // Buffer // stride 같은 것들이 모두 처리가 됨. 
+	//}
 
 
-	m_Modelmap.emplace(FilePath, model);
+//	m_Modelmap.emplace(FilePath, model);
 
 
 }

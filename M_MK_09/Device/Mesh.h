@@ -1,6 +1,6 @@
 #pragma once
 #include "Commons.h" //-> 쓸데 없는 include는 삼가.
-
+#include <vector>
 //#include "Device.h"
 
 struct V
