@@ -14,8 +14,10 @@
 using namespace std;
 
 
-class SoundResource;
+class SoundResource; //얘는 그냥 엔진 단에서 Sound
+
 class MaterialResource;
+class ShaderResource;
 
 
 //Device
@@ -55,5 +57,6 @@ private:
 
 private:
 	std::unique_ptr<MeshResource> m_MeshResource;
+	std::unique_ptr< ShaderResource> m_ShaderResource; //Shader 객체를 Map으로 보관 -> 후, Flag(iNDEX)
 };
 

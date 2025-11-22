@@ -154,6 +154,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderResource.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="MeshResource.h" />
@@ -175,6 +176,7 @@
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderResource.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="MeshResource.cpp" />
   </ItemGroup>

@@ -48,11 +48,14 @@ private:
 	std::list<Model*> m_BeDrawnModel;
 
 
+	//ResourceManager ->가 갖고 있는게 맞는 거 같음.
+	//Renderer 는 진짜 Render만 하자. 
 
 private:
 	std::shared_ptr<State> m_DxState;
 	std::shared_ptr<Graphics> m_DxGraphics;
-	std::shared_ptr<Shader> m_DxShader; // -> Layout & Shader Code & ConstBuffer;
+
+	std::shared_ptr<Shader> m_DxShader; // -> Layout & Shader Code  /    & ConstBuffer;
 
 	GridNAxis* GDNAX; //디버깅이긴 한데, 
 public:
