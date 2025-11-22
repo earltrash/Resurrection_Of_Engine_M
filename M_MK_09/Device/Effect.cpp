@@ -81,7 +81,7 @@ void Effect::SetColor(COLOR col)
 	auto cb = GetConstantBuffer<cbDEFAULT>();
 	if (cb)
 	{
-		cb->SetColor(col);
+		//cb->SetColor(col);
 	}
 }
 

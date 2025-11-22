@@ -1,10 +1,11 @@
 #pragma once
 #include <list>
+#include <vector>
 #include <memory>                 
 #include <d3d11.h>                
 #include <DirectXMath.h>          
 #include <wrl/client.h>           
-
+#include "Singleton.h"
 using namespace DirectX;
 using Microsoft::WRL::ComPtr; 
 
@@ -13,21 +14,19 @@ using Microsoft::WRL::ComPtr;
 extern class GridNAxis;
 class Graphics;
 class State;
-class Model;
-class Shader;
+class Render_Helper;
+
 
 
 using namespace DirectX;
 
-//너는 이제부터 Core로 Singleton으로 가져올 거임.
-class DX_Renderer
+//너는 이제부터 Core로 Singleton으로 가져올 거임. //일단 대기 
+class DX_Renderer 
 {
 public:
 		DX_Renderer() = default;
 		~DX_Renderer() = default;
 public:
-
-
 	HRESULT DX_SetUP(HWND hwnd, float width, float height);
 	HRESULT GridNAxis_SetUP(ID3D11Device* device);
 	void StateSet_BeforeRender();
@@ -39,25 +38,19 @@ public:
 	void DrawGridNAxis();
 	void Flip();
 	void Clear();
-
-
 	void StaticMeshRender();
-	void LoadModels(Model* model) { m_BeDrawnModel.push_back(model); }
 	void Render();
-private:
-	std::list<Model*> m_BeDrawnModel;
-
-
-	//ResourceManager ->가 갖고 있는게 맞는 거 같음.
-	//Renderer 는 진짜 Render만 하자. 
+	void ConstantBufferApply();
+	void SetWorldMatrix(XMMATRIX WORLD_MATRIX); //render_helper_Wrapper_function
 
 private:
+	//Unique로 바꿀 생각 중 -> device를 resource에서 가져오는 경우가 흔해서, 
 	std::shared_ptr<State> m_DxState;
 	std::shared_ptr<Graphics> m_DxGraphics;
-
-	std::shared_ptr<Shader> m_DxShader; // -> Layout & Shader Code  /    & ConstBuffer;
+	std::shared_ptr<Render_Helper> m_Render_Helper;
 
 	GridNAxis* GDNAX; //디버깅이긴 한데, 
+
 public:
 	ComPtr<ID3D11Device> m_Device = nullptr;
 	ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;

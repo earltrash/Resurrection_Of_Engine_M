@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Commons.h"
 
+//폐기 예정 
 float StrideFromFlag(VertexFlag Flag) //For Bytes 
 {
 	size_t stride = 0;
@@ -168,6 +169,50 @@ int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD nu
 	*ppLayout = pLayout;
 
 	return S_OK;
+}
+void HR_T(HRESULT hr)
+{
+	if (FAILED(hr))
+	{
+		throw com_exception(hr);
+	}
+}
+HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code)
+{
+	HRESULT hr = S_OK;
+	ID3DBlob* err = nullptr;
+
+	//Define은 탐구의 영역이기 때문에 일단 nullptr로 들어감. 
+
+	UINT Flag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR; //ROW MAJOR로 COMPILE 
+	
+	hr = D3DCompileFromFile(FileName, nullptr, nullptr, EntryPoint, ShaderModel, Flag, 0, code, &err);
+	if (FAILED(hr))
+	{
+		std::cout << "셰이더 컴파일 실패";
+		std::wcout
+			<< std::wstring(FileName) 
+			<< ", Entry " << EntryPoint
+			<< " , Model: " << ShaderModel
+			<< std::endl;
+	}
+	if (err)
+	{
+		std::string errMsg((char*)err->GetBufferPointer(), err->GetBufferSize());
+		std::cout << "컴파일러 에러 메시지: \n" << errMsg << std::endl;
+	}
+
+	if (err)
+	{
+		OutputDebugStringA((char*)err->GetBufferPointer());
+		err->Release();
+	}
+
+	err->Release();
+	return hr;
+
+	
+
 }
 HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size)
 {

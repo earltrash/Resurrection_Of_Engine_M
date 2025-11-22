@@ -1,20 +1,20 @@
 #pragma once
+#include "Shader.h"
+
 class ShaderResource
 {
 public:
 	ShaderResource() = default;
 	~ShaderResource() = default;
 public:
-
-	//정형화 비 정형화 
+	void Initalize(); //명시적으로 하는 게 마음 편하더라. 
+public:
 	void LoadShader(std::string FilePath, e_Shader_Type Shader_Type);
 	void LoadShader(e_Shader_Type Shader_Type);
-
-	Shader& GetShader(e_Shader_Type Type_Key);
+	Shader* GetShader(e_Shader_Type Type_Key);
 
 
 private:
-	//std::vector<Shader> m_Shader; //Flag Indexing으로 검색
-	std::unordered_map<e_Shader_Type, Shader> m_Shader_Map; //enum 갯수가 크기면 그닥 속도 차이는 없을 듯.
+	std::vector<unique_ptr<Shader>> m_Shader_Vec; //굳이 map을 쓸 필요를 못 느껴.
 };
 

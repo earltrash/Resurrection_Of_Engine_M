@@ -122,7 +122,7 @@ void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 �
      DX->StateSet_BeforeRender();
      DX->DrawGridNAxis();
 
-   
+   //Scene을 통해서든 어디서든 obj를 돌면서, 특정 Component를 가진 애들의 model & transform->worldMatrix를 보내는 형식으로 진행 
 
     m_obj->Render();
     DX->Flip();
@@ -170,12 +170,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();
-                //m_obj->m_effect->SetWorld(mWorld);
-                //m_obj->m_effect->SetView(mView);
-                //m_obj->m_effect->SetProj(mProj);
-                //m_obj->m_effect->SetColor(COLOR{ 0.5,1,1,1 }); //이건 상관없긴 함.
-                //m_obj->m_effect->Update();
-
+               
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
                 
                 DX->SetGridNAxis(mView); 

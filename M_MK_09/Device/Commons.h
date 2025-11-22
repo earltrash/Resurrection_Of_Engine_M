@@ -5,6 +5,9 @@
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
+#include <d3dcompiler.h> 
+#pragma comment(lib, "D3DCompiler.lib")
+
 
 //여기 helper 함수 포함해서 다 지울 예정.
 
@@ -59,7 +62,27 @@ enum class VertexFlag : uint32_t
 	VF_MAX
 };
 
+#pragma region exception
 
+class com_exception : public std::exception
+{
+public:
+	com_exception(HRESULT hr) : result(hr) {}
+
+	const char* what() const noexcept override
+	{
+		static char s_str[64] = {};
+		sprintf_s(s_str, "Failure with HRESULT of %08X",
+			static_cast<unsigned int>(result));
+		return s_str;
+	}
+
+private:
+	HRESULT result;
+};
+
+
+#pragma endregion 
 float StrideFromFlag(VertexFlag Flag);
 
 #pragma endregion
@@ -113,6 +136,8 @@ HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer*
 HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, LPVOID pData, ID3D11Buffer** ppCB);
 int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD num, ID3DBlob* pVSCode, ID3D11InputLayout** ppLayout);
 HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size);
+HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code);
+void HR_T(HRESULT hr);
 
 
 

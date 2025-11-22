@@ -34,6 +34,7 @@ public:
 	void CreateVertexBuffer(V* vertices, UINT vertexCount, ID3D11Buffer** vertexBuffer);
 
 	//기존 Model Property
+	//이거 INDEX BUFFER로 수정하자 
 	ID3D11Buffer* m_Vertexbuffer = nullptr;
 
 	UINT			m_Size = 0;			

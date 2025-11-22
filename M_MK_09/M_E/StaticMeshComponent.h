@@ -1,7 +1,5 @@
 #pragma once
 #include "RenderComponent.h"
-#include "Model.h"
-
 //얘는 ResourceManager나 mesh의 상위 혹은 하위 데이터를 운용해야 할듯?
 
 //Engine과 Renderer 사이를 연결할 Component. dx의 인터페이스 구조체 (buffer같은 개념들을 wrapping해서 사용할 거임)
@@ -24,6 +22,10 @@
 
 //해당 컴포넌트가 Update 될 일은 없지? 
 //업데이트라고 한다면 상수버퍼나 shader 쪽이니깐. 
+//Object 단위에서의 업데이트 되는 상수버퍼 자체는 월드 행렬 밖에 없을 거 같은데, 
+
+
+class Model;
 
 class StaticMeshComponent : public RenderComponent
 {
@@ -31,6 +33,7 @@ public:
     StaticMeshComponent() = default;
     ~StaticMeshComponent() = default;
 public:
+    //받긴 하는데, 뭐 없긴 할듯 
     virtual void Update() {}
     virtual void FixedUpdate(float dt) {}
 
@@ -40,7 +43,8 @@ public:
 
 
 private:
-    std::unique_ptr<Model> m_Model;
+    //그려야 하는 model의 pointer를 갖고 있어서, render 할 때 pointer만 줍소 하면 줄 걸 
+    Model* m_p_model;
     
 };
 

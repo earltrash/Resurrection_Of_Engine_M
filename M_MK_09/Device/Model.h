@@ -18,7 +18,11 @@ public:
 	Model() = default;
 	~Model() = default;
 
-	void Render(ID3D11DeviceContext* DX);
+	void Render(ID3D11DeviceContext* DX)
+	{
+		DX->IASetVertexBuffers(0, 1, &m_Mesh->m_Vertexbuffer, &m_Mesh->m_Stride, &m_Mesh->m_Offset);
+		DX->Draw(m_Mesh->m_VtxCnt, 0);
+	}
 
 private:
 	Mesh* m_Mesh; //-> 어차피 FBX를 통해 Mesh에 있는 texture정보를 보유할 거임.

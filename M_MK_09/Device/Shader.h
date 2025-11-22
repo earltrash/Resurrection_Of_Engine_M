@@ -1,51 +1,36 @@
 #pragma once
-#include "ConstBuffer.h" //여기 내부 싹다 고쳐야 할 듯.
+//#include "ConstBuffer.h" 
 
-
-//hlsl의 맥락.
 enum class e_Shader_Type
 {
+	Static_,
+	Skeleton,
+	UI,
+
 	
 
 
-
+	Max
 };
-
-//->HLSL 양식을 좀 보고 
-//Shader VS/PS
-// VSCODE
-// 
-//Layout -> 이거는 Vertex 구조를 통합했으니 다 들어가지 않을까 싶긴 하지만. 모르니깐 ㅇㅇ 
-//Filename -> 디버깅 용 
-
-struct Shader_Set
-{
-	//Device -> Shader 생성을 위한 
-	//
-
-};
-
-
-//랜더 될 때는 얘가 갖고 있는 모든 
-// Shader Code Compile
-// Layout 생성
-// ConstBuffer 
 
 class Shader
 {
 public:
-	Shader() = default;
+	Shader();
 	~Shader() = default;
-
-
 public:
-	void SetUp(Shader_Set Set);
-	void ShaderLoad(std::string FileName);
+	void Initalize(e_Shader_Type Type);
+	void CreateVS_N_IL();
+	void CreatePS();
 
+	ID3D11VertexShader* GetVS();
+	ID3D11PixelShader* GetPS();
+	ID3D11InputLayout* GetIL();
 
 private:
-	//std::vector<>
-
-
+	e_Shader_Type m_Type;
+	ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;
+	ComPtr<ID3D11PixelShader> m_pPixelShader = nullptr;
+	ComPtr<ID3D11InputLayout> m_pInputLayout = nullptr;
 };
 

@@ -1,14 +1,13 @@
 ﻿#pragma once
 
 #include "pch.h"
-
-
 #include "DX_Renderer.h"
 #include "GridNAxis.h"
 #include "Graphics.h"
 #include "State.h"
 #include "Model.h"
-
+#include "Render_Helper.h"
+#include "Resourcemanager.h"
 //Graphics로 대체시킬 예정 삭제 예정 
 
 
@@ -49,21 +48,20 @@ void DX_Renderer::Clear()
 
 void DX_Renderer::StaticMeshRender()
 {
+	std::vector<std::pair<Model*, XMMATRIX>>& Mesh_Models  = m_Render_Helper.get()->Get_Model_Vec();
+	Shader* Static_Mesh_Shader = ResourceManager::Instance().GetShaderResource()->GetShader(e_Shader_Type::Static_);
 
-	//쉐이더 세팅
-	//상수버퍼 -> 특히 월드 행렬.
-	//Layout 정렬하기 .
+	m_DXDC->VSSetShader(Static_Mesh_Shader->GetVS(), nullptr, 0);
+	m_DXDC->PSSetShader(Static_Mesh_Shader->GetPS(), nullptr, 0);
+	m_DXDC->IASetInputLayout(Static_Mesh_Shader->GetIL());
 
-
-
-
-
-	for (const auto& model : m_BeDrawnModel)
+	for (auto& model : Mesh_Models)
 	{
-		//
+		SetWorldMatrix(model.second); //update / Slot Setting까지 Wrapped.
+		model.first->m_Material; //Texture, cb material에 대한 처리는 나중에 하자. material class develope 필요.
 
 
-		model->Render(m_DXDC.Get());
+		model.first->Render(m_DXDC.Get());
 	}
 }
 
@@ -74,13 +72,37 @@ void DX_Renderer::Render()
 	DrawGridNAxis();
 
 	//Shader Set
-
+	ConstantBufferApply();
 	//Model Set
 
 
 	StaticMeshRender();
 
 	Flip();
+}
+
+void DX_Renderer::ConstantBufferApply() //일단 미정 
+{
+	std::vector<unique_ptr<IConstBuffer>>& Vec = m_Render_Helper.get()->Get_CB_Vec();
+
+	for (const auto& cb : Vec) 
+	{
+		cb.get()->Update(m_DXDC.Get());
+		ID3D11Buffer* pCB = cb.get()->GetBuffer();
+		UINT slot = cb.get()->GetRegisterSlot();
+		m_DXDC->VSSetConstantBuffers(slot, 1, &pCB);
+		m_DXDC->PSSetConstantBuffers(slot, 1, &pCB);
+	}
+}
+
+void DX_Renderer::SetWorldMatrix(XMMATRIX WORLD_MATRIX)
+{
+	m_Render_Helper->GetCB<cbDEFAULT>()->SetWorld(WORLD_MATRIX);
+	m_Render_Helper->GetCB<cbDEFAULT>()->Update(m_DXDC.Get());
+	ID3D11Buffer* pCB = m_Render_Helper->GetCB<cbDEFAULT>()->GetBuffer();
+
+	m_DXDC->VSSetConstantBuffers(static_cast<int>(e_CB::CB_DEFAULT), 1, &pCB);
+	m_DXDC->PSSetConstantBuffers(static_cast<int>(e_CB::CB_DEFAULT), 1, &pCB); //조건
 }
 
 void DX_Renderer::StateSet_BeforeRender()
@@ -95,7 +117,7 @@ void DX_Renderer::StateSet_BeforeRender()
 		m_DxGraphics->GetDepthStencilView().Get()          
 	);
 
-	m_DXDC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	m_DXDC->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 }
 
@@ -104,8 +126,6 @@ void DX_Renderer::SetGridNAxis(XMMATRIX view)
 	GDNAX->GetFX()->SetView(view);
 	GDNAX->GetFX()->Update();
 }
-
-
 HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 {
 	m_DxGraphics = std::make_shared<Graphics>();
@@ -126,7 +146,12 @@ HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 
 	m_DxState->Set_Up(Set_S);
 
+	Render_Helper_SetUp Set_RH;
+	Set_RH.m_Device = m_Device;
+	Set_RH.m_DXDC = m_DXDC;
 
+	m_Render_Helper = make_shared<Render_Helper>();
+	m_Render_Helper->Initalize(Set_RH);
 
 	return E_NOTIMPL;
 }

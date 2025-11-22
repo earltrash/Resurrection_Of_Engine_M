@@ -35,6 +35,7 @@ XMFLOAT4X4 GetWorldM() { return m_worldMatrix; }
 void SetLocalM(XMFLOAT4X4 NWL) { m_locaMatrix = NWL; m_ldirty = true;}
 void SetWorldM(XMFLOAT4X4 NWW) { m_worldMatrix = NWW; m_wdirty = true;}
 
+void SetOwner(Object* obj) { m_Owner = obj; }
 #pragma endregion
 
 

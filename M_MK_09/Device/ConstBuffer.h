@@ -3,42 +3,33 @@
 
 using namespace DirectX;
 
+
+
 struct cbMatrix_4
 {
 	XMMATRIX mTM;			
 	XMMATRIX mView;						
-	XMMATRIX mProj;			
-	XMMATRIX mW;
+	XMMATRIX mProj;		
 
-	XMFLOAT4 Color; //뭐 안 읽으면 되는거 아닌가? 음......... 고민좀 해보자 
+	XMMATRIX mW;
 };
 struct cbLT
 {
 	XMVECTOR Direction;		//!< 빛의 방향.
 	XMVECTOR Diffuse;		//!< 주 광량 : 확산광 Diffuse Light.
 	XMVECTOR Ambient;		//!< 보조 광량 : 주변광 Ambient Light.
+
 	FLOAT    Range;			//!< 빛 도달 거리.
 	BOOL	 LitOn;			//!< 조명 적용여부.
 };
+
 struct cbMAT
 {
 	XMVECTOR Diffuse = { 1,1,1,1 };		//!< 주 광량(확산광) 의 반사율(%) 
 	XMVECTOR Ambient;		//!< 보조 광량(주변광) 의 반사율(%) 
 };
-//그럼 타입에 따라서 업데이트 해야하는 상수 버퍼를 나누는 형식으로 해야 겠네 
 
-struct ConstBuffer_ANI
-{
-	XMFLOAT4X4 mTM;				//!< "World" 변환 행렬 변수 : DirectXMath, 비정렬, SIMD 비가속, 일반 저장용. 
-	XMFLOAT4X4 mView;			//!< "View" 변환 행렬 변수 
-	XMFLOAT4X4 mProj;			//!< "Projection" 변환 행렬 변수
-	XMFLOAT4X4 mWVP;			//!< "World+View+Projection" 변환 행렬 변수
-
-	XMFLOAT4 col;
-	float  aniT;
-};
-
-typedef ConstBuffer_ANI	CBuffer_Ani;
+//구조체 타입은 따로 빼는 것도 나쁘지 않을 듯. -> 차피, 
 
 class cbDEFAULT : public IConstBuffer
 {
@@ -56,12 +47,11 @@ public:
 	void SetView(XMMATRIX& TM) { matrix.mView = TM; }
 	void SetProj(XMMATRIX& TM) { matrix.mProj = TM; }
 	void SetTM(XMMATRIX& TM) { matrix.mTM = TM; }
-
 	const std::type_info& GetTypeInfo() const override { return typeid(cbDEFAULT); }
-	void SetColor(XMFLOAT4 col) { matrix.Color = col; }
+
 private:
 	ID3D11Buffer* m_pD3DBuffer;
-	UINT m_RegisterSlot = 0;
+	UINT m_RegisterSlot = static_cast<int>(e_CB::CB_DEFAULT);
 
 private:
 	cbMatrix_4 matrix;
@@ -90,7 +80,7 @@ public:
 	const std::type_info& GetTypeInfo() const override { return typeid(cbLIGHT); }
 private:
 	ID3D11Buffer* m_pD3DBuffer;
-	UINT m_RegisterSlot = 1;
+	UINT m_RegisterSlot = static_cast<int>(e_CB::CB_LIGHT);
 
 
 private:
@@ -117,10 +107,37 @@ public:
 
 private:
 	ID3D11Buffer* m_pD3DBuffer;
-	UINT m_RegisterSlot = 3;
+	UINT m_RegisterSlot = static_cast<int>(e_CB::CB_MATERIAL);
 
 
 private:
 
 	cbMAT material;
 };
+
+
+
+
+#pragma region Type_Traits
+
+template <typename T>
+struct CB_Type_Traits;
+
+template<>
+struct CB_Type_Traits<cbDEFAULT>
+{
+	static constexpr e_CB Type = e_CB::CB_DEFAULT;
+};
+
+template<>
+struct CB_Type_Traits<cbLIGHT>
+{
+	static constexpr e_CB Type = e_CB::CB_LIGHT;
+};
+
+template <>
+struct CB_Type_Traits<cbMATERIAL> {
+	static constexpr e_CB Type = e_CB::CB_MATERIAL;
+};
+
+#pragma endregion

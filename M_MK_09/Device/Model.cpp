@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "Model.h"
-#include "Material.h"
 
 //이거 하나 땜에... 아. 
 void Model::Render(ID3D11DeviceContext* DXDC)

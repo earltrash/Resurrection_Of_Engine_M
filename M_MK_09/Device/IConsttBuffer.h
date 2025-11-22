@@ -9,3 +9,14 @@ public:
 	virtual UINT GetRegisterSlot() const = 0;
 	virtual const std::type_info& GetTypeInfo() const = 0; // 런타임에 타입 받아오는 거 땜에 그래 template
 };
+
+
+enum class e_CB
+{
+	CB_DEFAULT,
+	CB_LIGHT,
+	CB_MATERIAL,
+
+
+	MAX
+};

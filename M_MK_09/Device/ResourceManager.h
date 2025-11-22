@@ -10,7 +10,7 @@
 //#include "Commons.h" //commons -> helper 함수로, pch랑 분리
 #include "Singleton.h"
 #include "MeshResource.h"
-
+#include "ShaderResource.h"
 using namespace std;
 
 
@@ -41,22 +41,22 @@ private:
 
 
 public:
-	void ModelLoad(std::string filepath, ModelType Type); //캡슐화? 외부에서 ModelType을 알아야 하는게 좀 골치긴 하네, 뭐 boolean으로 나눠도 상관없지 않을까. 
-
-
-
-	
+	void ModelLoad(std::string& filepath, ModelType Type); //캡슐화? 외부에서 ModelType을 알아야 하는게 좀 골치긴 하네, 뭐 boolean으로 나눠도 상관없지 않을까. 
 public:
 	void Set_Up(RM_Set Set); //-> Device, context를 제공받고. MeshResource가 resource만들 device 자체는 얘만 들자
 	ComPtr<ID3D11Device> GetDevice();
 	ComPtr<ID3D11DeviceContext>GetDeviceContext();
-
+	ShaderResource* GetShaderResource();
+	MeshResource* GetMeshResource();
 private:
 	ComPtr<ID3D11Device> m_pDevice = nullptr;
 	ComPtr<ID3D11DeviceContext> m_pDeviceContext = nullptr;
 
 private:
-	std::unique_ptr<MeshResource> m_MeshResource;
-	std::unique_ptr< ShaderResource> m_ShaderResource; //Shader 객체를 Map으로 보관 -> 후, Flag(iNDEX)
+	std::unique_ptr <MeshResource> m_MeshResource;
+	std::unique_ptr <ShaderResource> m_ShaderResource; //Shader 객체를 Vec으로 보관 -> 후, Flag(iNDEX)
+
+	
+
 };
 

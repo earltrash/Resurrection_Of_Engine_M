@@ -1,6 +1,7 @@
 #pragma once
 #include "Commons.h"
 #include "ConstBuffer.h"
+#include "Shader.h"
 
 class Effect
 {

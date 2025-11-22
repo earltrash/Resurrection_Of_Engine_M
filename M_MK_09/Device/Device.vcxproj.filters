@@ -69,6 +69,9 @@
     <ClInclude Include="ShaderResource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Render_Helper.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX_Renderer.cpp">
@@ -110,9 +113,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -120,6 +120,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ShaderResource.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Render_Helper.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
