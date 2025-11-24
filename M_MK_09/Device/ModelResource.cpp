@@ -1,10 +1,11 @@
 #include "pch.h"
-#include "MeshResource.h"
+#include "ModelResource.h"
+
+#include "Material.h"
+#include "Mesh.h"
 
 
-
-
-void MeshResource::LoadFile(std::string FilePath , ModelType Type)
+void ModelResource::LoadFile(std::string FilePath , ModelType Type)
 {
 	Assimp::Importer Importer;
 	unsigned int flags =0;
@@ -39,9 +40,36 @@ void MeshResource::LoadFile(std::string FilePath , ModelType Type)
 		std::cerr << "읽었던 경로는" << " " << FilePath << endl;
 	}
 
-	Model model;
+	//
 
+	unique_ptr<Model> model = make_unique<Model>(); 
+	vector<shared_ptr<Material>> globalMaterials;
 
+	for (int i = 0; i < Fbx_Model->mNumMaterials; i++) {
+		auto mat = make_shared<Material>();
+		
+		aiMaterial* Material = Fbx_Model->mMaterials[i];
+		mat->Create(Material);
+		globalMaterials.push_back(mat);
+	}
+
+	for (int i = 0; i < Fbx_Model->mNumMeshes; i++)
+	{
+		aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
+
+		//parts 라고 보는 게 더 직관적일 듯 
+		shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		mesh->Create(pAiMesh);
+
+		int Material_IDX = pAiMesh->mMaterialIndex;
+		
+		shared_ptr<Material> mat = globalMaterials[Material_IDX];
+
+		model->m_Parts.push_back({ mesh, mat });
+	}
+
+	
+	
 	if (Type == ModelType::Skeleton) //Skeleton일 경우에만 추가적으로 정보를 넣어주는 식으로 ?
 	{
 		//Skeleton인 경우에는 각 노드의 가중치와 본의 정보가 들어가기 때문에 추가하는 식으로.
@@ -49,19 +77,12 @@ void MeshResource::LoadFile(std::string FilePath , ModelType Type)
 	}
 
 	
-	//model.m_Meshresize(Fbx_Model->mNumMeshes);
+	m_Modelmap.emplace(FilePath, std::move(model));
+}
 
 
-	//for (int i = 0; i < Fbx_Model->mNumMeshes; i++)
-	//{
-	//	aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
-
-	//	model.m_Mesh[i].Create(pAiMesh);
-	//	//내부에서는 Mesh // Buffer // stride 같은 것들이 모두 처리가 됨. 
-	//}
-
-
-//	m_Modelmap.emplace(FilePath, model);
-
-
+Model* ModelResource::GetModel(std::string Key)
+{
+	if (m_Modelmap.find(Key) != m_Modelmap.end())
+		return m_Modelmap.at(Key).get();
 }

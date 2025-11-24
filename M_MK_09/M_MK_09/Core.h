@@ -1,7 +1,6 @@
 #pragma once
 #include "Window.h"
 #include "Modules.h" //Engine Module
-#include "DX_Renderer.h"
 #include "Camera.h"
 
 
@@ -40,7 +39,7 @@ public:
 
 
 private:
-	std::shared_ptr<DX_Renderer> DX = nullptr;
+	//std::shared_ptr<DX_Renderer> DX = nullptr;
 	
 	std::unique_ptr<GameTimer> m_timer = nullptr;
 	std::shared_ptr<Camera> g_camera = nullptr;

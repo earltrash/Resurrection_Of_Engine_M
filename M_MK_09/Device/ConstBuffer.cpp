@@ -31,7 +31,7 @@ HRESULT cbLIGHT::Update(ID3D11DeviceContext* pDXDC)
 		sizeof(cbLT));
 }
 
-HRESULT cbMATERIAL::Create(ID3D11Device* pDev)
+HRESULT cbMATERIAL::Create(ID3D11Device* pDev) 
 {
 	return ::CreateDynamicConstantBuffer(pDev, sizeof(cbMAT), &m_pD3DBuffer);
 }

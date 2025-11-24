@@ -32,11 +32,17 @@ ShaderResource* ResourceManager::GetShaderResource()
 	return nullptr;
 }
 
-MeshResource* ResourceManager::GetMeshResource()
+ModelResource* ResourceManager::GetModelResource()
 {
-	MeshResource* returned = m_MeshResource.get();
+	ModelResource* returned = m_MeshResource.get();
 	if (returned) return returned;
 
 	else
 		return nullptr;
+}
+
+TextureResource* ResourceManager::GetTextureResource()
+{
+
+	return m_TextureResource.get();
 }

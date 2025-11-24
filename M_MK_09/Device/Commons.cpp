@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Commons.h"
 
+#include "WICTextureLoader.h"
+#include "DDSTextureLoader.h"
+
 //폐기 예정 
 float StrideFromFlag(VertexFlag Flag) //For Bytes 
 {
@@ -176,6 +179,37 @@ void HR_T(HRESULT hr)
 	{
 		throw com_exception(hr);
 	}
+}
+
+std::wstring Base_Path = L"../Texture/";
+
+ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* device)
+{
+	//작업 디렉터리는 M_MK_09의 ProjectDir을 기준으로 함.
+	
+
+	std::wstring path = Base_Path + file_name;
+
+
+	ID3D11ShaderResourceView* Texture = nullptr;
+	HRESULT hr = E_FAIL;
+
+	hr = DirectX::CreateWICTextureFromFile(device, path.c_str(), nullptr, &Texture);
+
+	if (FAILED(hr))
+	{
+
+		hr = DirectX::CreateDDSTextureFromFile(device, path.c_str(), nullptr, &Texture);
+
+		if (FAILED(hr)) //두번 실패면 뭐 ... 쩔 수 있나 
+		{
+			std::cout << "Texture 생성 오류; 경로:  " << std::endl;
+			std::wcout << path << endl;
+		}
+		
+	}
+
+	return Texture;
 }
 HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code)
 {

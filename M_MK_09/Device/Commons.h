@@ -7,7 +7,7 @@ using namespace DirectX;
 
 #include <d3dcompiler.h> 
 #pragma comment(lib, "D3DCompiler.lib")
-
+#include <string>
 
 //여기 helper 함수 포함해서 다 지울 예정.
 
@@ -139,6 +139,8 @@ HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, L
 HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code);
 void HR_T(HRESULT hr);
 
+ID3D11ShaderResourceView* CreateTexture(std::wstring path, ID3D11Device* device);
+
 
 
 
@@ -160,9 +162,5 @@ inline VertexFlag& operator|=(VertexFlag& a, VertexFlag b)
 	a = a | b;
 	return a;
 }
-
-// 예시: 노멀과 텍스처 좌표가 모두 필요하다면:
-// VertexFlags flags = VertexFlags::VF_NORMAL | VertexFlags::VF_TEXCOORD; 
-
 #pragma endregion
 

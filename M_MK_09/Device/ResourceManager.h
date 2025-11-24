@@ -7,18 +7,17 @@
 
 //FileLoader는 밑까지 .
 
-//#include "Commons.h" //commons -> helper 함수로, pch랑 분리
 #include "Singleton.h"
-#include "MeshResource.h"
+#include "ModelResource.h"
 #include "ShaderResource.h"
+#include "TextureResource.h"
 using namespace std;
 
 
 class SoundResource; //얘는 그냥 엔진 단에서 Sound
-
-class MaterialResource;
+class TextureResource;
 class ShaderResource;
-
+//class MaterialResource;
 
 //Device
 
@@ -47,16 +46,23 @@ public:
 	ComPtr<ID3D11Device> GetDevice();
 	ComPtr<ID3D11DeviceContext>GetDeviceContext();
 	ShaderResource* GetShaderResource();
-	MeshResource* GetMeshResource();
+	ModelResource* GetModelResource();
+	TextureResource* GetTextureResource();
 private:
 	ComPtr<ID3D11Device> m_pDevice = nullptr;
 	ComPtr<ID3D11DeviceContext> m_pDeviceContext = nullptr;
 
 private:
-	std::unique_ptr <MeshResource> m_MeshResource;
+	// TO DO MODEL_Resource
+	// Material - material cb & Texture 
+	// Sound 는 너무 먼 미래야~ 
+	std::unique_ptr <ModelResource> m_MeshResource;
 	std::unique_ptr <ShaderResource> m_ShaderResource; //Shader 객체를 Vec으로 보관 -> 후, Flag(iNDEX)
+	//모든 texture가 material이랑 엮일 일은 없다고 생각해.
+	std::unique_ptr <TextureResource> m_TextureResource;
 
-	
-
+	//그래서 분리하고, material은 fbx를 통해서 읽어 올거야.  -> 그냥 mesh에서 읽으면 되는 거잖아 
+	//std::unique_ptr <MaterialResource> m_MaterialResource;
+	// Phong Model이니, Material이 가져야 할 값은 Difffuse Specular Ambient Texture Name ? 
 };
 

@@ -17,8 +17,6 @@ void Mesh::Create(aiMesh* mesh)
         vertex.TexCoord = { mesh->mTextureCoords[0][i].x , mesh->mTextureCoords[0][i].y }; //À½.. žÍ±î 
         vertex.Tangent = { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
 
-
-
         m_Vertex.push_back( vertex);
     }
 
@@ -43,3 +41,11 @@ void Mesh::CreateVertexBuffer(V* vertices, UINT vertexCount, ID3D11Buffer** vert
     	m_Stride = sizeof(V);
     	m_Offset = 0;
 }
+
+void Mesh::Render(ID3D11DeviceContext* DXDC)
+{
+    DXDC->IASetVertexBuffers(0, 1, &m_Vertexbuffer, &m_Stride, &m_Offset);
+    DXDC->IASetVertexBuffers(0, 1, &m_Vertexbuffer, &m_Stride, &m_Offset);
+    DXDC->Draw(m_VtxCnt , 0);
+}
+

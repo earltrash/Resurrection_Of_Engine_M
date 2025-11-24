@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Core.h"
-#include "WICTextureLoader.h"
 #include "ResourceManager.h"
+#include "DX_Renderer.h"
 
 //전역에서 관리되는 shader ?
 // 
@@ -33,11 +33,10 @@ bool Core::WinSet()
 bool Core::DX_Set()
 {
 
-     DX = make_shared< DX_Renderer>(); 
 
-     DX->DX_SetUP(m_hWnd, w_width, w_height); //Graphics & State 생성 
+     DX_Renderer::Instance().DX_SetUP(m_hWnd, w_width, w_height);
+     DX_Renderer::Instance().GridNAxis_SetUP(DX_Renderer::Instance().m_Device.Get());
 
-     DX->GridNAxis_SetUP(DX->m_Device.Get());
 
     return 1;
 }
@@ -55,13 +54,14 @@ bool Core::ModuleInit()
 
     //Wrapping needed
     RM_Set set;
-    set.Device = DX->m_Device.Get();
-    set.DeviceContext = DX->m_DXDC.Get();
+    set.Device = DX_Renderer::Instance().m_Device.Get();
+    set.DeviceContext = DX_Renderer::Instance().m_DXDC.Get();
 
     ResourceManager::Instance().Set_Up(set);
 
-
-    ResourceManager::Instance().ModelLoad("..\Models\Cube.obj" ,  ModelType::Static);
+    //FBX로 바꿔야 함.
+    std::string path = "..\Models\Cube.obj";
+    ResourceManager::Instance().ModelLoad(path,  ModelType::Static);
 
 
     return true;
@@ -118,14 +118,14 @@ void Core::Update(float dTime)
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
-    DX->Clear();
-     DX->StateSet_BeforeRender();
-     DX->DrawGridNAxis();
+    DX_Renderer::Instance().Clear();
+    DX_Renderer::Instance().StateSet_BeforeRender();
+    DX_Renderer::Instance().DrawGridNAxis();
 
    //Scene을 통해서든 어디서든 obj를 돌면서, 특정 Component를 가진 애들의 model & transform->worldMatrix를 보내는 형식으로 진행 
 
     m_obj->Render();
-    DX->Flip();
+    DX_Renderer::Instance().Flip();
 }
 
 bool Core::MsgProcess(MSG& msg)
@@ -152,7 +152,6 @@ float	fAspect = 1.6f;					//가로:세로 비율. 960:600 = 1.6:1 (16:10) 800:600 = 1.
 float	fZnear = 1.0f;					//시야 최소 거리 (1.0m) 
 float	fZfar = 300.0f;					//시야 최대 거리 (300m) 
 
-ID3D11ShaderResourceView* g_DinoTextureRv = nullptr;
 
 void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어지럽네
 {
@@ -173,7 +172,7 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                
                 //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
                 
-                DX->SetGridNAxis(mView); 
+                DX_Renderer::Instance().SetGridNAxis(mView);
                 g_camera->SetDirty(false);
             
 

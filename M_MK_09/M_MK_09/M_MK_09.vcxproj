@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include;$(SolutionDir)External\DXTK\Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -111,8 +111,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)External\assimp-master\Build\lib\Debug;$(SolutionDir)External\DXTK\Lib;$(SolutionDir)External\DXTEX\DirectXTex-main\DirectXTex\Bin\Desktop_2022_Win10\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mtd.lib;DirectXTK.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration);$(SolutionDir)External\assimp-master\Build\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>

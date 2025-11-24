@@ -10,7 +10,7 @@ public:
 	virtual const std::type_info& GetTypeInfo() const = 0; // 런타임에 타입 받아오는 거 땜에 그래 template
 };
 
-
+//폐기 예정
 enum class e_CB
 {
 	CB_DEFAULT,

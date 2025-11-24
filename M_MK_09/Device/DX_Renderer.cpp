@@ -46,6 +46,7 @@ void DX_Renderer::Clear()
 
 //쉐이더 코드를 하나로 통일할 거기 때문에.
 
+
 void DX_Renderer::StaticMeshRender()
 {
 	std::vector<std::pair<Model*, XMMATRIX>>& Mesh_Models  = m_Render_Helper.get()->Get_Model_Vec();
@@ -54,14 +55,13 @@ void DX_Renderer::StaticMeshRender()
 	m_DXDC->VSSetShader(Static_Mesh_Shader->GetVS(), nullptr, 0);
 	m_DXDC->PSSetShader(Static_Mesh_Shader->GetPS(), nullptr, 0);
 	m_DXDC->IASetInputLayout(Static_Mesh_Shader->GetIL());
+	m_DXDC->PSSetSamplers( 0, 1 ,m_DxState->Get_Sampler().GetAddressOf()); //SAMPLER는 일단 하나만 써보자
 
 	for (auto& model : Mesh_Models)
 	{
 		SetWorldMatrix(model.second); //update / Slot Setting까지 Wrapped.
-		model.first->m_Material; //Texture, cb material에 대한 처리는 나중에 하자. material class develope 필요.
 
-
-		model.first->Render(m_DXDC.Get());
+		model.first->Render(m_DXDC.Get()); //binding //material & vtx
 	}
 }
 
@@ -125,6 +125,10 @@ void DX_Renderer::SetGridNAxis(XMMATRIX view)
 {
 	GDNAX->GetFX()->SetView(view);
 	GDNAX->GetFX()->Update();
+}
+Render_Helper* DX_Renderer::GetRH()
+{
+	return m_Render_Helper.get();
 }
 HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 {

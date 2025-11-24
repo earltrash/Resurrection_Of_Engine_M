@@ -30,10 +30,10 @@ public:
 
 
 	//일단 기본적인 것만
-	ComPtr<ID3D11RasterizerState> Get_Rasterize() { return  m_pSolidRS; }
-	ComPtr<ID3D11DepthStencilState> Get_DepthStencil() { return  m_pDepth; }
-	ComPtr<ID3D11SamplerState> Get_Sampler() { return  m_pSampler_; }
-	ComPtr<ID3D11BlendState> Get_BlendState() { return  m_pBlendState; }
+	const ComPtr<ID3D11RasterizerState> Get_Rasterize() const { return  m_pSolidRS; }
+	const ComPtr<ID3D11DepthStencilState> Get_DepthStencil() const { return  m_pDepth; }
+	const ComPtr<ID3D11SamplerState> Get_Sampler() const { return  m_pSampler_; }
+	const ComPtr<ID3D11BlendState> Get_BlendState() const { return  m_pBlendState; }
 
 private:
 	ComPtr<ID3D11RasterizerState> m_pSolidRS = nullptr;

@@ -26,7 +26,9 @@ struct cbLT
 struct cbMAT
 {
 	XMVECTOR Diffuse = { 1,1,1,1 };		//!< 주 광량(확산광) 의 반사율(%) 
-	XMVECTOR Ambient;		//!< 보조 광량(주변광) 의 반사율(%) 
+	XMVECTOR Ambient = { 1,1,1,1 }; ;		//!< 보조 광량(주변광) 의 반사율(%) 
+	XMVECTOR Spec = { 1,1,1,1 }; ;
+	FLOAT    Power = 30.f;
 };
 
 //구조체 타입은 따로 빼는 것도 나쁘지 않을 듯. -> 차피, 
@@ -98,12 +100,21 @@ public:
 
 	HRESULT Create(ID3D11Device* pDev);
 	HRESULT Update(ID3D11DeviceContext* pDXDC);
-	ID3D11Buffer* GetBuffer() const { return m_pD3DBuffer; }
-	UINT GetRegisterSlot() const { return m_RegisterSlot; }
+	ID3D11Buffer* GetBuffer() const override { return m_pD3DBuffer; }
+	UINT GetRegisterSlot() const override  { return m_RegisterSlot; }
+	const std::type_info& GetTypeInfo() const override { return typeid(cbMATERIAL); } 
 
 	void Set_Mat_Ambi(XMVECTOR& val) { material.Ambient = val; }
+	void Set_Mat_Ambi(XMFLOAT4 val) { material.Ambient = XMLoadFloat4(&val); }
+
 	void Set_Mat_Dif(XMVECTOR& val) { material.Diffuse = val; }
-	const std::type_info& GetTypeInfo() const override { return typeid(cbMATERIAL); }
+	void Set_Mat_Dif(XMFLOAT4 val) { material.Diffuse = XMLoadFloat4(&val); }
+
+	void Set_Mat_Spc(XMVECTOR& val) { material.Spec = val; }
+	void Set_Mat_Spc(XMFLOAT4 val) { material.Spec = XMLoadFloat4(&val); }
+
+	void Set_Mat_Pw(float val) { material.Power = val; }
+
 
 private:
 	ID3D11Buffer* m_pD3DBuffer;

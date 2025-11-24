@@ -6,6 +6,7 @@
 #include <DirectXMath.h>          
 #include <wrl/client.h>           
 #include "Singleton.h"
+
 using namespace DirectX;
 using Microsoft::WRL::ComPtr; 
 
@@ -21,17 +22,22 @@ class Render_Helper;
 using namespace DirectX;
 
 //너는 이제부터 Core로 Singleton으로 가져올 거임. //일단 대기 
-class DX_Renderer 
+
+class DX_Renderer : public Singleton<DX_Renderer>
 {
-public:
-		DX_Renderer() = default;
+private:
+		 DX_Renderer() = default;
 		~DX_Renderer() = default;
 public:
+	friend class Singleton;
+
+
+
 	HRESULT DX_SetUP(HWND hwnd, float width, float height);
 	HRESULT GridNAxis_SetUP(ID3D11Device* device);
 	void StateSet_BeforeRender();
 	void SetGridNAxis(XMMATRIX view);
-	
+	Render_Helper* GetRH();
 	GridNAxis* GetGridFX();
 	ComPtr<ID3D11SamplerState> Get_SamplerState(); ///얘는 나중에 빠질 예정임.
 	void UpdateGrid(float dTime);
