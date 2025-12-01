@@ -1,8 +1,4 @@
 #pragma once
-
-//Mesh를 포함하는 
-
-#include <string>
 #include "Model.h"
 
 
@@ -20,7 +16,7 @@ public:
 
 public:
 
-	void LoadFile(std::string FilePath , ModelType Type ); 
+	int LoadFile(std::string FilePath , ModelType Type ); 
 	Model* GetModel(std::string Key);
 private:
 

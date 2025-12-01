@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <iostream>
 #include <list>
+#include <string>
+#include <filesystem>  
 
 #include "D3D11.h"
 #include "DirectXMath.h"

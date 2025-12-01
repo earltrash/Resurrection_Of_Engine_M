@@ -11,6 +11,13 @@ void ResourceManager::Set_Up(RM_Set Set)
 {
 	m_pDevice = Set.Device;
 	m_pDeviceContext = Set.DeviceContext;
+
+
+	m_MeshResource = std::make_unique< ModelResource>();
+	m_ShaderResource = std::make_unique<ShaderResource>();
+		
+    m_TextureResource = std::make_unique<TextureResource>();
+
 }
 
 ComPtr<ID3D11Device> ResourceManager::GetDevice()

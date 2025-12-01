@@ -9,7 +9,7 @@ class Transform
 public:
 
 void Initalize();
-void Update(); // Parent가 있는 경우, 해당 parent의 matrix를 통해 업데이트 
+void Update(float dTime); // Parent가 있는 경우, 해당 parent의 matrix를 통해 업데이트 
 
 #pragma region GetSet
 XMFLOAT3 Get_W_Pos() { return m_W_pos; }

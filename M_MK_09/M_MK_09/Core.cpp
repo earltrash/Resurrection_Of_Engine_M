@@ -3,6 +3,10 @@
 #include "ResourceManager.h"
 #include "DX_Renderer.h"
 
+#include "RenderComponent.h" //임시.
+#include "StaticMeshComponent.h"
+
+
 //전역에서 관리되는 shader ?
 // 
 //Object가 렌더되기 위해서 가져야 하는 shader 객체 혹은 포인터도 결국 전역 정보와 오브젝트의 정보가 필요하긴 함. 
@@ -43,11 +47,9 @@ bool Core::DX_Set()
 bool Core::ModuleInit()
 {
     m_timer = make_unique<GameTimer>();
-
     g_camera = make_shared<Camera>(); 
     g_camera->Initalize();	
     m_obj = make_unique<Object>();
-
     g_camera->SetDirty(true); 
 
 
@@ -60,9 +62,15 @@ bool Core::ModuleInit()
     ResourceManager::Instance().Set_Up(set);
 
     //FBX로 바꿔야 함.
-    std::string path = "..\Models\Cube.obj";
-    ResourceManager::Instance().ModelLoad(path,  ModelType::Static);
+    //std::string path = "..\Models\Cube.obj";
+    // ResourceManager::Instance().ModelLoad(path,  ModelType::Static);
 
+    std::string path = "Models\\aid_hearing.fbx";
+    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+
+
+    m_obj->AddComponent<StaticMeshComponent>();
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel("aid_hearing.fbx");
 
     return true;
 }
@@ -108,6 +116,7 @@ void Core::Update(float dTime)
 {
    // DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
+    m_obj->Update(dTime);
     //
     // 
     // 물리 컴포넌트 

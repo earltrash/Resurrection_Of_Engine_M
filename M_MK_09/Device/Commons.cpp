@@ -181,8 +181,8 @@ void HR_T(HRESULT hr)
 	}
 }
 
-std::wstring Base_Path = L"../Texture/";
-
+//std::wstring Base_Path = L"../Texture/";
+std::wstring Base_Path = L"Models\\";
 ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* device)
 {
 	//작업 디렉터리는 M_MK_09의 ProjectDir을 기준으로 함.

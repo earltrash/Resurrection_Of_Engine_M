@@ -4,8 +4,7 @@
 #include "Material.h"
 #include "Mesh.h"
 
-
-void ModelResource::LoadFile(std::string FilePath , ModelType Type)
+int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 {
 	Assimp::Importer Importer;
 	unsigned int flags =0;
@@ -15,6 +14,7 @@ void ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	{
 		flags = aiProcess_Triangulate |             // 사각형 이상을 삼각형으로 변환 (필수)
 		aiProcess_ConvertToLeftHanded |
+			aiProcess_CalcTangentSpace|
 		aiProcess_PreTransformVertices;      // 왼손 좌표계로 변환 (DirectX 필수)
 
 		//aiProcess_CalcTangentSpace |        // PBR을 위한 탄젠트 벡터 계산
@@ -31,13 +31,17 @@ void ModelResource::LoadFile(std::string FilePath , ModelType Type)
 			aiProcess_GenBoundingBoxes |  // 바운딩 박스 생성
 			aiProcess_ConvertToLeftHanded;   // 왼손 좌표계로 변환
 	}
+	std::filesystem::path p;
 
+	std::cout << "현재 경로" << std::filesystem::current_path() << endl;
 	const aiScene* Fbx_Model = Importer.ReadFile(FilePath, flags);
 
 	if (!Fbx_Model || Fbx_Model->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Fbx_Model->mRootNode)
 	{
 		std::cerr << "Assimp Load Error: " << Importer.GetErrorString() << std::endl;
 		std::cerr << "읽었던 경로는" << " " << FilePath << endl;
+
+		return 0;
 	}
 
 	//

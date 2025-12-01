@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "StaticMeshComponent.h"
 #include "DX_Renderer.h"
+#include "ResourceManager.h"
+#include "Model.h"
 
 //DXRenderer가 갖고있는 List에 이걸 넣음. // 
 //
@@ -11,4 +13,34 @@
 void StaticMeshComponent::Render()
 {
 	
+}
+
+void StaticMeshComponent::Update(float dTime)
+{
+	RenderComponent::Update(dTime);
+
+}
+
+void StaticMeshComponent::FixedUpdate(float dTime)
+{
+}
+
+
+//엔진에서 하는게 맞긴 하죠 
+void StaticMeshComponent::SetModel(std::string Path)
+{
+
+	std::string Base_Path = "Models\\";
+
+	m_p_model = ResourceManager::Instance().GetModelResource()->GetModel(Base_Path+Path);
+
+}
+
+Model* StaticMeshComponent::GetModel()
+{
+	if (m_p_model)
+		return m_p_model;
+
+	else return nullptr;
+		
 }

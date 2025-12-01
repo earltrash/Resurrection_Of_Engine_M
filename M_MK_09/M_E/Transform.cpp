@@ -13,7 +13,7 @@
 //flag의 근거는 이동 (입력을 통해서든 뭐든) 
 
 
-void Transform::Update() //DX HELPER로 WRAPPING 하기 귀찮..
+void Transform::Update(float dTime) //DX HELPER로 WRAPPING 하기 귀찮..
 {
 	if (m_ldirty)
 	{

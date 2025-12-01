@@ -16,11 +16,11 @@ public:
 	virtual ~Object() { m_Components.clear(); }
 		
 
-		virtual void Update() 
+		virtual void Update(float dTime) 
 		{
 			for (auto& cmp : m_Components)
 			{
-				cmp->Update();
+				cmp->Update(dTime);
 			}
 
 
@@ -87,7 +87,7 @@ inline T* Object::AddComponent(Args && ...args)
 
 		auto comp = std::make_shared<T>(std::forward<Args>(args)...);
 
-		comp->SetOwner(shared_from_this());
+		comp->Component::SetOwner(shared_from_this());
 
 		T* ptr = comp.get();
 
