@@ -63,7 +63,7 @@ void Effect::SetWorld(XMMATRIX TM)
 	auto cb = GetConstantBuffer<cbDEFAULT>();
 	if (cb)
 	{
-		cb->SetTM(TM);
+		cb->SetWorld(TM);
 	}
 }
 
@@ -72,7 +72,7 @@ void Effect::SetMatrix(XMMATRIX TM)
 	auto cb = GetConstantBuffer<cbDEFAULT>();
 	if (cb)
 	{
-		cb->SetTM(TM);
+		cb->SetWorld(TM);
 	}
 }
 

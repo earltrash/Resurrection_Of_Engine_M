@@ -10,10 +10,18 @@ HRESULT cbDEFAULT::Create(ID3D11Device* pDev)
 
 HRESULT cbDEFAULT::Update(ID3D11DeviceContext* pDXDC)
 {
+	cbMatrix_4 data = matrix;
+
+	data.mTM = XMMatrixTranspose(matrix.mTM);
+	data.mView = XMMatrixTranspose(matrix.mView);
+	data.mProj = XMMatrixTranspose(matrix.mProj);
+	data.mW = XMMatrixTranspose(matrix.mW);
+
+
 	return UpdateDynamicBuffer(
 		pDXDC,
 		m_pD3DBuffer,
-		&matrix,
+		&data,
 		sizeof(cbMatrix_4));
 }
 

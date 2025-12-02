@@ -14,6 +14,8 @@ void Mesh::Create(aiMesh* mesh)
         vertex.Position = { mesh->mVertices[i].x , mesh->mVertices[i].y , mesh->mVertices[i].z ,1.0f };
         vertex.Normal = { mesh->mNormals[i].x , mesh->mNormals[i].y , mesh->mNormals[i].z };
         vertex.TexCoord = { mesh->mTextureCoords[0][i].x , mesh->mTextureCoords[0][i].y }; 
+
+        //->
         vertex.Tangent = { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
 
         m_Vertex.push_back(vertex);

@@ -89,7 +89,7 @@ float StrideFromFlag(VertexFlag Flag);
 #pragma region Vertex_Structures
 struct Vertex
 {
-	XMFLOAT3 Position;
+	XMFLOAT4 Position;
 	XMFLOAT4 Color;
 	XMFLOAT2 TexCoord;
 	XMFLOAT3 Normal;

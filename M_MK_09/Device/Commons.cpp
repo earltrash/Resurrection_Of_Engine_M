@@ -185,12 +185,7 @@ void HR_T(HRESULT hr)
 std::wstring Base_Path = L"Models\\";
 ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* device)
 {
-	//작업 디렉터리는 M_MK_09의 ProjectDir을 기준으로 함.
-	
-
 	std::wstring path = Base_Path + file_name;
-
-
 	ID3D11ShaderResourceView* Texture = nullptr;
 	HRESULT hr = E_FAIL;
 
@@ -218,11 +213,11 @@ HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char
 
 	//Define은 탐구의 영역이기 때문에 일단 nullptr로 들어감. 
 
-	UINT Flag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR; //ROW MAJOR로 COMPILE 
+	//UINT Flag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR; //ROW MAJOR로 COMPILE -> 고민거리.
 	
-	std::cout << "Current_Path : " << std::filesystem::current_path() << std::endl;
+	//std::cout << "Current_Path : " << std::filesystem::current_path() << std::endl;
 
-	hr = D3DCompileFromFile(FileName, nullptr, nullptr, EntryPoint, ShaderModel, Flag, 0, code, &err);
+	hr = D3DCompileFromFile(FileName, nullptr, nullptr, EntryPoint, ShaderModel, 0, 0, code, &err);
 	if (FAILED(hr))
 	{
 		std::cout << "셰이더 컴파일 실패";

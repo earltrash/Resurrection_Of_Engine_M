@@ -47,11 +47,11 @@ public:
 	ID3D11Buffer* GetBuffer() const { return m_pD3DBuffer; }
 	UINT GetRegisterSlot() const { return m_RegisterSlot; }
 
-	void SetWorld(XMMATRIX& TM) { matrix.mTM = TM; }
 
 	void SetView(XMMATRIX& TM) { matrix.mView = TM; }
 	void SetProj(XMMATRIX& TM) { matrix.mProj = TM; }
-	void SetTM(XMMATRIX& TM) { matrix.mTM = TM; }
+	void SetWorld(XMMATRIX& TM) { matrix.mTM = TM; }
+
 	const std::type_info& GetTypeInfo() const override { return typeid(cbDEFAULT); }
 
 private:

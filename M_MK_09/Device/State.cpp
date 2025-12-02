@@ -8,10 +8,7 @@ void State::Set_Up(State_Set Set)
 
 	m_pDevice = Set.Device;
 	m_pDeviceContext = Set.DeviceContext;
-
-	
 	Set_DepthStencil();
-	Set_BlendState();
 	Set_Rasterizer();
 	Set_BlendState();
 	Set_Sampler();
@@ -52,7 +49,7 @@ void State::Set_Sampler()
 	sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sd.Filter = D3D11_FILTER_ANISOTROPIC;
 
 	sd.MaxAnisotropy = 1;
 	sd.MinLOD = 0;
@@ -71,4 +68,23 @@ void State::Set_Sampler()
 
 void State::Set_BlendState()
 {
+	D3D11_BLEND_DESC BD{};
+	D3D11_RENDER_TARGET_BLEND_DESC RTB{};
+
+	RTB.BlendEnable = TRUE;
+	RTB.BlendOp = D3D11_BLEND_OP_ADD;
+
+	RTB.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	RTB.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+	RTB.SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	RTB.DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+
+	RTB.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	BD.RenderTarget[0] = RTB;
+	BD.AlphaToCoverageEnable = FALSE;
+	BD.IndependentBlendEnable = FALSE;
+	m_pDevice->CreateBlendState(&BD, &m_pBlendState);
+
 }

@@ -61,7 +61,6 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	{
 		aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
 
-		//parts 라고 보는 게 더 직관적일 듯 
 		std::shared_ptr<Mesh> mesh = make_shared<Mesh>();
 		mesh->Create(pAiMesh);
 

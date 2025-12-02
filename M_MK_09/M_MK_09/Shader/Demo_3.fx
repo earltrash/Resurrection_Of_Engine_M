@@ -69,6 +69,8 @@ VSOutput VS_Main(
 	//정점 정리
     //pos.w = 1;
 
+    
+    
 	//월드 변환.(World Transform) 
     pos = mul(pos, mWorld); //pos = pos * mTM
 	

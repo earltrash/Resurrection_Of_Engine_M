@@ -39,6 +39,7 @@ private:
 	ComPtr<ID3D11RasterizerState> m_pSolidRS = nullptr;
 	ComPtr<ID3D11DepthStencilState> m_pDepth = nullptr;
 	ComPtr<ID3D11SamplerState> m_pSampler_ = nullptr;
+
 	ComPtr<ID3D11BlendState> m_pBlendState = nullptr;
 
 	ComPtr<ID3D11Device> m_pDevice = nullptr;

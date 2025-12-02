@@ -69,15 +69,16 @@ void DX_Renderer::StaticMeshRender()
 void DX_Renderer::Render()
 {
 	Clear();
+	ConstantBufferApply();
 	StateSet_BeforeRender(); //State Set
+	StaticMeshRender();
 	DrawGridNAxis();
 
 	//Shader Set
-	ConstantBufferApply();
 	//Model Set
 
 
-	StaticMeshRender();
+	
 
 	Flip();
 }
@@ -118,6 +119,8 @@ void DX_Renderer::StateSet_BeforeRender()
 		m_DxGraphics->GetRenderTargetView().GetAddressOf(),
 		m_DxGraphics->GetDepthStencilView().Get()          
 	);
+
+	m_DXDC->OMSetBlendState(m_DxState->Get_BlendState().Get() , NULL, 0xFFFFFFFF);
 
 	m_DXDC->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

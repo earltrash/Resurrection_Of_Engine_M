@@ -61,16 +61,8 @@ bool Core::ModuleInit()
 
     ResourceManager::Instance().Set_Up(set);
 
-    //FBX로 바꿔야 함.
-    //std::string path = "..\Models\Cube.obj";
-    // ResourceManager::Instance().ModelLoad(path,  ModelType::Static);
-
-    std::string path = "Models\\aid_hearing.fbx";
-    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
-
-    path = "aid_hearing.fbx";
-    m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
+    
+   
 
     return true;
 }
@@ -127,20 +119,13 @@ void Core::Update(float dTime)
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
-    DX_Renderer::Instance().Clear();
-    DX_Renderer::Instance().StateSet_BeforeRender();
-    DX_Renderer::Instance().DrawGridNAxis();
 
-   //Scene을 통해서든 어디서든 obj를 돌면서, 특정 Component를 가진 애들의 model & transform->worldMatrix를 보내는 형식으로 진행 
-    //일단 un capsuleized
     Model* model = m_obj->GetComponent<StaticMeshComponent>()->GetModel();
-    
-    XMMATRIX pos = XMLoadFloat4x4(&(m_obj->GetTransform().GetWorldM()));
+    XMMATRIX pos = XMMatrixIdentity(); 
+
     pair<Model*, XMMATRIX> val = { model, pos };
 
     DX_Renderer::Instance().GetRH()->Get_Model_Vec().push_back(val);
-
-
     DX_Renderer::Instance().Render();
 
     //FLIP은 내부에서 
@@ -189,6 +174,9 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetView(mView);
                 DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetProj(mProj);
 
+                DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->Update((DX_Renderer::Instance().m_DXDC.Get()));
+                
+
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();
                
@@ -204,7 +192,21 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
 void Core::ModelParssing()
 {
- 
+   /* std::string path = "Models\\aid_hearing.fbx";
+    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+
+    path = "aid_hearing.fbx";
+    m_obj->AddComponent<StaticMeshComponent>();
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
+
+
+    std::string path = "Models\\character-male-e.fbx";
+    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+
+    path = "character-male-e.fbx";
+    m_obj->AddComponent<StaticMeshComponent>();
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
+
    
 
 }

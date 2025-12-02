@@ -3,9 +3,10 @@
 struct V
 {
 	XMFLOAT4 Position;
+	XMFLOAT2 TexCoord;
 	XMFLOAT3 Normal;
 	XMFLOAT3 Tangent;
-	XMFLOAT2 TexCoord;
+	
 };
 
 class aiMesh;
@@ -36,23 +37,4 @@ private:
 	std::vector<V> m_Vertex;
 };
 
-//ResourceManager-> 그 밑 애가 assimop를 통해서 처리? 해줄 거니. 따로 ㄴㄴ
-//template<typename T>
-//inline void Mesh::CreateVertexBuffer(T* vertices, UINT vertexCount, ID3D11Buffer** vertexBuffer)
-//{
-//	D3D11_BUFFER_DESC bd = {};
-//	bd.ByteWidth = sizeof(T) * vertexCount;
-//	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-//	bd.Usage = D3D11_USAGE_DEFAULT;
-//	bd.CPUAccessFlags = 0;
-//
-//	D3D11_SUBRESOURCE_DATA vbData = {};
-//	vbData.pSysMem = vertices;
-//
-//	ResourceManager::Instance().GetDevice()->CreateBuffer(&bd, &vbData, vertexBuffer);
-//
-//	m_VtxCnt = vertexCount;
-//	m_Stride = sizeof(T);
-//	m_Offset = 0;
-//}
 
