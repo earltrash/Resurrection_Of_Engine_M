@@ -20,6 +20,6 @@ public:
 	Model* GetModel(std::string Key);
 private:
 
-	std::unordered_map<std::string, unique_ptr<Model>> m_Modelmap;
+	std::unordered_map<std::string, std::unique_ptr<Model>> m_Modelmap;
 };
 

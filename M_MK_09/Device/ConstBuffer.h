@@ -12,6 +12,9 @@ struct cbMatrix_4
 	XMMATRIX mProj;		
 
 	XMMATRIX mW;
+
+	XMVECTOR COL;
+
 };
 struct cbLT
 {
@@ -44,7 +47,7 @@ public:
 	ID3D11Buffer* GetBuffer() const { return m_pD3DBuffer; }
 	UINT GetRegisterSlot() const { return m_RegisterSlot; }
 
-	void SetWorld(XMMATRIX& TM) { matrix.mW = TM; }
+	void SetWorld(XMMATRIX& TM) { matrix.mTM = TM; }
 
 	void SetView(XMMATRIX& TM) { matrix.mView = TM; }
 	void SetProj(XMMATRIX& TM) { matrix.mProj = TM; }

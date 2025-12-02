@@ -220,6 +220,8 @@ HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char
 
 	UINT Flag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR; //ROW MAJOR·Î COMPILE 
 	
+	std::cout << "Current_Path : " << std::filesystem::current_path() << std::endl;
+
 	hr = D3DCompileFromFile(FileName, nullptr, nullptr, EntryPoint, ShaderModel, Flag, 0, code, &err);
 	if (FAILED(hr))
 	{
@@ -229,6 +231,9 @@ HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char
 			<< ", Entry " << EntryPoint
 			<< " , Model: " << ShaderModel
 			<< std::endl;
+
+		
+
 	}
 	if (err)
 	{
@@ -242,7 +247,6 @@ HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char
 		err->Release();
 	}
 
-	err->Release();
 	return hr;
 
 	

@@ -8,26 +8,26 @@ void Mesh::Create(aiMesh* mesh)
 {
     // std::vector<unsigned int> indices; -> 얘는 나중에 
     m_Vertex.reserve(mesh->mNumVertices);
-
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         V vertex;
         vertex.Position = { mesh->mVertices[i].x , mesh->mVertices[i].y , mesh->mVertices[i].z ,1.0f };
         vertex.Normal = { mesh->mNormals[i].x , mesh->mNormals[i].y , mesh->mNormals[i].z };
-        vertex.TexCoord = { mesh->mTextureCoords[0][i].x , mesh->mTextureCoords[0][i].y }; //음.. 왤까 
+        vertex.TexCoord = { mesh->mTextureCoords[0][i].x , mesh->mTextureCoords[0][i].y }; 
         vertex.Tangent = { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
 
-        m_Vertex.push_back( vertex);
+        m_Vertex.push_back(vertex);
     }
 
-    UINT vertexCount = m_Vertex.size() * sizeof(V);
+    UINT vertexCount = m_Vertex.size();
+
     CreateVertexBuffer(&m_Vertex[0], vertexCount, &m_Vertexbuffer);
 }
 
 void Mesh::CreateVertexBuffer(V* vertices, UINT vertexCount, ID3D11Buffer** vertexBuffer)
 {
     D3D11_BUFFER_DESC bd = {};
-    	bd.ByteWidth = sizeof(V) * vertexCount;
+    	bd.ByteWidth = vertexCount * sizeof(V); //바이트 단위
     	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     	bd.Usage = D3D11_USAGE_DEFAULT;
     	bd.CPUAccessFlags = 0;
@@ -44,7 +44,6 @@ void Mesh::CreateVertexBuffer(V* vertices, UINT vertexCount, ID3D11Buffer** vert
 
 void Mesh::Render(ID3D11DeviceContext* DXDC)
 {
-    DXDC->IASetVertexBuffers(0, 1, &m_Vertexbuffer, &m_Stride, &m_Offset);
     DXDC->IASetVertexBuffers(0, 1, &m_Vertexbuffer, &m_Stride, &m_Offset);
     DXDC->Draw(m_VtxCnt , 0);
 }

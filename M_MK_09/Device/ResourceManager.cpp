@@ -15,9 +15,10 @@ void ResourceManager::Set_Up(RM_Set Set)
 
 	m_MeshResource = std::make_unique< ModelResource>();
 	m_ShaderResource = std::make_unique<ShaderResource>();
-		
     m_TextureResource = std::make_unique<TextureResource>();
 
+	m_ShaderResource->Initalize();
+	m_ShaderResource->LoadShader(e_Shader_Type::Static_);
 }
 
 ComPtr<ID3D11Device> ResourceManager::GetDevice()

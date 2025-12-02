@@ -67,7 +67,7 @@ public:
 
 
 private:
-	unordered_map<std::wstring, shared_ptr<Texture>> m_Texture_map;
+	std::unordered_map<std::wstring, std::shared_ptr<Texture>> m_Texture_map;
 
 };
 

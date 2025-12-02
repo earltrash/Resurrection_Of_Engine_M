@@ -18,13 +18,17 @@ public:
 
 		virtual void Update(float dTime) 
 		{
+			GetTransform().Update(dTime);
+
+			//Transform 을 update -> 결국 Component들은 Transform에 종속당해서 render나 postion을 처리하긴 함. 정보 관계가 수직적이긴 함. 일방적이지 ㅇㅇ 
+			
 			for (auto& cmp : m_Components)
 			{
 				cmp->Update(dTime);
 			}
 
 
-			m_effect->Update(); //임시
+			//m_effect->Update(); //임시
 
 		};
 
@@ -36,11 +40,7 @@ public:
 			}
 		}
 
-		virtual void Render() 
-		{
-			//임시
-			//m_effect->Apply(); //update까지 같이 ㄴ
-		}; 
+	
 
 		void SetPosition(XMFLOAT3 position);
 		void SetRotation(XMFLOAT3 rotation);

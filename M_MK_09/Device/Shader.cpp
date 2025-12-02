@@ -38,7 +38,12 @@ void Shader::CreateVS_N_IL()
 	if (m_Type == e_Shader_Type::Static_)
 	{
 		ID3D10Blob* Vertex_Blob = nullptr;
-		::HR_T(::ShaderCompile(L"..\Shader\Default.fx", "VS_main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
+
+
+
+
+
+		::HR_T(::ShaderCompile(L"Shader\\Demo_3.fx", "VS_Main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
 		::HR_T(ResourceManager::Instance().GetDevice()->CreateInputLayout(Static, ARRAYSIZE(Static), Vertex_Blob->GetBufferPointer(),
 			Vertex_Blob->GetBufferSize(), m_pInputLayout.GetAddressOf()));
 		::HR_T(ResourceManager::Instance().GetDevice()->CreateVertexShader(Vertex_Blob->GetBufferPointer(),
@@ -54,7 +59,7 @@ void Shader::CreatePS()
 	if (m_Type == e_Shader_Type::Static_)
 	{
 		ID3D10Blob* Pixel_Blob = nullptr;
-		HR_T(::ShaderCompile(L"..\Shader\Default.fx", "PS_main", "ps_5_0", &Pixel_Blob));
+		HR_T(::ShaderCompile(L"Shader\\Demo_3.fx", "PS_Main", "ps_5_0", &Pixel_Blob));
 		HR_T(ResourceManager::Instance().GetDevice()->CreatePixelShader(Pixel_Blob->GetBufferPointer(), Pixel_Blob->GetBufferSize(),
 			NULL, m_pPixelShader.GetAddressOf()));
 		::SafeRelease(Pixel_Blob);

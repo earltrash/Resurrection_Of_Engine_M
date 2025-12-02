@@ -46,8 +46,8 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 
 	//
 
-	unique_ptr<Model> model = make_unique<Model>(); 
-	vector<shared_ptr<Material>> globalMaterials;
+	std::unique_ptr<Model> model = make_unique<Model>(); 
+	std::vector<std::shared_ptr<Material>> globalMaterials;
 
 	for (int i = 0; i < Fbx_Model->mNumMaterials; i++) {
 		auto mat = make_shared<Material>();
@@ -62,12 +62,12 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 		aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
 
 		//parts 라고 보는 게 더 직관적일 듯 
-		shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		std::shared_ptr<Mesh> mesh = make_shared<Mesh>();
 		mesh->Create(pAiMesh);
 
 		int Material_IDX = pAiMesh->mMaterialIndex;
 		
-		shared_ptr<Material> mat = globalMaterials[Material_IDX];
+		std::shared_ptr<Material> mat = globalMaterials[Material_IDX];
 
 		model->m_Parts.push_back({ mesh, mat });
 	}

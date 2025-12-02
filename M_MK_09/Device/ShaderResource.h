@@ -15,6 +15,6 @@ public:
 
 
 private:
-	std::vector<unique_ptr<Shader>> m_Shader_Vec; //굳이 map을 쓸 필요를 못 느껴.
+	std::vector<std::unique_ptr<Shader>> m_Shader_Vec; //굳이 map을 쓸 필요를 못 느껴.
 };
 

@@ -44,7 +44,7 @@ private:
 	std::unique_ptr<GameTimer> m_timer = nullptr;
 	std::shared_ptr<Camera> g_camera = nullptr;
 
-	std::unique_ptr<Object> m_obj = nullptr;
+	std::shared_ptr<Object> m_obj = nullptr;
 
 	//리소스 매니저
 	//사운드 매니저

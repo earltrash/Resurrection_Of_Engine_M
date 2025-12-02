@@ -54,6 +54,7 @@ void DX_Renderer::StaticMeshRender()
 
 	m_DXDC->VSSetShader(Static_Mesh_Shader->GetVS(), nullptr, 0);
 	m_DXDC->PSSetShader(Static_Mesh_Shader->GetPS(), nullptr, 0);
+
 	m_DXDC->IASetInputLayout(Static_Mesh_Shader->GetIL());
 	m_DXDC->PSSetSamplers( 0, 1 ,m_DxState->Get_Sampler().GetAddressOf()); //SAMPLER는 일단 하나만 써보자
 
@@ -90,6 +91,7 @@ void DX_Renderer::ConstantBufferApply() //일단 미정
 		cb.get()->Update(m_DXDC.Get());
 		ID3D11Buffer* pCB = cb.get()->GetBuffer();
 		UINT slot = cb.get()->GetRegisterSlot();
+
 		m_DXDC->VSSetConstantBuffers(slot, 1, &pCB);
 		m_DXDC->PSSetConstantBuffers(slot, 1, &pCB);
 	}

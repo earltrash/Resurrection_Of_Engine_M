@@ -42,7 +42,7 @@ struct VSOutput
 
 VSOutput VS_Main(
 				  float4 pos : POSITION,    //[입력] 정점좌표. Vertex Position (Model Space, 3D)
-				  float4 col : COLOR0       //[입력] 정점색 Vertex Color : "Diffuse"
+                  float4 col : COLOR
 				)
 {
 	//정점 정리
@@ -62,29 +62,15 @@ VSOutput VS_Main(
     VSOutput o = (VSOutput) 0;
     o.pos = pos; 
     o.col = col;
-
     return o;
 }
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////// 
-//
-// Pixel Shader Main : 픽셀 셰이더 메인 함수.
-//
-////////////////////////////////////////////////////////////////////////////// 
-
 float4 PS_Main(
-				float4 pos : SV_POSITION,   //[입력] (보간된) 픽셀별 좌표. (Screen, 2D)
-				float4 col : COLOR0         //[입력] (보간된) 픽셀별 색상. (Pixel Color : "Diffuse")
+				float4 pos : SV_POSITION, //[입력] (보간된) 픽셀별 좌표. (Screen, 2D)
+				float4 col : COLOR         //[입력] (보간된) 픽셀별 색상. (Pixel Color : "Diffuse")
 				) : SV_TARGET               //[출력] 색상.(필수), "렌더타겟" 으로 출력합니다.
-{
-	//특별한 변환 없이 입력된 정보를 그대로 출력합니다.
-    //...
-  
-    
+{    
     return col;
 }
 

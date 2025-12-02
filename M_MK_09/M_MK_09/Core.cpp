@@ -2,8 +2,8 @@
 #include "Core.h"
 #include "ResourceManager.h"
 #include "DX_Renderer.h"
-
-#include "RenderComponent.h" //임시.
+#include "Render_Helper.h"
+//#include "RenderComponent.h" //임시.
 #include "StaticMeshComponent.h"
 
 
@@ -68,9 +68,9 @@ bool Core::ModuleInit()
     std::string path = "Models\\aid_hearing.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
-
+    path = "aid_hearing.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel("aid_hearing.fbx");
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
 
     return true;
 }
@@ -132,9 +132,18 @@ void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 �
     DX_Renderer::Instance().DrawGridNAxis();
 
    //Scene을 통해서든 어디서든 obj를 돌면서, 특정 Component를 가진 애들의 model & transform->worldMatrix를 보내는 형식으로 진행 
+    //일단 un capsuleized
+    Model* model = m_obj->GetComponent<StaticMeshComponent>()->GetModel();
+    
+    XMMATRIX pos = XMLoadFloat4x4(&(m_obj->GetTransform().GetWorldM()));
+    pair<Model*, XMMATRIX> val = { model, pos };
 
-    m_obj->Render();
-    DX_Renderer::Instance().Flip();
+    DX_Renderer::Instance().GetRH()->Get_Model_Vec().push_back(val);
+
+
+    DX_Renderer::Instance().Render();
+
+    //FLIP은 내부에서 
 }
 
 bool Core::MsgProcess(MSG& msg)
@@ -172,9 +181,13 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 XMVECTOR up = g_camera->GetCameraMem().up;
 
                 //// View 행렬 재계산
+
+
                 XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
                 XMMATRIX mProj = XMMatrixPerspectiveFovLH(fFov, fAspect, fZnear, fZfar);
 
+                DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetView(mView);
+                DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetProj(mProj);
 
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();

@@ -1,8 +1,7 @@
 #pragma once
 #include "Component.h"
-#include "Transform.h"
 
-class RenderComponent : public Component , public Transform
+class RenderComponent : public Component 
 {
 public:
 	RenderComponent() = default;
