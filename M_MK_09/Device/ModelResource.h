@@ -15,7 +15,6 @@ public:
 	~ModelResource() = default;
 
 public:
-
 	int LoadFile(std::string FilePath , ModelType Type ); 
 	Model* GetModel(std::string Key);
 private:

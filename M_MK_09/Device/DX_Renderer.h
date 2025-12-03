@@ -7,12 +7,6 @@
 #include <wrl/client.h>           
 #include "Singleton.h"
 
-using namespace DirectX;
-using Microsoft::WRL::ComPtr; 
-
-
-
-extern class GridNAxis;
 class Graphics;
 class State;
 class Render_Helper;
@@ -31,17 +25,10 @@ private:
 public:
 	friend class Singleton;
 
-
-
 	HRESULT DX_SetUP(HWND hwnd, float width, float height);
-	HRESULT GridNAxis_SetUP(ID3D11Device* device);
 	void StateSet_BeforeRender();
-	void SetGridNAxis(XMMATRIX view);
 	Render_Helper* GetRH();
-	GridNAxis* GetGridFX();
-	ComPtr<ID3D11SamplerState> Get_SamplerState(); ///얘는 나중에 빠질 예정임.
-	void UpdateGrid(float dTime);
-	void DrawGridNAxis();
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> Get_SamplerState(); ///얘는 나중에 빠질 예정임.
 	void Flip();
 	void Clear();
 	void StaticMeshRender();
@@ -54,10 +41,7 @@ private:
 	std::shared_ptr<State> m_DxState;
 	std::shared_ptr<Graphics> m_DxGraphics;
 	std::shared_ptr<Render_Helper> m_Render_Helper;
-
-	GridNAxis* GDNAX; //디버깅이긴 한데, 
-
 public:
-	ComPtr<ID3D11Device> m_Device = nullptr;
-	ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> m_Device = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_DXDC = nullptr;
 };

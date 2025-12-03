@@ -1,6 +1,9 @@
 #pragma once
 class aiMaterial;
 
+#include <wrl/client.h>
+
+
 class Material
 {
 
@@ -25,16 +28,11 @@ private:
 
 	std::wstring Texture_Path; //일단 diffuse만.
 
-	ComPtr<ID3D11ShaderResourceView> m_Diffuse_Texture; // 일단 이거만
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_Diffuse_Texture; // 일단 이거만
 
-	//일단 단일 Texture로 처리하는 식으로 하자.
-
-	//PBR 로 할 거면 위에 있는 인자 값들이 다 Texture로 처리가 될거고, bit flag로 처리하는 방식으로 해야 편할 듯.
-	//Texture Pointer? 
-
-
-
-
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texAlbedo;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texNormal;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texMRA;
 
 };
 

@@ -1,11 +1,5 @@
 #pragma once
 
-//ResourceManager로 부터 device같은 거는 받으시고, 
-//texture 생성이랑, 
-
-//TO DO  TEXTURE TYPE을 나눠서 RENDER 시 필요하면 SETTING 해 놓기 
-
-//이거 비트 연산으로 처리하면 편할 거 같은ㄷ데, 
 enum class e_Texture_Type
 {
 	DIFFUSE,
@@ -49,7 +43,7 @@ public:
 
 private:
 	std::string m_Name; //a.k.a filePath
-	ComPtr<ID3D11ShaderResourceView> m_Texture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_Texture = nullptr;
 };
 
 

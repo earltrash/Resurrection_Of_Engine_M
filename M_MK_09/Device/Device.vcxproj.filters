@@ -21,12 +21,6 @@
     <ClInclude Include="Commons.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GridNAxis.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -78,12 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX_Renderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GridNAxis.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Commons.cpp">

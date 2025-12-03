@@ -147,9 +147,7 @@ dxguid.lib</AdditionalDependencies>
     <ClInclude Include="ConstBuffer.h" />
     <ClInclude Include="DX_Renderer.h" />
     <ClInclude Include="Editor.h" />
-    <ClInclude Include="Effect.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="GridNAxis.h" />
     <ClInclude Include="IConsttBuffer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -168,9 +166,7 @@ dxguid.lib</AdditionalDependencies>
     <ClCompile Include="ConstBuffer.cpp" />
     <ClCompile Include="DX_Renderer.cpp" />
     <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="GridNAxis.cpp" />
     <ClCompile Include="Commons.cpp" />
     <ClCompile Include="IConsttBuffer.cpp" />
     <ClCompile Include="Material.cpp" />

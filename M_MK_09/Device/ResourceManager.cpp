@@ -1,6 +1,8 @@
 #include "pch.h"
-
 #include "ResourceManager.h"
+
+using Microsoft::WRL::ComPtr;
+using namespace std;
 
 void ResourceManager::ModelLoad(std::string& filepath, ModelType Type)
 {

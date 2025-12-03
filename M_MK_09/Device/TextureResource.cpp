@@ -2,6 +2,9 @@
 #include "TextureResource.h"
 #include "ResourceManager.h"
 
+using Microsoft::WRL::ComPtr;
+using namespace std;
+
 void TextureResource::TextureLoad(std::wstring& path)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();

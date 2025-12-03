@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "ShaderResource.h"
 
+using Microsoft::WRL::ComPtr;
+using namespace std;
+
 void ShaderResource::Initalize()
 {
 	m_Shader_Vec.reserve(int(e_Shader_Type::Max)); //Capacity
@@ -17,11 +20,11 @@ void ShaderResource::LoadShader(std::string FilePath, e_Shader_Type Shader_Type)
 
 void ShaderResource::LoadShader(e_Shader_Type Shader_Type)
 {
-	unique_ptr<Shader> shader = make_unique<Shader>();
+	unique_ptr<Shader> shader = std::make_unique<Shader>();
 	shader->Initalize(Shader_Type);
 
 	Shader* existed = m_Shader_Vec.at(int(Shader_Type)).get();
-	if (existed) std::cout << "중복" << endl;
+	if (existed) std::cout << "중복" << std::endl;
 
 	else
 	{

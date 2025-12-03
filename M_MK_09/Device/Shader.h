@@ -1,5 +1,6 @@
 #pragma once
-//#include "ConstBuffer.h" 
+//Particle
+#include <wrl/client.h>
 
 enum class e_Shader_Type
 {
@@ -29,8 +30,8 @@ public:
 
 private:
 	e_Shader_Type m_Type;
-	ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;
-	ComPtr<ID3D11PixelShader> m_pPixelShader = nullptr;
-	ComPtr<ID3D11InputLayout> m_pInputLayout = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pInputLayout = nullptr;
 };
 

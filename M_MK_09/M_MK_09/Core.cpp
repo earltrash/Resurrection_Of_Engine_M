@@ -36,12 +36,7 @@ bool Core::WinSet()
 }
 bool Core::DX_Set()
 {
-
-
      DX_Renderer::Instance().DX_SetUP(m_hWnd, w_width, w_height);
-     DX_Renderer::Instance().GridNAxis_SetUP(DX_Renderer::Instance().m_Device.Get());
-
-
     return 1;
 }
 bool Core::ModuleInit()
@@ -52,13 +47,10 @@ bool Core::ModuleInit()
     m_obj = make_unique<Object>();
     g_camera->SetDirty(true); 
 
-
-
     //Wrapping needed
     RM_Set set;
     set.Device = DX_Renderer::Instance().m_Device.Get();
     set.DeviceContext = DX_Renderer::Instance().m_DXDC.Get();
-
     ResourceManager::Instance().Set_Up(set);
 
     
@@ -82,9 +74,7 @@ void Core::MessagePump()
     while (msg.message != WM_QUIT)
     {
         if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) //특정 메시지만 처리해야 함. 
-        {
-            //if (EditorMode()) continue; //시간의 흐름을 받지 않는 정지 상태긴 함. 추가적인 입력은 받지 않음.
-            
+        {            
             if (!MsgProcess(msg)) 
             {
                 TranslateMessage(&msg);
@@ -104,11 +94,13 @@ void Core::FixedUpdate(float dTimme)
 {
 }
 
+
 void Core::Update(float dTime)
 {
    // DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
     m_obj->Update(dTime);
+
     //
     // 
     // 물리 컴포넌트 
@@ -119,6 +111,9 @@ void Core::Update(float dTime)
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
+
+
+    //-> Transfrom의 위치가... 
 
     Model* model = m_obj->GetComponent<StaticMeshComponent>()->GetModel();
     XMMATRIX pos = XMMatrixIdentity(); 
@@ -136,6 +131,8 @@ bool Core::MsgProcess(MSG& msg)
     return InputManager::Get().MsgCheck(msg);
 }
 
+
+//ㅋㅋ 폐기 예정.
 bool Core::EditorMode()
 {
     return InputManager::Get().Cancled_Check();
@@ -165,24 +162,19 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
                 XMVECTOR lookat = g_camera->GetCameraMem().lookat;
                 XMVECTOR up = g_camera->GetCameraMem().up;
 
-                //// View 행렬 재계산
-
-
                 XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
                 XMMATRIX mProj = XMMatrixPerspectiveFovLH(fFov, fAspect, fZnear, fZfar);
 
+
+                ///
                 DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetView(mView);
                 DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->SetProj(mProj);
-
                 DX_Renderer::Instance().GetRH()->GetCB<cbDEFAULT>()->Update((DX_Renderer::Instance().m_DXDC.Get()));
                 
 
                 //일단 하드코딩 
                 XMMATRIX mWorld = XMMatrixIdentity();
-               
-                //어찌보면 전역 카메라 오브젝트가 전역적인 view랑 proj를 관장하는 애긴 하지. 여기서 obj가 갖고 있는 shader의 행렬값을 받는 것도 괜찮아 보이긴 함. 
-                
-                DX_Renderer::Instance().SetGridNAxis(mView);
+                              
                 g_camera->SetDirty(false);
             
 

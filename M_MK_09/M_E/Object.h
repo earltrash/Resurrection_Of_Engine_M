@@ -3,13 +3,7 @@
 #include "ListenerComponent.h" //이거 고칠 수 있으면 고쳐보자. 너무 이상해
 #include "Transform.h"
 
-//class Transform;
-
-//버릴 예정 
-#include "Effect.h"
-
 class Object : public std::enable_shared_from_this<Object>
-	//Transform을 자식으로 하고, Local Position을 조정하게 하는 wrwapping이 필요함. 
 {
 public:
 	Object() { m_transform.SetOwner(this); }
@@ -19,16 +13,12 @@ public:
 		virtual void Update(float dTime) 
 		{
 			GetTransform().Update(dTime);
-
-			//Transform 을 update -> 결국 Component들은 Transform에 종속당해서 render나 postion을 처리하긴 함. 정보 관계가 수직적이긴 함. 일방적이지 ㅇㅇ 
 			
 			for (auto& cmp : m_Components)
 			{
 				cmp->Update(dTime);
 			}
 
-
-			//m_effect->Update(); //임시
 
 		};
 
@@ -59,12 +49,7 @@ public:
 		weak_ptr<Object> GetParent();
 		 Transform GetTransform();  
 public:
-		
-	//이 친구들 전부 컴포넌트 행 
-	Effect* m_effect = nullptr;
-
-public:
-
+	
 		template<typename T, typename... Args>
 		T* AddComponent(Args&&... args);
 		template<typename T>

@@ -4,17 +4,6 @@
 #include "WICTextureLoader.h"
 #include "DDSTextureLoader.h"
 
-//폐기 예정 
-float StrideFromFlag(VertexFlag Flag) //For Bytes 
-{
-	size_t stride = 0;
-	if ((Flag & VertexFlag::VF_POSITION) != VertexFlag::VF_NONE) stride += sizeof(XMFLOAT3);
-	if ((Flag & VertexFlag::VF_NORMAL) != VertexFlag::VF_NONE)   stride += sizeof(XMFLOAT3);
-	if ((Flag & VertexFlag::VF_COLOR) != VertexFlag::VF_NONE)    stride += sizeof(XMFLOAT4);
-	if ((Flag & VertexFlag::VF_TEXCOORD) != VertexFlag::VF_NONE) stride += sizeof(XMFLOAT2);
-	return stride;
-}
-
 DWORD AlignCBSize(DWORD size)
 {
 	DWORD sizeAligned = 0;
@@ -42,13 +31,6 @@ HRESULT CreateDynamicConstantBuffer(ID3D11Device* pDev, UINT size, ID3D11Buffer*
 	bd.ByteWidth = sizeAligned;						//버퍼 크기 : 128비트 정렬 추가.
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;				//CPU 접근 설정. 
-
-	/*//서브리소스 설정.
-	D3D11_SUBRESOURCE_DATA sd;
-	sd.pSysMem = pData;										//상수 데이터 설정.
-	sd.SysMemPitch = 0;
-	sd.SysMemSlicePitch = 0;
-	*/
 
 	//상수 버퍼 생성.
 	hr = pDev->CreateBuffer(&bd, nullptr, &pCB);
@@ -199,7 +181,7 @@ ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* de
 		if (FAILED(hr)) //두번 실패면 뭐 ... 쩔 수 있나 
 		{
 			std::cout << "Texture 생성 오류; 경로:  " << std::endl;
-			std::wcout << path << endl;
+			std::wcout << path << std::endl;
 		}
 		
 	}

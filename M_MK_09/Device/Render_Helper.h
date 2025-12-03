@@ -1,16 +1,18 @@
 #pragma once
 // 상수 버퍼, RenderComponent를 통해 받아온 worldmatrix랑 model data를 vector로 갖을 클래스,
 // 그리기 단계에 필요한, 특히 동적으로 변화하는 데이터를 해당 클래스에서 관리하도록 함.
+#include <wrl/client.h>
 
 #include "ConstBuffer.h"
+using namespace std;
 
 class Model;
 
 
 struct Render_Helper_SetUp
 {
-	ComPtr<ID3D11Device> m_Device;
-	ComPtr<ID3D11DeviceContext> m_DXDC;
+	Microsoft::WRL::ComPtr<ID3D11Device> m_Device;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_DXDC;
 };
 
 

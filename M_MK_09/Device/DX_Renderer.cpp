@@ -2,7 +2,6 @@
 
 #include "pch.h"
 #include "DX_Renderer.h"
-#include "GridNAxis.h"
 #include "Graphics.h"
 #include "State.h"
 #include "Model.h"
@@ -11,20 +10,7 @@
 //Graphics로 대체시킬 예정 삭제 예정 
 
 
-GridNAxis* DX_Renderer::GetGridFX()
-{
-	 return GDNAX; 
-}
 
-void DX_Renderer::UpdateGrid(float dTime)
-{ 
-	 (GetGridFX()->GetFX()) ->Update(dTime); 
-}
-
-void DX_Renderer::DrawGridNAxis()
-{
-	GDNAX->Draw();
-}
 
 ComPtr<ID3D11SamplerState> DX_Renderer::Get_SamplerState()
 {
@@ -70,9 +56,9 @@ void DX_Renderer::Render()
 {
 	Clear();
 	ConstantBufferApply();
-	StateSet_BeforeRender(); //State Set
+
+	StateSet_BeforeRender(); 
 	StaticMeshRender();
-	DrawGridNAxis();
 
 	//Shader Set
 	//Model Set
@@ -126,11 +112,7 @@ void DX_Renderer::StateSet_BeforeRender()
 
 }
 
-void DX_Renderer::SetGridNAxis(XMMATRIX view)
-{
-	GDNAX->GetFX()->SetView(view);
-	GDNAX->GetFX()->Update();
-}
+
 Render_Helper* DX_Renderer::GetRH()
 {
 	return m_Render_Helper.get();
@@ -163,13 +145,5 @@ HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 	m_Render_Helper->Initalize(Set_RH);
 
 	return E_NOTIMPL;
-}
-HRESULT DX_Renderer::GridNAxis_SetUP(ID3D11Device* Dev)
-{
-	HRESULT hr;
-	GDNAX = new GridNAxis();
-	hr = GDNAX->Set_GridNAxis( Dev);
-	
-	return hr;
 }
 

@@ -33,24 +33,24 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	}
 	std::filesystem::path p;
 
-	std::cout << "현재 경로" << std::filesystem::current_path() << endl;
+	std::cout << "현재 경로" << std::filesystem::current_path() << std::endl;
 	const aiScene* Fbx_Model = Importer.ReadFile(FilePath, flags);
 
 	if (!Fbx_Model || Fbx_Model->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Fbx_Model->mRootNode)
 	{
 		std::cerr << "Assimp Load Error: " << Importer.GetErrorString() << std::endl;
-		std::cerr << "읽었던 경로는" << " " << FilePath << endl;
+		std::cerr << "읽었던 경로는" << " " << FilePath << std::endl;
 
 		return 0;
 	}
 
 	//
 
-	std::unique_ptr<Model> model = make_unique<Model>(); 
+	std::unique_ptr<Model> model = std::make_unique<Model>(); 
 	std::vector<std::shared_ptr<Material>> globalMaterials;
 
 	for (int i = 0; i < Fbx_Model->mNumMaterials; i++) {
-		auto mat = make_shared<Material>();
+		auto mat = std::make_shared<Material>();
 		
 		aiMaterial* Material = Fbx_Model->mMaterials[i];
 		mat->Create(Material);
@@ -61,7 +61,7 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	{
 		aiMesh* pAiMesh = Fbx_Model->mMeshes[i];
 
-		std::shared_ptr<Mesh> mesh = make_shared<Mesh>();
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
 		mesh->Create(pAiMesh);
 
 		int Material_IDX = pAiMesh->mMaterialIndex;
