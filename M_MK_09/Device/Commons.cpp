@@ -164,10 +164,10 @@ void HR_T(HRESULT hr)
 }
 
 //std::wstring Base_Path = L"../Texture/";
-std::wstring Base_Path = L"Models\\";
+//std::wstring Base_Path = L"Models\\";
 ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* device)
 {
-	std::wstring path = Base_Path + file_name;
+	std::wstring path =  file_name;
 	ID3D11ShaderResourceView* Texture = nullptr;
 	HRESULT hr = E_FAIL;
 
@@ -178,14 +178,14 @@ ID3D11ShaderResourceView* CreateTexture(std::wstring file_name, ID3D11Device* de
 
 		hr = DirectX::CreateDDSTextureFromFile(device, path.c_str(), nullptr, &Texture);
 
-		if (FAILED(hr)) //두번 실패면 뭐 ... 쩔 수 있나 
+		if (FAILED(hr)) 
 		{
 			std::cout << "Texture 생성 오류; 경로:  " << std::endl;
 			std::wcout << path << std::endl;
 		}
 		
 	}
-
+	std::wcout <<"Texture 생성 : " << path << std::endl;
 	return Texture;
 }
 HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code)

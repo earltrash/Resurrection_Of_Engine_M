@@ -33,6 +33,13 @@ ComPtr<ID3D11DeviceContext> ResourceManager::GetDeviceContext()
 	return m_pDeviceContext;
 }
 
+std::shared_ptr<MaterialTexture> ResourceManager::CreateMaterialTexture(std::wstring Path)
+{
+	std::shared_ptr<MaterialTexture> p_out = m_TextureResource->MaterialTextureLoad(Path);
+
+	return p_out;
+}
+
 ShaderResource* ResourceManager::GetShaderResource()
 {
 	ShaderResource* returned = m_ShaderResource.get();
@@ -53,6 +60,8 @@ ModelResource* ResourceManager::GetModelResource()
 
 TextureResource* ResourceManager::GetTextureResource()
 {
-
-	return m_TextureResource.get();
+	TextureResource* returned = m_TextureResource.get();
+	if (returned) return returned;
+	else
+		return nullptr;
 }

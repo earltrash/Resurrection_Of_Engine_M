@@ -10,7 +10,8 @@ class Mesh;
 struct MeshPart 
 {
 	std::shared_ptr<Mesh> mesh;
-	std::shared_ptr<Material> material;
+
+	std::shared_ptr<Material> material; 
 };
 
 

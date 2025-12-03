@@ -1,13 +1,10 @@
 #pragma once
-#include "D3D11.h"
-#include "DirectXMath.h"
-#include <wrl/client.h>
+
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
 #include <d3dcompiler.h> 
 #pragma comment(lib, "D3DCompiler.lib")
-#include <string>
 
 #pragma region exception
 
@@ -42,6 +39,12 @@ inline void SafeDelete(T*& ptr)
 	delete ptr; ptr = nullptr;
 }
 
+inline std::wstring ToWString(const std::string& s)
+{
+	std::wstring wsTmp(s.begin(), s.end());
+	return wsTmp;
+}
+
 
 DWORD AlignCBSize(DWORD size);
 int CreateVertexBuffer(ID3D11Device* pDev, LPVOID pData, UINT size, ID3D11Buffer** ppVB);
@@ -52,7 +55,6 @@ int CreateInputLayout(ID3D11Device* pDev, D3D11_INPUT_ELEMENT_DESC* ed, DWORD nu
 HRESULT UpdateDynamicBuffer(ID3D11DeviceContext* pDXDC, ID3D11Resource* pBuff, LPVOID pData, UINT size);
 HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char* ShaderModel, ID3DBlob** code);
 void HR_T(HRESULT hr);
-
 ID3D11ShaderResourceView* CreateTexture(std::wstring path, ID3D11Device* device);
 
 #pragma endregion

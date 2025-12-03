@@ -4,97 +4,107 @@
 
 #include <assimp/scene.h>
 #include <filesystem>
-#include "DX_Renderer.h" 
+#include "DX_Renderer.h" //얘가 필요하나? 
 #include "Render_Helper.h"
 
- 
-void Material::Create(aiMaterial* pAiMaterial)
+//최적화 할 수 있는 부분은 여기일듯?
+
+
+void Material::Create(aiMaterial* pMaterial)
 {
-    //TEMP
-    aiColor3D color(0.f, 0.f, 0.f);
-    float value = 0.f;
-    aiString texturePath;
+	aiString texturePath;
+	wstring basePath = L"Models/textures/";
+	std::filesystem::path path;
+	wstring finalPath;
 
-    if (AI_SUCCESS == pAiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-    {
-        DIFFUSE = XMFLOAT4(color.r, color.g, color.b, 1);
-    }
-    else 
-    {
-        DIFFUSE = XMFLOAT4(1, 1, 1, 1);
-    }
+	string name = pMaterial->GetName().C_Str();
+	std::cout << "Material Name : " << name << endl;
 
-    if (AI_SUCCESS == pAiMaterial->Get(AI_MATKEY_COLOR_AMBIENT, color))
-    {
-        AMBIENT = XMFLOAT4(color.r, color.g, color.b, 1);
-    }
 
-    else
-    {
-        AMBIENT = XMFLOAT4(0.2f, 0.2f, 0.2f, 1);
-    }
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath))
+	{
+		string rawPath = texturePath.C_Str();
+		path = (rawPath);
 
-    
-    if (AI_SUCCESS == pAiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, color))
-    {
-        SPECULAR = XMFLOAT4(color.r, color.g, color.b, 1);
-    }
-    else
-    {
-        SPECULAR = XMFLOAT4(1, 1, 1, 1);
-    }
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Albedo = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::BASECOLOR;
+	}
 
-    if (AI_SUCCESS == pAiMaterial->Get(AI_MATKEY_SHININESS, value))
-    {
-        POWER = value;
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_NORMALS, 0, &texturePath))
+	{
 
-        POWER = clamp(POWER, 0.f, 100.f);
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Normal = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::NORMAL;
+	}
 
-    }
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_SPECULAR, 0, &texturePath))
+	{
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Spec = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::SPECULAR;
+	}
 
-    else
-    {
-        POWER = 50.f;
-    }
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_EMISSIVE, 0, &texturePath))
+	{
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Emissive = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::EMISSIVE;
+	}
 
-    if (pAiMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
-    {
-        Texture_Path = std::filesystem::path(texturePath.C_Str()).wstring();
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_OPACITY, 0, &texturePath))
+	{
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Opacity = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::OPACITY;
+	}
 
-        SetTexture(Texture_Path);
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_METALNESS, 0, &texturePath))
+	{
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Metal = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::METALNESS;
+	}
 
-    }
-
-    else Texture_Path = L"NOTEX";
+	if (AI_SUCCESS == pMaterial->GetTexture(aiTextureType_SHININESS, 0, &texturePath))
+	{
+		path = ToWString(string(texturePath.C_Str()));
+		finalPath = basePath + path.filename().wstring();
+		m_tex_Roughness = ResourceManager::Instance().CreateMaterialTexture(finalPath);
+		m_Flag |= MaterialMapFlags::ROUGHNESS;
+	}
 
 }
 
 //사실 이건 Phong 구조의 문조니깐. PBR로 넘어가는게 편하긴 하겠다. ㅇㅇ 
 //매번 상수 버퍼를 바꿔야 하니깐. 
 
+//Bind
+//생성과 동시에, Set.
 void Material::Bind(ID3D11DeviceContext* DXDC)
 {
-    cbMATERIAL* cb_m =  DX_Renderer::Instance().GetRH()->GetCB<cbMATERIAL>();
-    cb_m->Set_Mat_Dif(DIFFUSE);
-    cb_m->Set_Mat_Ambi(AMBIENT);
-    cb_m->Set_Mat_Spc(SPECULAR);
-    cb_m->Set_Mat_Pw(POWER);
-    cb_m->Update(DXDC);
-    
-    UINT slot = cb_m->GetRegisterSlot();
-    ID3D11Buffer* cb = cb_m->GetBuffer();
-
-    DXDC->VSSetConstantBuffers(slot, 1 , &cb);
-    DXDC->PSSetConstantBuffers(slot, 1, &cb);
-    DXDC->PSSetShaderResources(0, 1, m_Diffuse_Texture.GetAddressOf());
+   // DXDC->PSSetShaderResources(0, 1, m_Diffuse_Texture.GetAddressOf());
 
 
 }
 
-void Material::SetTexture(std::wstring Path)
+bool MaterialTexture::Create(const std::wstring& filePath)
 {
- Texture* texture = ResourceManager::Instance().GetTextureResource()->GetTexture(Path);
- ID3D11ShaderResourceView* Textureview = texture->GetTexture();
- m_Diffuse_Texture = Textureview;
+	ID3D11ShaderResourceView* Texture = nullptr;
+	Texture = ::CreateTexture(filePath, ResourceManager::Instance().GetDevice().Get());
 
+	if (Texture)
+	{
+		m_Path = filePath;
+		m_pTexture = Texture;
+		return true;
+	}
+	else
+		return false;
 }

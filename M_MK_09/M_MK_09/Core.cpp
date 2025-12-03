@@ -192,10 +192,10 @@ void Core::ModelParssing()
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
 
 
-    std::string path = "Models\\character-male-e.fbx";
+    std::string path = "Models\\Fire_Extinguisher.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
-    path = "character-male-e.fbx";
+    path = "Fire_Extinguisher.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
 

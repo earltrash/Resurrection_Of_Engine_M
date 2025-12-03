@@ -9,7 +9,7 @@
 class SoundResource; 
 class TextureResource;
 class ShaderResource;
-
+class MaterialTexture;
 
 struct RM_Set
 {
@@ -34,6 +34,8 @@ public:
 	void Set_Up(RM_Set Set); //-> Device, context를 제공받고. MeshResource가 resource만들 device 자체는 얘만 들자
 	Microsoft::WRL::ComPtr<ID3D11Device> GetDevice();
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>GetDeviceContext();
+
+	std::shared_ptr<MaterialTexture> CreateMaterialTexture(std::wstring Path);
 	ShaderResource* GetShaderResource();
 	ModelResource* GetModelResource();
 	TextureResource* GetTextureResource();
