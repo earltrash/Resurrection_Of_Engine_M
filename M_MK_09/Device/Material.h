@@ -36,7 +36,6 @@ public:
 	MaterialTexture() = default;
 	~MaterialTexture() = default;
 public:
-	
 	bool Create(const std::wstring& filePath);
 	ComPtr<ID3D11ShaderResourceView> m_pTexture = nullptr;
 	std::wstring m_Path;
@@ -56,6 +55,9 @@ public:
 	void Create(aiMaterial* material);
 	void Bind(ID3D11DeviceContext* DXDC);//상수 버퍼로 처리하기. 
 private:
+
+	XMFLOAT4 m_VTX_Color = XMFLOAT4(1,1,1,1);
+
 	MaterialMapFlags m_Flag = MaterialMapFlags::None; //Texture Set 및, Render pass State 설정을 위해.
 	std::shared_ptr<MaterialTexture> m_tex_Albedo;
 	std::shared_ptr<MaterialTexture> m_tex_Normal;
@@ -65,4 +67,7 @@ private:
 	std::shared_ptr<MaterialTexture> m_tex_Roughness;
 	std::shared_ptr<MaterialTexture> m_tex_Opacity;
 };
+
+// flag로 material를 확인 -> m_Flag를 읽고 setting
+// 
 

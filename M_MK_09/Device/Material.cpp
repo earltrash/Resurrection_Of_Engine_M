@@ -89,7 +89,13 @@ void Material::Create(aiMaterial* pMaterial)
 //생성과 동시에, Set.
 void Material::Bind(ID3D11DeviceContext* DXDC)
 {
-   // DXDC->PSSetShaderResources(0, 1, m_Diffuse_Texture.GetAddressOf());
+    DXDC->PSSetShaderResources(0, 1, m_tex_Albedo->m_pTexture.GetAddressOf());
+	//DXDC->PSSetShaderResources(1, 1, m_tex_Normal->m_pTexture.GetAddressOf());
+//	DXDC->PSSetShaderResources(2, 1, m_tex_Spec->m_pTexture.GetAddressOf());
+	//DXDC->PSSetShaderResources(3, 1, m_tex_Emissive->m_pTexture.GetAddressOf());
+	//DXDC->PSSetShaderResources(4, 1, m_tex_Metal->m_pTexture.GetAddressOf());
+	//DXDC->PSSetShaderResources(5, 1, m_tex_Roughness->m_pTexture.GetAddressOf());
+	//DXDC->PSSetShaderResources(6, 1, m_tex_Opacity->m_pTexture.GetAddressOf());
 
 
 }

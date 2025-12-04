@@ -111,10 +111,6 @@ void Core::Update(float dTime)
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
-
-
-    //-> Transfrom의 위치가... 
-
     Model* model = m_obj->GetComponent<StaticMeshComponent>()->GetModel();
     XMMATRIX pos = XMMatrixIdentity(); 
 
@@ -122,8 +118,6 @@ void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 �
 
     DX_Renderer::Instance().GetRH()->Get_Model_Vec().push_back(val);
     DX_Renderer::Instance().Render();
-
-    //FLIP은 내부에서 
 }
 
 bool Core::MsgProcess(MSG& msg)
@@ -184,22 +178,30 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 
 void Core::ModelParssing()
 {
-   /* std::string path = "Models\\aid_hearing.fbx";
+   
+   /* std::string path = "Models\\Hoshimi_Miyabi.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
-    path = "aid_hearing.fbx";
+    path = "Hoshimi_Miyabi.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
 
-
-    std::string path = "Models\\Fire_Extinguisher.fbx";
+   
+   /* std::string path = "Models\\elephant.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
-    path = "Fire_Extinguisher.fbx";
+    path = "elephant.fbx";
+    m_obj->AddComponent<StaticMeshComponent>();
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
+
+    std::string path = "Models\\Cam.fbx";
+    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+
+    path = "Cam.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
 
-   
+
 
 }
 
