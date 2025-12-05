@@ -52,15 +52,15 @@
     <FxCompile Include="Shader\Demo_3.fx">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Static_VS.hlsl">
+    <FxCompile Include="Shader\Static_PS.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Static_PS.hlsl">
+    <FxCompile Include="Shader\Static_VS.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Static_Common.hlsli">
+    <None Include="Shader\Static_Common.hlsli">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

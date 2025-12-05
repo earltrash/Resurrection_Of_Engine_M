@@ -193,13 +193,7 @@ HRESULT ShaderCompile(const WCHAR* FileName, const  char* EntryPoint, const char
 	HRESULT hr = S_OK;
 	ID3DBlob* err = nullptr;
 
-	//Define은 탐구의 영역이기 때문에 일단 nullptr로 들어감. 
-
-	//UINT Flag = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR; //ROW MAJOR로 COMPILE -> 고민거리.
-	
-	//std::cout << "Current_Path : " << std::filesystem::current_path() << std::endl;
-
-	hr = D3DCompileFromFile(FileName, nullptr, nullptr, EntryPoint, ShaderModel, 0, 0, code, &err);
+	hr = D3DCompileFromFile(FileName, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint, ShaderModel, 0, 0, code, &err);
 	if (FAILED(hr))
 	{
 		std::cout << "셰이더 컴파일 실패";
