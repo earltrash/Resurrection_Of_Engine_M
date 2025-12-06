@@ -9,6 +9,8 @@ Texture2D tex_Roughness : register(t5);
 Texture2D tex_Opacity : register(t6);
 
 
+
+
 //etc
 
 

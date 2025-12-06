@@ -32,6 +32,7 @@ void DX_Renderer::Clear()
 
 //쉐이더 코드를 하나로 통일할 거기 때문에.
 
+//TO DO SORTING 생각하기.
 
 void DX_Renderer::StaticMeshRender()
 {

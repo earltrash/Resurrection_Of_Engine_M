@@ -12,14 +12,10 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	//Flag도 잘 읽어봐야 함.
 	if (Type == ModelType::Static)
 	{
-		flags = aiProcess_Triangulate |             // 사각형 이상을 삼각형으로 변환 (필수)
+		flags = aiProcess_Triangulate |      
 		aiProcess_ConvertToLeftHanded |
 			aiProcess_CalcTangentSpace|
-		aiProcess_PreTransformVertices;      // 왼손 좌표계로 변환 (DirectX 필수)
-
-		//aiProcess_CalcTangentSpace |        // PBR을 위한 탄젠트 벡터 계산
-		//aiProcess_JoinIdenticalVertices |   // 정점 최적화
-		//aiProcess_SortByPType;              // 하나의 메쉬가 여러 기본 요소를 가지지 않도록 분리
+		aiProcess_PreTransformVertices;      
 	}
 	else
 	{

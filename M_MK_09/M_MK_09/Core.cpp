@@ -94,12 +94,11 @@ void Core::FixedUpdate(float dTimme)
 {
 }
 
-
 void Core::Update(float dTime)
 {
    // DX->UpdateGrid(dTime);
     CameraUpdate(dTime);
-    m_obj->Update(dTime);
+    m_obj->Update(dTime); 
 
     //
     // 
@@ -108,6 +107,7 @@ void Core::Update(float dTime)
     //
     //
 }
+
 
 void Core::Render(float dTime) //현 상황 모두 DX 내에서 처리. Component를 갖고 있는 애들을 D3D Render에 보내는 형식으로 처리
 {
@@ -187,19 +187,19 @@ void Core::ModelParssing()
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
 
    
-   /* std::string path = "Models\\elephant.fbx";
+    std::string path = "Models\\elephant.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
     path = "elephant.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
 
-    std::string path = "Models\\Cam.fbx";
+   /* std::string path = "Models\\Cam.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
     path = "Cam.fbx";
     m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
 
 
 

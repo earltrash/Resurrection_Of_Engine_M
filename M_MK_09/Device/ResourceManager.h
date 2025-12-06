@@ -50,7 +50,8 @@ private:
 	std::unique_ptr <ModelResource> m_MeshResource;
 	std::unique_ptr <ShaderResource> m_ShaderResource;
 	std::unique_ptr <TextureResource> m_TextureResource;
-
-	
 };
+
+//Template -> Resource Load. °¡´É
+
 

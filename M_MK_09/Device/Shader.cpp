@@ -41,18 +41,20 @@ void Shader::CreateVS_N_IL()
 
 		::HR_T(::ShaderCompile(L"Shader\\Demo_3.fx", "VS_Main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
 
-		//::HR_T(::ShaderCompile(L"Shader\\Static_VS.hlsl", "main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
+		//::HR_T(::ShaderCompile(L"Shader\\Static_VS.hlsl", "main", "vs_5_0", &Vertex_Blob)); 
 
 
 
 		::HR_T(ResourceManager::Instance().GetDevice()->CreateInputLayout(Static, ARRAYSIZE(Static), Vertex_Blob->GetBufferPointer(),
 			Vertex_Blob->GetBufferSize(), m_pInputLayout.GetAddressOf()));
+
 		::HR_T(ResourceManager::Instance().GetDevice()->CreateVertexShader(Vertex_Blob->GetBufferPointer(),
 			Vertex_Blob->GetBufferSize(), NULL, m_pVertexShader.GetAddressOf())); //class llinkage는 뭐지 
 		::SafeRelease(Vertex_Blob);
 	}
 
 }
+
 
 void Shader::CreatePS()
 {
