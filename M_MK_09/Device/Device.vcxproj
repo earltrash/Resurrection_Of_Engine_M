@@ -129,7 +129,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib; DirectXTK.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)External\DXTK\Lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\DXTK\Lib\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
     <FxCompile>
       <DisableOptimizations>false</DisableOptimizations>
@@ -147,7 +147,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include;$(SolutionDir)External\DXTK\Inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -158,9 +158,8 @@
       <EnableDebuggingInformation>false</EnableDebuggingInformation>
     </FxCompile>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;DirectXTK.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\DXTK\Lib\$(Configuration)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

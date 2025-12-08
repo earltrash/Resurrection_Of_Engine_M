@@ -122,12 +122,12 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)External\assimp-master\Build\lib\$(Configuration);$(SolutionDir)Bin\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc145-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\assimp-master\Build\bin\$(Configuration)\assimp-vc143-mtd.dll" "$(TargetDir)" /Y
-xcopy "$(SolutionDir)External\assimp-master\Build\lib\$(Configuration)\assimp-vc143-mtd.lib" "$(TargetDir)" /Y</Command>
+      <Command>xcopy "$(SolutionDir)External\assimp-master\Build\bin\$(Configuration)\assimp-vc145-mtd.dll" "$(TargetDir)" /Y
+xcopy "$(SolutionDir)External\assimp-master\Build\lib\$(Configuration)\assimp-vc145-mtd.lib" "$(TargetDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,12 +151,12 @@ $(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)External\assimp-master\Build\lib\$(Configuration);$(SolutionDir)Bin\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>M_E.lib;Device.lib;assimp-vc145-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\assimp-master\Build\bin\$(Configuration)\assimp-vc143-mt.dll" "$(TargetDir)" /Y
+      <Command>xcopy "$(SolutionDir)External\assimp-master\Build\bin\$(Configuration)\assimp-vc145-mt.dll" "$(TargetDir)" /Y
 xcopy "$(ProjectDir)Resources" "$(TargetDir)Resources\" /E /Y
-xcopy "$(SolutionDir)External\assimp-master\Build\lib\$(Configuration)\assimp-vc143-mt.lib" "$(TargetDir)" /Y</Command>
+xcopy "$(SolutionDir)External\assimp-master\Build\lib\$(Configuration)\assimp-vc145-mt.lib" "$(TargetDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
