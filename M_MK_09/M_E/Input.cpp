@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Input.h"
 
 std::unordered_map<int, GameAction> KeyToActionMap = {

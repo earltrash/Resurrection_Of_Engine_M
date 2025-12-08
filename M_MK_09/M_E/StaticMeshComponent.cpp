@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 #include "StaticMeshComponent.h"
 #include "DX_Renderer.h"
 #include "ResourceManager.h"
@@ -30,9 +29,8 @@ void StaticMeshComponent::FixedUpdate(float dTime)
 void StaticMeshComponent::SetModel(std::string Path)
 {
 
-	std::string Base_Path = "Models\\";
 
-	m_p_model = ResourceManager::Instance().GetModelResource()->GetModel(Base_Path+Path);
+	m_p_model = ResourceManager::Instance().GetModelResource()->GetModel(Path);
 
 }
 

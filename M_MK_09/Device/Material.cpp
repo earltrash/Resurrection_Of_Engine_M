@@ -13,7 +13,7 @@
 void Material::Create(aiMaterial* pMaterial)
 {
 	aiString texturePath;
-	wstring basePath = L"Models/textures/";
+	wstring basePath = L"Resources/Models/textures/";
 	std::filesystem::path path;
 	wstring finalPath;
 

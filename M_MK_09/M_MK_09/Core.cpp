@@ -176,6 +176,8 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
     
 }
 
+#define ROOTL_PATH  "Resources\\"
+
 void Core::ModelParssing()
 {
    
@@ -187,12 +189,14 @@ void Core::ModelParssing()
     m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
 
    
-    std::string path = "Models\\elephant.fbx";
-    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+    std::string path =  "Models\\elephant.fbx";
+    std::string FullPath = ROOTL_PATH + path;
 
-    path = "elephant.fbx";
+    ResourceManager::Instance().ModelLoad(FullPath, ModelType::Static);
+
+
     m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);
+    m_obj->GetComponent<StaticMeshComponent>()->SetModel(FullPath);
 
    /* std::string path = "Models\\Cam.fbx";
     ResourceManager::Instance().ModelLoad(path, ModelType::Static);

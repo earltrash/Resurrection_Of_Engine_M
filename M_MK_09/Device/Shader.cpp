@@ -39,7 +39,7 @@ void Shader::CreateVS_N_IL()
 	{
 		ID3D10Blob* Vertex_Blob = nullptr;
 
-		//::HR_T(::ShaderCompile(L"Shader\\Demo_3.fx", "VS_Main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
+		::HR_T(::ShaderCompile(L"Resources\\Shader\\Demo_3.fx", "VS_Main", "vs_5_0", &Vertex_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
 
 		//::HR_T(::ShaderCompile(L"Shader\\Static_VS.hlsl", "main", "vs_5_0", &Vertex_Blob)); 
 		
@@ -63,7 +63,7 @@ void Shader::CreatePS()
 	if (m_Type == e_Shader_Type::Static_)
 	{
 		ID3D10Blob* Pixel_Blob = nullptr;
-		HR_T(::ShaderCompile(L"Shader\\Demo_3.fx", "PS_Main", "ps_5_0", &Pixel_Blob));
+		HR_T(::ShaderCompile(L"Resources\\Shader\\Demo_3.fx", "PS_Main", "ps_5_0", &Pixel_Blob));
 		//::HR_T(::ShaderCompile(L"Shader\\Static_PS.hlsl", "main", "ps_5_0", &Pixel_Blob)); //define도 나중에 넣을 수 있으면 넣어 보자.
 		//::HR_T(::ShaderCompile(L"C:\\Users\\User\\Desktop\\M_MK_10\\Resurrection_Of_Engine_M\\M_MK_09\\M_MK_09\\Shader\\Static_PS.hlsl", "main", "ps_5_0", &Pixel_Blob));
 

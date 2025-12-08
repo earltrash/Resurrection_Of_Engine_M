@@ -14,23 +14,22 @@ struct MeshPart
 	std::shared_ptr<Material> material; 
 };
 
+	class Model
+	{
+		friend class ModelResource;
+		friend class DX_Renderer;
 
-class Model 
-{
-	friend class ModelResource;
-	friend class DX_Renderer;
 
+	public:
+		Model() = default;
+		~Model() = default;
+	public:
+		void Render(ID3D11DeviceContext* DX);
 
-public:
-	Model() = default;
-	~Model() = default;
-public:
-	void Render(ID3D11DeviceContext* DX);
+	private:
+		std::vector<MeshPart> m_Parts;
 
-private:
-	std::vector<MeshPart> m_Parts;
-
-};
+	};
 
 
 //Model은 Mesh랑 Material(Texture)을 갖고 있음. 

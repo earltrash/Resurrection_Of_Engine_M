@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderComponent.h"
-
+#include <string>
 class Model;
 
 class StaticMeshComponent : public RenderComponent

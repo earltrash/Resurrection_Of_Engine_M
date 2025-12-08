@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.h"
-
+#include <string>
+#include <unordered_map>
 
 enum class ModelType
 {

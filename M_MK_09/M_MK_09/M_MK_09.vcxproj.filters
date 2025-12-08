@@ -46,22 +46,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\Default.fx">
+    <FxCompile Include="Resources\Shader\Default.fx">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\Demo_3.fx">
+    <FxCompile Include="Resources\Shader\Demo_3.fx">
       <Filter>리소스 파일</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\Static_PS.hlsl">
-      <Filter>리소스 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\Static_VS.hlsl">
-      <Filter>리소스 파일</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\Static_Common.hlsli">
-      <Filter>리소스 파일</Filter>
-    </None>
   </ItemGroup>
 </Project>
