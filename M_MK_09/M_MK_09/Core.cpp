@@ -144,7 +144,7 @@ void Core::Release()
 float	fFov = XMConvertToRadians(45);	//기본 FOV 앵글. Field of View (Y) 
 float	fAspect = 1.6f;					//가로:세로 비율. 960:600 = 1.6:1 (16:10) 800:600 = 1.33:1 (4:3) 
 float	fZnear = 1.0f;					//시야 최소 거리 (1.0m) 
-float	fZfar = 300.0f;					//시야 최대 거리 (300m) 
+float	fZfar = 3000.0f;					//시야 최대 거리 (300m) 
 
 
 void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어지럽네
@@ -189,8 +189,8 @@ void Core::ModelParssing()
     //m_obj->GetComponent<StaticMeshComponent>()->SetModel(FullPath);
 
    
-    //std::string path =  "Models\\elephant.fbx";
-    std::string path = "Models\\sphere_sampleScene_1cm.fbx";
+    std::string path =  "Models\\elephant.fbx";
+   // std::string path = "Models\\sphere_sampleScene_1cm.fbx";
     //std::string path = "Models\\u2ntitled.fbx";
 
 

@@ -94,7 +94,7 @@ void DX_Renderer::Render()
 	StaticMeshRender();
 
 
-	DebugRender();
+	//DebugRender();
 	Flip();
 }
 
