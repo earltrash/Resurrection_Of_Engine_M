@@ -32,17 +32,17 @@ public:
 
 	
 
-		void SetPosition(XMFLOAT3 position);
-		void SetRotation(XMFLOAT3 rotation);
-		void SetScale(XMFLOAT3 scale);
+		void SetPosition(Vector3 position);
+		void SetRotation(Vector3 rotation);
+		void SetScale(Vector3 scale);
 		
-		XMFLOAT3 Get_L_Pos();
-		XMFLOAT3 Get_L_Rot();
-		XMFLOAT3 Get_L_Scl();
+		Vector3 Get_L_Pos();
+		Vector3 Get_L_Rot();
+		Vector3 Get_L_Scl();
 
-		XMFLOAT3 Get_W_Pos();
-		XMFLOAT3 Get_W_Rot();
-		XMFLOAT3 Get_W_Scl();
+		Vector3 Get_W_Pos();
+		Vector3 Get_W_Rot();
+		Vector3 Get_W_Scl();
 
 
 		void SetParent(shared_ptr<Object> parent);

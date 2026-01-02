@@ -5,7 +5,7 @@
 
 void Model::Render(ID3D11DeviceContext* DXDC)
 {
-	for (auto& part : m_Parts)
+	for (auto& part : m_v_Parts)
 	{
 		if (part.material) 
 		part.material->Bind(DXDC);

@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="Commons.h" />
     <ClInclude Include="ConstBuffer.h" />
+    <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="DX_Renderer.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Graphics.h" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConstBuffer.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="DX_Renderer.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Graphics.cpp" />

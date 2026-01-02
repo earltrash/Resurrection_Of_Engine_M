@@ -17,11 +17,13 @@ void Transform::Update(float dTime) //DX HELPER·Î WRAPPING ÇÏ±â ±ÍÂú..
 {
 	if (m_ldirty)
 	{
-		//ÀÍ¼÷ÇÑ YenaÀÇ ¸À....
-		XMMATRIX Translation = XMMatrixTranslation(m_L_pos.x, m_L_pos.y, m_L_pos.z);
-		XMMATRIX Rotation = XMMatrixRotationRollPitchYaw(m_L_rot.x, m_L_rot.y, m_L_rot.z);
-		XMMATRIX Scaling = XMMatrixScaling(m_L_scl.x, m_L_scl.y, m_L_scl.z);
-		XMMATRIX Local_MATRIX = Scaling * Rotation * Translation;
+		Matrix Translation = Matrix::CreateTranslation(m_L_pos.x, m_L_pos.y, m_L_pos.z);
+		Matrix Rotation = Matrix::CreateFromYawPitchRoll(m_L_rot.x, m_L_rot.y, m_L_rot.z);
+		Matrix Scaling = Matrix::CreateScale(m_L_scl.x, m_L_scl.y, m_L_scl.z);
+
+
+
+		Matrix Local_MATRIX = Scaling * Rotation * Translation;
 		XMStoreFloat4x4(&m_locaMatrix, Local_MATRIX);
 		
 
@@ -29,11 +31,11 @@ void Transform::Update(float dTime) //DX HELPER·Î WRAPPING ÇÏ±â ±ÍÂú..
 
 		if(parent != nullptr)
 		{
-			XMFLOAT4X4 P_W = parent->GetTransform().GetWorldM();
+			Matrix P_W = parent->GetTransform().GetWorldM();
 
-			XMMATRIX Parent_World_Matrix = XMLoadFloat4x4(&P_W);
+			Matrix Parent_World_Matrix = XMLoadFloat4x4(&P_W);
 
-			XMMATRIX WORLD = Local_MATRIX * Parent_World_Matrix;
+			Matrix WORLD = Local_MATRIX * Parent_World_Matrix;
 
 			XMStoreFloat4x4(&m_worldMatrix, WORLD);
 

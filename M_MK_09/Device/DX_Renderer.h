@@ -1,21 +1,19 @@
 #pragma once
 #include <list>
 #include <vector>
-#include <memory>                 
+#include <memory>     
+
 #include <d3d11.h>                
-#include <DirectXMath.h>          
-#include <wrl/client.h>           
+#include <wrl/client.h>  
+
 #include "Singleton.h"
+#include <SimpleMath.h>
+
 
 class Graphics;
 class State;
 class Render_Helper;
 
-
-
-using namespace DirectX;
-
-//너는 이제부터 Core로 Singleton으로 가져올 거임. //일단 대기 
 
 class DX_Renderer : public Singleton<DX_Renderer>
 {
@@ -32,9 +30,14 @@ public:
 	void Flip();
 	void Clear();
 	void StaticMeshRender();
+
+	void DebugRender();
+
 	void Render();
 	void ConstantBufferApply();
-	void SetWorldMatrix(XMMATRIX WORLD_MATRIX); //render_helper_Wrapper_function
+	void SetWorldMatrix(DirectX::SimpleMath::Matrix& WORLD_MATRIX); //render_helper_Wrapper_function
+
+	void Release();
 
 private:
 	//Unique로 바꿀 생각 중 -> device를 resource에서 가져오는 경우가 흔해서, 

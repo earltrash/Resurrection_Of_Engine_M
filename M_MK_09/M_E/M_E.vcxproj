@@ -145,7 +145,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Device</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Device; C:\Users\User\Desktop\M_MK_10\Resurrection_Of_Engine_M\M_MK_09\External\DXTK\Inc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -171,7 +171,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Device</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Device; C:\Users\User\Desktop\M_MK_10\Resurrection_Of_Engine_M\M_MK_09\External\DXTK\Inc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>

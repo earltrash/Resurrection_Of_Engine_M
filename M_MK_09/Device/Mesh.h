@@ -1,11 +1,12 @@
 #pragma once
 
+
 struct V
 {
-	XMFLOAT4 Position;
-	XMFLOAT2 TexCoord;
-	XMFLOAT3 Normal;
-	XMFLOAT3 Tangent;
+	Vector4 Position;
+	Vector2 TexCoord;
+	Vector3 Normal;
+	Vector4 Tangent;
 	
 };
 

@@ -1,4 +1,11 @@
 #pragma once
+#include "D3D11.h"
+
+#include "DirectXMath.h"
+#include "DirectXCollision.h"
+#include <wrl/client.h>
+#include "SimpleMath.h"
+
 #include <vector>
 #include <array>
 #include <memory>
@@ -8,10 +15,10 @@
 #include <string>
 #include <filesystem>  
 #include <cassert>
-#include "D3D11.h"
-#include "DirectXMath.h"
-#include <wrl/client.h>
 
+
+
+using namespace DirectX::SimpleMath;
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

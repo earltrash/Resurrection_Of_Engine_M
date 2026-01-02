@@ -2,8 +2,9 @@
 // 상수 버퍼, RenderComponent를 통해 받아온 worldmatrix랑 model data를 vector로 갖을 클래스,
 // 그리기 단계에 필요한, 특히 동적으로 변화하는 데이터를 해당 클래스에서 관리하도록 함.
 #include <wrl/client.h>
-
 #include "ConstBuffer.h"
+#include <SimpleMath.h>
+
 using namespace std;
 
 class Model;
@@ -25,12 +26,15 @@ public:
 	~Render_Helper() = default;
 
 	void Initalize(Render_Helper_SetUp SetUp);
-	void LoadModels(std::pair <Model*, XMMATRIX> Render_Data);
+	void LoadModels(std::pair <Model*, Matrix> Render_Data);
 
-	std::vector<pair<Model*, XMMATRIX>>& Get_Model_Vec();
+	std::vector<pair<Model*, Matrix>>& Get_Model_Vec();
 	std::vector<unique_ptr<IConstBuffer>>& Get_CB_Vec();
 
 	IConstBuffer* GetCB(e_CB Type); //enum 땜에 전방 선언 꺤거 자존심 상하는데, 
+	Matrix GetViewMatrix();
+	Matrix GetProjMatrix();
+
 
 	void CBUpdates();
 
@@ -45,7 +49,7 @@ public:
 	}
 
 private:
-	std::vector<pair<Model*, XMMATRIX>> m_Static;
+	std::vector<pair<Model*, Matrix>> m_Static;
 	std::vector<unique_ptr<IConstBuffer>> m_cbBuffers;
 
 private:

@@ -7,20 +7,16 @@ using namespace DirectX;
 
 struct cbMatrix_4
 {
-	XMMATRIX mTM;			
-	XMMATRIX mView;						
-	XMMATRIX mProj;		
-
-	XMMATRIX mW;
-
-	XMVECTOR COL;
-
+	Matrix mTM;			
+	Matrix mView;
+	Matrix mProj;
+	Matrix mW;
 };
 struct cbLT
 {
-	XMVECTOR Direction;		//!< ºûÀÇ ¹æÇâ.
-	XMVECTOR Diffuse;		//!< ÁÖ ±¤·® : È®»ê±¤ Diffuse Light.
-	XMVECTOR Ambient;		//!< º¸Á¶ ±¤·® : ÁÖº¯±¤ Ambient Light.
+	Vector4 Direction;		//!< ºûÀÇ ¹æÇâ.
+	Vector4 Diffuse;		//!< ÁÖ ±¤·® : È®»ê±¤ Diffuse Light.
+	Vector4 Ambient;		//!< º¸Á¶ ±¤·® : ÁÖº¯±¤ Ambient Light.
 
 	FLOAT    Range;			//!< ºû µµ´Þ °Å¸®.
 	BOOL	 LitOn;			//!< Á¶¸í Àû¿ë¿©ºÎ.
@@ -28,9 +24,9 @@ struct cbLT
 
 struct cbMAT
 {
-	XMVECTOR Diffuse = { 1,1,1,1 };		//!< ÁÖ ±¤·®(È®»ê±¤) ÀÇ ¹Ý»çÀ²(%) 
-	XMVECTOR Ambient = { 1,1,1,1 }; ;		//!< º¸Á¶ ±¤·®(ÁÖº¯±¤) ÀÇ ¹Ý»çÀ²(%) 
-	XMVECTOR Spec = { 1,1,1,1 }; ;
+	Vector4 Diffuse = { 1,1,1,1 };		//!< ÁÖ ±¤·®(È®»ê±¤) ÀÇ ¹Ý»çÀ²(%) 
+	Vector4 Ambient = { 1,1,1,1 }; ;		//!< º¸Á¶ ±¤·®(ÁÖº¯±¤) ÀÇ ¹Ý»çÀ²(%) 
+	Vector4 Spec = { 1,1,1,1 }; ;
 	FLOAT    Power = 30.f;
 };
 
@@ -48,9 +44,12 @@ public:
 	UINT GetRegisterSlot() const { return m_RegisterSlot; }
 
 
-	void SetView(XMMATRIX& TM) { matrix.mView = TM; }
-	void SetProj(XMMATRIX& TM) { matrix.mProj = TM; }
-	void SetWorld(XMMATRIX& TM) { matrix.mTM = TM; }
+	void SetView(Matrix& TM) { matrix.mView = TM; }
+	void SetProj(Matrix& TM) { matrix.mProj = TM; }
+	void SetWorld(Matrix& TM) { matrix.mTM = TM; }
+
+	Matrix GetView() { return matrix.mView; }
+	Matrix GetProj() { return matrix.mProj; }
 
 	const std::type_info& GetTypeInfo() const override { return typeid(cbDEFAULT); }
 
@@ -74,9 +73,9 @@ public:
 	ID3D11Buffer* GetBuffer() const { return m_pD3DBuffer; }
 	UINT GetRegisterSlot() const { return m_RegisterSlot; }
 
-	void SetLightDir(XMVECTOR& val) { light.Direction = val; }
-	void SetDiffuse(XMVECTOR& val) { light.Diffuse = val; }
-	void SetAmbient(XMVECTOR& val) { light.Ambient = val; }
+	void SetLightDir(Vector4& val) { light.Direction = val; }
+	void SetDiffuse(Vector4& val) { light.Diffuse = val; }
+	void SetAmbient(Vector4& val) { light.Ambient = val; }
 	void SetLightRange(FLOAT& val) { light.Range = val; }
 	void LightOn(BOOL val) { light.LitOn = val; }
 
@@ -107,14 +106,14 @@ public:
 	UINT GetRegisterSlot() const override  { return m_RegisterSlot; }
 	const std::type_info& GetTypeInfo() const override { return typeid(cbMATERIAL); } 
 
-	void Set_Mat_Ambi(XMVECTOR& val) { material.Ambient = val; }
-	void Set_Mat_Ambi(XMFLOAT4 val) { material.Ambient = XMLoadFloat4(&val); }
+	void Set_Mat_Ambi(Vector4& val) { material.Ambient = val; }
+	void Set_Mat_Ambi(Vector4 val) { material.Ambient = XMLoadFloat4(&val); }
 
-	void Set_Mat_Dif(XMVECTOR& val) { material.Diffuse = val; }
-	void Set_Mat_Dif(XMFLOAT4 val) { material.Diffuse = XMLoadFloat4(&val); }
+	void Set_Mat_Dif(Vector4& val) { material.Diffuse = val; }
+	void Set_Mat_Dif(Vector4 val) { material.Diffuse = XMLoadFloat4(&val); }
 
-	void Set_Mat_Spc(XMVECTOR& val) { material.Spec = val; }
-	void Set_Mat_Spc(XMFLOAT4 val) { material.Spec = XMLoadFloat4(&val); }
+	void Set_Mat_Spc(Vector4& val) { material.Spec = val; }
+	void Set_Mat_Spc(Vector4 val) { material.Spec = XMLoadFloat4(&val); }
 
 	void Set_Mat_Pw(float val) { material.Power = val; }
 

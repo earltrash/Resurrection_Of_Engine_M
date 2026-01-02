@@ -1,19 +1,25 @@
 #pragma once
 #include "Object.h"
+
 #include "KeyListenerComponent.h"
 #include "MouseListenerComponent.h"
 
+
+#include "SimpleMath.h"
+using namespace DirectX::SimpleMath;
+using namespace DirectX;
+
 struct Cam_M
 {
-	XMVECTOR eye{ 0.0f, 5.0f, -30.0f };		
-	XMVECTOR lookat{ 0.0f, 5.0f, 0.0f };		
-	XMVECTOR up{ 0.0f, 1.0f, 0.0f };			
+	Vector4 eye{ 0.0f, 50.0f, 300.0f ,1.f };
+	Vector4 lookat{ 0.0f, 5.0f, 0.0f ,1.f };
+	Vector4 up{ 0.0f, 1.0f, 0.0f , 0.f };
 
 
 	float	g_fFov = XMConvertToRadians(45);	//기본 FOV 앵글. Field of View (Y) 
 	float	g_fAspect = 1.6f;					//가로:세로 비율. 960:600 = 1.6:1 (16:10) 800:600 = 1.33:1 (4:3) 
 	float	g_fZnear = 1.0f;					//시야 최소 거리 (1.0m) 
-	float	g_fZfar = 300.0f;					//시야 최대 거리 (300m) 
+	float	g_fZfar = 200.0f;					//시야 최대 거리 (300m) 
 };
 
 class Camera : public Object
@@ -41,9 +47,9 @@ public:
 
 public:
 	Cam_M GetCameraMem();
-	void SetEye (XMVECTOR newEYE);
-	void SetLookAt (XMVECTOR newLookat);
-	void Setup (XMVECTOR newUP); //얘는 거의 없지 않을까
+	void SetEye (Vector4 newEYE);
+	void SetLookAt (Vector4 newLookat);
+	void Setup (Vector4 newUP); //얘는 거의 없지 않을까
 
 	void SetFov(float newFov);
 	void SetAspect(float newAspect);

@@ -152,12 +152,12 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
     g_camera->Update(dTime);
 
            
-                XMVECTOR eye = g_camera->GetCameraMem().eye;
-                XMVECTOR lookat = g_camera->GetCameraMem().lookat;
-                XMVECTOR up = g_camera->GetCameraMem().up;
+                Vector4 eye = g_camera->GetCameraMem().eye;
+                Vector4 lookat = g_camera->GetCameraMem().lookat;
+                Vector4 up = g_camera->GetCameraMem().up;
 
-                XMMATRIX mView = XMMatrixLookAtLH(eye, lookat, up);
-                XMMATRIX mProj = XMMatrixPerspectiveFovLH(fFov, fAspect, fZnear, fZfar);
+                Matrix mView = XMMatrixLookAtRH(eye, lookat, up);
+                Matrix mProj = XMMatrixPerspectiveFovRH(fFov, fAspect, fZnear, fZfar);
 
 
                 ///
@@ -181,15 +181,20 @@ void Core::CameraUpdate(float dTime) //값 업데이트는 renderr랑 연동해야 하나 어�
 void Core::ModelParssing()
 {
    
-   /* std::string path = "Models\\Hoshimi_Miyabi.fbx";
-    ResourceManager::Instance().ModelLoad(path, ModelType::Static);
+    //std::string path = "Models\\Fire_Extinguisher.fbx";
+    //ResourceManager::Instance().ModelLoad(path, ModelType::Static);
 
-    path = "Hoshimi_Miyabi.fbx";
-    m_obj->AddComponent<StaticMeshComponent>();
-    m_obj->GetComponent<StaticMeshComponent>()->SetModel(path);*/
+    //std::string FullPath = ROOTL_PATH + path;
+    //m_obj->AddComponent<StaticMeshComponent>();
+    //m_obj->GetComponent<StaticMeshComponent>()->SetModel(FullPath);
 
    
-    std::string path =  "Models\\elephant.fbx";
+    //std::string path =  "Models\\elephant.fbx";
+    std::string path = "Models\\sphere_sampleScene_1cm.fbx";
+    //std::string path = "Models\\u2ntitled.fbx";
+
+
+    //std::string path = "Models\\Fire_Extinguisher.fbx";
     std::string FullPath = ROOTL_PATH + path;
 
     ResourceManager::Instance().ModelLoad(FullPath, ModelType::Static);

@@ -7,6 +7,8 @@
 #include "Model.h"
 #include "Render_Helper.h"
 #include "Resourcemanager.h"
+#include "DebugDraw.h"
+
 //Graphics로 대체시킬 예정 삭제 예정 
 
 
@@ -36,7 +38,7 @@ void DX_Renderer::Clear()
 
 void DX_Renderer::StaticMeshRender()
 {
-	std::vector<std::pair<Model*, XMMATRIX>>& Mesh_Models  = m_Render_Helper.get()->Get_Model_Vec();
+	std::vector<std::pair<Model*, Matrix>>& Mesh_Models  = m_Render_Helper.get()->Get_Model_Vec();
 	Shader* Static_Mesh_Shader = ResourceManager::Instance().GetShaderResource()->GetShader(e_Shader_Type::Static_);
 
 	m_DXDC->VSSetShader(Static_Mesh_Shader->GetVS(), nullptr, 0);
@@ -53,6 +55,36 @@ void DX_Renderer::StaticMeshRender()
 	}
 }
 
+void DX_Renderer::DebugRender()
+{
+	DebugDraw::g_BatchEffect->Apply(m_DXDC.Get());
+	DebugDraw::g_BatchEffect->SetView(GetRH()->GetViewMatrix());
+	DebugDraw::g_BatchEffect->SetProjection(GetRH()->GetProjMatrix());
+
+	m_DXDC.Get()->IASetInputLayout(DebugDraw::g_pBatchInputLayout.Get());
+	m_DXDC->OMSetDepthStencilState(m_DxState->Get_DepthStencil().Get(), 0);
+
+	DebugDraw::g_Batch->Begin();
+
+	DirectX::BoundingBox boundingBox;
+
+	std::vector<std::pair<Model*, Matrix>>& Mesh_Models = m_Render_Helper.get()->Get_Model_Vec();
+
+	//포인터로 받는 거는 뭐 나중에 하시고. 
+	for (auto& model : Mesh_Models)
+	{
+		Vector3 trans = model.second.Translation();
+
+		boundingBox.Center.x += trans.x;
+		boundingBox.Center.y += trans.y;
+		boundingBox.Center.z += trans.z;
+
+		DebugDraw::Draw(DebugDraw::g_Batch.get(), boundingBox, Colors::Red);
+	}
+
+	DebugDraw::g_Batch->End();
+}
+
 void DX_Renderer::Render()
 {
 	Clear();
@@ -61,12 +93,8 @@ void DX_Renderer::Render()
 	StateSet_BeforeRender(); 
 	StaticMeshRender();
 
-	//Shader Set
-	//Model Set
 
-
-	
-
+	DebugRender();
 	Flip();
 }
 
@@ -85,7 +113,7 @@ void DX_Renderer::ConstantBufferApply() //일단 미정
 	}
 }
 
-void DX_Renderer::SetWorldMatrix(XMMATRIX WORLD_MATRIX)
+void DX_Renderer::SetWorldMatrix(Matrix& WORLD_MATRIX)
 {
 	m_Render_Helper->GetCB<cbDEFAULT>()->SetWorld(WORLD_MATRIX);
 	m_Render_Helper->GetCB<cbDEFAULT>()->Update(m_DXDC.Get());
@@ -95,9 +123,13 @@ void DX_Renderer::SetWorldMatrix(XMMATRIX WORLD_MATRIX)
 	m_DXDC->PSSetConstantBuffers(static_cast<int>(e_CB::CB_DEFAULT), 1, &pCB); //조건
 }
 
+void DX_Renderer::Release()
+{
+	DebugDraw::Uninitialize();
+}
+
 void DX_Renderer::StateSet_BeforeRender()
 {
-	
 	m_DXDC->RSSetState(m_DxState->Get_Rasterize().Get());
 	m_DXDC->OMSetDepthStencilState(m_DxState->Get_DepthStencil().Get(), 0);
 
@@ -108,8 +140,6 @@ void DX_Renderer::StateSet_BeforeRender()
 	);
 
 	m_DXDC->OMSetBlendState(m_DxState->Get_BlendState().Get() , NULL, 0xFFFFFFFF);
-
-	m_DXDC->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 }
 
@@ -144,6 +174,10 @@ HRESULT DX_Renderer::DX_SetUP(HWND hwnd, float width, float height)
 
 	m_Render_Helper = make_shared<Render_Helper>();
 	m_Render_Helper->Initalize(Set_RH);
+
+
+
+	DebugDraw::Initialize(m_Device, m_DXDC);
 
 	return E_NOTIMPL;
 }

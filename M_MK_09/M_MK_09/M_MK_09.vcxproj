@@ -114,7 +114,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include;$(SolutionDir)External\DXTK\Inc</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -141,11 +141,7 @@ xcopy "$(SolutionDir)External\assimp-master\Build\lib\$(Configuration)\assimp-vc
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Device;
-$(SolutionDir)M_E;
-$(SolutionDir)Externall\assimp-master\code\Common;
-$(SolutionDir)External\assimp-master\include;
-$(SolutionDir)External\assimp-master\Build\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Device;$(SolutionDir)M_E;$(SolutionDir)Externall\assimp-master\code\Common;$(SolutionDir)External\assimp-master\include;$(SolutionDir)External\assimp-master\Build\include;$(SolutionDir)External\DXTK\Inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

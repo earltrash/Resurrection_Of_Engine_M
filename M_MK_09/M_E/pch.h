@@ -5,4 +5,6 @@
 #include <memory>
 #include <unordered_map>
 
-using namespace DirectX;
+
+//#include "SimpleMath.h"
+//using namespace DirectX::SimpleMath;

@@ -8,9 +8,6 @@ enum class e_Shader_Type
 	Skeleton,
 	UI,
 
-	
-
-
 	Max
 };
 

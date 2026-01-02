@@ -12,10 +12,11 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 	//Flag도 잘 읽어봐야 함.
 	if (Type == ModelType::Static)
 	{
-		flags = aiProcess_Triangulate |      
-		aiProcess_ConvertToLeftHanded |
-			aiProcess_CalcTangentSpace|
-		aiProcess_PreTransformVertices;      
+		flags = aiProcess_Triangulate  |
+			aiProcess_GenBoundingBoxes |
+			aiProcess_CalcTangentSpace |
+			aiProcess_ConvertToLeftHanded|
+			aiProcess_PreTransformVertices;
 	}
 	else
 	{
@@ -40,8 +41,6 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 		return 0;
 	}
 
-	//
-
 	std::unique_ptr<Model> model = std::make_unique<Model>(); 
 	std::vector<std::shared_ptr<Material>> globalMaterials;
 
@@ -64,9 +63,24 @@ int ModelResource::LoadFile(std::string FilePath , ModelType Type)
 		
 		std::shared_ptr<Material> mat = globalMaterials[Material_IDX];
 
-		model->m_Parts.push_back({ mesh, mat });
+		model->m_v_Parts.push_back({ mesh, mat });
 	}
 
+
+	//정점 생성은 UI MODEL과 같이 하나를 돌려쓸겁니다! 
+	for (UINT i = 0; i < Fbx_Model->mNumMeshes; i++)
+	{
+		aiMesh* pMesh = Fbx_Model->mMeshes[i];
+		Vector3 meshMin = Vector3(pMesh->mAABB.mMin.x, pMesh->mAABB.mMin.y, pMesh->mAABB.mMin.z);
+		Vector3 meshMax = Vector3(pMesh->mAABB.mMax.x, pMesh->mAABB.mMax.y, pMesh->mAABB.mMax.z);
+
+
+
+		BoundingBox boundingBox;
+		boundingBox.Center = (meshMin + meshMax) / 2;
+		boundingBox.Extents = (meshMax - meshMin) / 2;
+		model->m_v_Box.push_back(boundingBox);
+	}
 	
 	
 	if (Type == ModelType::Skeleton) //Skeleton일 경우에만 추가적으로 정보를 넣어주는 식으로 ?

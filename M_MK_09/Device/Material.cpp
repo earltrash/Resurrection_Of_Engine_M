@@ -82,22 +82,19 @@ void Material::Create(aiMaterial* pMaterial)
 
 }
 
-//사실 이건 Phong 구조의 문조니깐. PBR로 넘어가는게 편하긴 하겠다. ㅇㅇ 
-//매번 상수 버퍼를 바꿔야 하니깐. 
 
-//Bind
-//생성과 동시에, Set.
+// 최적화는 (이미 binding 된 Texture 유무라던가) 
+
+
 void Material::Bind(ID3D11DeviceContext* DXDC)
 {
     DXDC->PSSetShaderResources(0, 1, m_tex_Albedo->m_pTexture.GetAddressOf());
 	//DXDC->PSSetShaderResources(1, 1, m_tex_Normal->m_pTexture.GetAddressOf());
-//	DXDC->PSSetShaderResources(2, 1, m_tex_Spec->m_pTexture.GetAddressOf());
+    //DXDC->PSSetShaderResources(2, 1, m_tex_Spec->m_pTexture.GetAddressOf());
 	//DXDC->PSSetShaderResources(3, 1, m_tex_Emissive->m_pTexture.GetAddressOf());
 	//DXDC->PSSetShaderResources(4, 1, m_tex_Metal->m_pTexture.GetAddressOf());
 	//DXDC->PSSetShaderResources(5, 1, m_tex_Roughness->m_pTexture.GetAddressOf());
 	//DXDC->PSSetShaderResources(6, 1, m_tex_Opacity->m_pTexture.GetAddressOf());
-
-
 }
 
 bool MaterialTexture::Create(const std::wstring& filePath)

@@ -1,7 +1,9 @@
+#pragma once
+
 #include "pch.h"
 #include "Render_Helper.h"
 
-void Render_Helper::LoadModels(std::pair < Model*, XMMATRIX> Data)
+void Render_Helper::LoadModels(std::pair < Model*, Matrix> Data)
 {
 	m_Static.push_back(Data);
 	
@@ -31,7 +33,7 @@ void Render_Helper::Initalize(Render_Helper_SetUp SetUp)
 
 }
 
-std::vector<pair<Model*, XMMATRIX>>& Render_Helper::Get_Model_Vec()
+std::vector<pair<Model*, Matrix>>& Render_Helper::Get_Model_Vec()
 {
 	return std::ref(m_Static); //복사는 하기 싫어요 
 }
@@ -50,6 +52,16 @@ IConstBuffer* Render_Helper::GetCB(e_CB Type)
 
 	else 
 	return nullptr;
+}
+
+Matrix Render_Helper::GetViewMatrix()
+{
+	return GetCB<cbDEFAULT>()->GetView();
+}
+
+Matrix Render_Helper::GetProjMatrix()
+{
+	return GetCB<cbDEFAULT>()->GetProj();
 }
 
 void Render_Helper::CBUpdates()

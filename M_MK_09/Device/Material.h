@@ -32,7 +32,6 @@ inline MaterialMapFlags& operator|=(MaterialMapFlags& a, MaterialMapFlags b)
 class MaterialTexture
 {
 public:
-
 	MaterialTexture() = default;
 	~MaterialTexture() = default;
 public:
@@ -68,6 +67,4 @@ private:
 	std::shared_ptr<MaterialTexture> m_tex_Opacity;
 };
 
-// flag로 material를 확인 -> m_Flag를 읽고 setting
-// 
 

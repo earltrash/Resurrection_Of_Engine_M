@@ -73,12 +73,11 @@ void Camera::Update(float dTime)
 
     if (currentRotAmount != 0.0f)
     {
-        XMMATRIX ROTMATRRIX = XMMatrixRotationY(currentRotAmount);
+        Matrix ROTMATRRIX = Matrix::CreateRotationY(currentRotAmount);
 
-        XMVECTOR look_vec = Mem.lookat - Mem.eye; // 현재 시선 벡터
+        Vector4 look_vec = Mem.lookat - Mem.eye; // 현재 시선 벡터
 
-      
-        XMVECTOR rotated_look_vec = XMVector3TransformNormal(look_vec, ROTMATRRIX);
+        Vector4 rotated_look_vec = XMVector3TransformNormal(look_vec, ROTMATRRIX);
 
       
         Mem.lookat = Mem.eye + rotated_look_vec;
@@ -87,10 +86,10 @@ void Camera::Update(float dTime)
     if (currentMovAmount != 0.0f)
     {
       
-        XMVECTOR look_dir = XMVector3Normalize(Mem.lookat - Mem.eye);
+        Vector4 look_dir = XMVector3Normalize(Mem.lookat - Mem.eye);
 
        
-        XMVECTOR move_vec = look_dir * currentMovAmount;
+        Vector4 move_vec = look_dir * currentMovAmount;
 
        
         Mem.eye = XMVectorAdd(Mem.eye, move_vec);
@@ -103,17 +102,17 @@ void Camera::Update(float dTime)
 
 }
 
-void Camera::SetEye(XMVECTOR newEYE)
+void Camera::SetEye(Vector4 newEYE)
 {
 	Mem.eye = newEYE;
 
 }
-void Camera::SetLookAt(XMVECTOR newLookat)
+void Camera::SetLookAt(Vector4 newLookat)
 {
 	Mem.lookat = newLookat;
 
 }
-void Camera::Setup(XMVECTOR newUP)
+void Camera::Setup(Vector4 newUP)
 {
 	Mem.up = newUP;
 
@@ -165,12 +164,12 @@ void Camera::MouseMove(InputEvent event)
     Pitch = min(XMConvertToRadians(89.0f), Pitch);
 
     // 3. 회전 행렬 생성 (Yaw -> Pitch 순서 권장)
-    XMMATRIX rotation = XMMatrixRotationRollPitchYaw(Pitch, Yaw, 0); // Roll은 0
+    Matrix rotation = Matrix::CreateFromYawPitchRoll (Yaw, Pitch, 0); // Roll은 0
 
     // 4. 새로운 Look 벡터 계산
     // 기본 Look 벡터(0, 0, 1)를 회전시켜 새 Look 방향을 얻음
-    XMVECTOR defaultLook = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-    XMVECTOR look_vec = XMVector3TransformNormal(defaultLook, rotation);
+    Vector3 defaultLook = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
+    Vector3 look_vec = XMVector3TransformNormal(defaultLook, rotation);
     look_vec = XMVector3Normalize(look_vec);
 
     // 5. 카메라 위치 갱신
